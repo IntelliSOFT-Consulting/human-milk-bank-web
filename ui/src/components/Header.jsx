@@ -6,7 +6,7 @@ import { getCookie } from '../lib/cookie';
 
 
 export default function Header({ children }) {
-  let title = "Human Milk Bank"
+  let title = "Neonatal Nutrition"
   let pages = [
     {
       'Newborn Unit': '/newborn'

@@ -21,7 +21,7 @@ const drawerWidth = 250;
 
 export default function HeaderDrawer({ children }) {
 
-  let title = "Human Milk Bank"
+  let title = "Neonatal Nutrition"
   let navigate = useNavigate()
   const settings = [{ 'My Account': '/account' }, { 'Logout': "/logout" },];
   let pages = settings

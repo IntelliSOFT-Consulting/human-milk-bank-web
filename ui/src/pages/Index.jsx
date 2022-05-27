@@ -54,7 +54,7 @@ export default function Index() {
         { field: 'lastName', headerName: 'Last Name', width: 150, editable: true },
         { field: 'firstName', headerName: 'First Name', width: 150, editable: true },
         { field: 'age', headerName: 'Age', width: 200 },
-        { field: 'role', headerName: 'Date of admission', width: 150 }
+        // { field: 'role', headerName: 'Date of admission', width: 150 }
     ];
 
     let isMobile = useMediaQuery('(max-width:600px)');

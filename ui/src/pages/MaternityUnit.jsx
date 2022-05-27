@@ -594,7 +594,7 @@ export default function MaternityUnit({ id }) {
                                                 aria-labelledby="demo-row-radio-buttons-group-label"
                                                 name="row-radio-buttons-group"
                                             >
-                                                <FormControlLabel value={0} control={<FormLabel  />} label="Grimace: " />
+                                                <FormControlLabel value={0} control={<FormLabel  />} label="Infant feeding counseling done: " />
 
                                                 <FormControlLabel value={0} control={<Radio />} label="0 points" />
                                                 <FormControlLabel value={1} control={<Radio />} label="1 point" />
