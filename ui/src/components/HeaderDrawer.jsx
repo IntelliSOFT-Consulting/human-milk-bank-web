@@ -14,14 +14,14 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getCookie } from '../lib/cookie';
 import { Tooltip, IconButton, Avatar, Button, Container } from '@mui/material';
-import { AccountCircle, AppRegistration, BabyChangingStation, ChildCare, Dashboard, Kitchen, ListAlt, People, Settings } from '@mui/icons-material';
+import { AccountCircle, AppRegistration, BabyChangingStation, ChildCare, Dashboard, FileDownload, FileUpload, Kitchen, ListAlt, People, PivotTableChart, Settings } from '@mui/icons-material';
 import Menu from '@mui/material/Menu';
 import { MenuItem } from '@mui/material';
 const drawerWidth = 250;
 
 export default function HeaderDrawer({ children }) {
 
-  let title = "Human Milk Bank"
+  let title = "Neonatal Nutrition"
   let navigate = useNavigate()
   const settings = [{ 'My Account': '/account' }, { 'Logout': "/logout" },];
   let pages = settings
@@ -45,7 +45,7 @@ export default function HeaderDrawer({ children }) {
   };
 
   useEffect(() => {
-    if(getCookie("token")) {
+    if (getCookie("token")) {
       return
     } else {
       navigate('/login')
@@ -62,8 +62,8 @@ export default function HeaderDrawer({ children }) {
       <CssBaseline />
       <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: '#115987' }} elevation={0}>
         <Container maxWidth="xl">
-        <Toolbar disableGutters>
-        <Typography
+          <Toolbar disableGutters>
+            <Typography
               variant="h6"
               noWrap
               component="div"
@@ -73,8 +73,8 @@ export default function HeaderDrawer({ children }) {
               {title}
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'inline-block' } }}>
-              
-             
+
+
             </Box>
             <Typography
               variant="h6"
@@ -125,7 +125,7 @@ export default function HeaderDrawer({ children }) {
                 ))}
               </Menu>
             </Box> : <Button variant="outlined" onClick={e => { navigate('/login') }} sx={{ color: "white" }}>LOGIN</Button>}
-        </Toolbar>
+          </Toolbar>
         </Container>
       </AppBar>
       <Drawer
@@ -140,89 +140,86 @@ export default function HeaderDrawer({ children }) {
         <Toolbar />
         <Box sx={{ overflow: 'auto', backgroundColor: '#115987', color: 'white' }} >
           <List >
-          <ListItem button onClick={e=>navigate('/')}>
-                <ListItemIcon>
-                  <Dashboard sx={{ color: 'white' }} />
-                </ListItemIcon>
-                <ListItemText primary='Dashboard' primaryTypographyProps={{fontSize:"13px"}}/>
-          </ListItem>
-          <ListItem button onClick={e=>navigate('/maternity-unit')}>
-                <ListItemIcon>
-                  <AppRegistration sx={{ color: 'white' }} />
-                </ListItemIcon>
-                <ListItemText primary='Maternity Unit' primaryTypographyProps={{fontSize:"13px"}}/>
-          </ListItem>
-          
-          <ListItem button onClick={e=>navigate('/new-born-unit')}>
-                <ListItemIcon>
-                  <BabyChangingStation sx={{ color: 'white' }} />
-                </ListItemIcon>
-                <ListItemText primary='New Born Unit' primaryTypographyProps={{fontSize:"13px"}}/>
-          </ListItem>
+            <Divider />
+            <ListItem button onClick={e => navigate('/')}>
+              <ListItemIcon>
+                <Dashboard sx={{ color: 'white' }} />
+              </ListItemIcon>
+              <ListItemText primary='Dashboard' primaryTypographyProps={{ fontSize: "13px" }} />
+            </ListItem>
           </List>
           <Divider />
-         
-          <List>
-          <ListItem button onClick={e=>navigate('/post-natal-unit')}>
-                <ListItemIcon>
-                  <ChildCare sx={{ color: 'white' }} />
-                </ListItemIcon>
-                <ListItemText primary='Post Natal Unit' primaryTypographyProps={{fontSize:"13px"}}/>
-          </ListItem>
 
-          <ListItem button onClick={e=>navigate('/human-milk-bank')}>
-                <ListItemIcon>
-                  <Kitchen sx={{ color: 'white' }} />
-                </ListItemIcon>
-                <ListItemText primary='Human Milk Bank' primaryTypographyProps={{fontSize:"13px"}}/>
-          </ListItem>
-          <Divider />
-          <ListItem button onClick={e=>navigate('/patients')}>
-                <ListItemIcon>
-                  <ListAlt sx={{ color: 'white' }} />
-                </ListItemIcon>
-                <ListItemText primary='Patients List' primaryTypographyProps={{fontSize:"13px"}}/>
-          </ListItem>
+          <List>
+            <ListItem button onClick={e => navigate('/reports')}>
+              <ListItemIcon>
+                <PivotTableChart sx={{ color: 'white' }} />
+              </ListItemIcon>
+              <ListItemText primary='Reports' primaryTypographyProps={{ fontSize: "13px" }} />
+            </ListItem>
+            <ListItem button onClick={e => navigate('/import')}>
+              <ListItemIcon>
+                <FileUpload sx={{ color: 'white' }} />
+              </ListItemIcon>
+              <ListItemText primary='Data Import' primaryTypographyProps={{ fontSize: "13px" }} />
+            </ListItem>
+            <ListItem button onClick={e => navigate('/export')}>
+              <ListItemIcon>
+                <FileDownload sx={{ color: 'white' }} />
+              </ListItemIcon>
+              <ListItemText primary='Data Export' primaryTypographyProps={{ fontSize: "13px" }} />
+            </ListItem>
+
+            <ListItem button onClick={e => navigate('/human-milk-bank')}>
+              <ListItemIcon>
+                <Kitchen sx={{ color: 'white' }} />
+              </ListItemIcon>
+              <ListItemText primary='Human Milk Bank' primaryTypographyProps={{ fontSize: "13px" }} />
+            </ListItem>
+            <Divider />
+            <ListItem button onClick={e => navigate('/patients')}>
+              <ListItemIcon>
+                <ListAlt sx={{ color: 'white' }} />
+              </ListItemIcon>
+              <ListItemText primary='Patients List' primaryTypographyProps={{ fontSize: "13px" }} />
+            </ListItem>
           </List>
           <Divider />
           <List>
-          <ListItem button onClick={e=>navigate('/users')}>
-                <ListItemIcon>
-                  <People sx={{ color: 'white' }} />
-                </ListItemIcon>
-                <ListItemText primary='Users' primaryTypographyProps={{fontSize:"13px"}}/>
-          </ListItem>
-          <ListItem button onClick={e=>navigate('/account')}>
-                <ListItemIcon>
-                  <AccountCircle sx={{ color: 'white' }} />
-                </ListItemIcon>
-                <ListItemText primary='My Account' primaryTypographyProps={{fontSize:"13px"}}/>
-          </ListItem>
-          <ListItem button>
-                <ListItemIcon>
-                  <Settings sx={{ color: 'white' }} />
-                </ListItemIcon>
-                <ListItemText primary='Settings' primaryTypographyProps={{fontSize:"13px"}}/>
-          </ListItem>
+            <ListItem button onClick={e => navigate('/users')}>
+              <ListItemIcon>
+                <People sx={{ color: 'white' }} />
+              </ListItemIcon>
+              <ListItemText primary='Users' primaryTypographyProps={{ fontSize: "13px" }} />
+            </ListItem>
+            <ListItem button onClick={e => navigate('/account')}>
+              <ListItemIcon>
+                <AccountCircle sx={{ color: 'white' }} />
+              </ListItemIcon>
+              <ListItemText primary='My Account' primaryTypographyProps={{ fontSize: "13px" }} />
+            </ListItem>
+
           </List>
-          <br/>
-          <br/>
-          <br/>
-          <br/>
-          <br/>
-          <br/>
+          <br />
+          <br />
           <p></p>
+          <br />
+          <p></p>
+          <br />
+          <p></p>
+          <br />
+          <p></p><br />
           <p></p>
 
         </Box>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-      <br/>
-      <br/>
-      <br/>
-      <Container>
-        {children}
-      </Container>
+        <br />
+        <br />
+        <br />
+        <Container>
+          {children}
+        </Container>
       </Box>
     </Box>
   );

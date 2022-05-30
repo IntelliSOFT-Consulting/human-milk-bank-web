@@ -38,7 +38,7 @@ export default function Account() {
        <Layout>
         <Typography>Account Information</Typography>
 
-        <Card>
+        {profile && <Card>
             <CardContent> 
             <Typography>User ID:</Typography>
             <Typography variant='h5'>{profile.id}</Typography>
@@ -63,11 +63,9 @@ export default function Account() {
             <Typography variant='h5'>{new Date(profile.updatedAt).toLocaleString()}</Typography>
             <Divider/>
 
-
             </CardContent>
 
-
-        </Card>
+        </Card>}
 
        </Layout>
 
