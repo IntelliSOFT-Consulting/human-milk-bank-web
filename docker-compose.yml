@@ -12,6 +12,7 @@ services:
     
 
   nndak-api:
+    container_name: nndak-api
     build: ./api
     restart: always
     depends_on:
