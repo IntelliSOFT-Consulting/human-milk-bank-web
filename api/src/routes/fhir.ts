@@ -6,13 +6,9 @@ const router = express.Router()
 
 
 
-router.use(function (err:any, req: Request, res: Response, next: NextFunction) {
-    console.error('Got an error!', err);
-    res.end();
-});
 
 
-router.use('/', [requireJWT, createProxyMiddleware(
+router.use('/', [ requireJWT, createProxyMiddleware(
     {
         target: 'https://devnndak.intellisoftkenya.com', changeOrigin: true,
         pathRewrite: {
@@ -21,6 +17,10 @@ router.use('/', [requireJWT, createProxyMiddleware(
         onProxyReq: fixRequestBody
 })]);
 
+router.use(function (err:any, req: Request, res: Response, next: NextFunction) {
+    console.error('Got an error!', err);
+    res.end();
+});
 
 
 
