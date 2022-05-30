@@ -55,6 +55,15 @@ export default function DataExport({ id }) {
     useEffect(() => {
         getPatientDetails(id)
     }, [])
+    useEffect(() => {
+        if (getCookie("token")) {
+            return
+        } else {
+            navigate('/login')
+            window.localStorage.setItem("next_page", "/export")
+            return
+        }
+    }, [])
     return (
         <>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -71,10 +80,10 @@ export default function DataExport({ id }) {
                                         variant="scrollable"
                                         scrollButtons="auto"
                                         aria-label="scrollable auto tabs example">
-                                        <Tab label="Select Import Data" value="1" />
+                                        <Tab label="Select Export Data" value="1" />
                                         <Tab label="Preview " value="2" />
-                                        <Tab label="Confirm Import" value="3" />
-                                        <Tab label="Past Import Tasks" value="4" />
+                                        <Tab label="Confirm Export" value="3" />
+                                        <Tab label="Past Export Tasks" value="4" />
                                     </TabList>
                                 </Box>
 
@@ -94,7 +103,7 @@ export default function DataExport({ id }) {
                                                 label="Select File"
                                                 placeholder="Select File"
                                                 size="small"
-                                            onChange={e=>{console.log(e)}}
+                                                onChange={e => { console.log(e) }}
 
 
                                             />
@@ -106,7 +115,7 @@ export default function DataExport({ id }) {
                                     <p></p>
                                     <Typography variant='p' sx={{ fontSize: 'large', fontWeight: 'bold' }}></Typography>
                                     <Grid container spacing={1} padding=".5em" >
-                                       
+
                                     </Grid>
                                     <Divider />
                                     <p></p>
@@ -124,15 +133,15 @@ export default function DataExport({ id }) {
                                     <Divider />
                                     <p></p>
                                     <Grid container spacing={1} padding=".5em" >
-                                        
+
                                     </Grid>
                                     <p></p>
                                     <Divider />
                                     <Typography variant='p' sx={{ fontSize: 'medium', fontWeight: 'bold', p: '1em' }}>Vitals</Typography>
 
-                                   
-                                   
-                                    
+
+
+
                                     <p></p>
                                     <Divider />
                                     <p></p>
@@ -159,7 +168,7 @@ export default function DataExport({ id }) {
                                                 label="Last Name"
                                                 placeholder="Last Name"
                                                 size="small"
-                                            onChange={e=>{console.log(e)}}
+                                                onChange={e => { console.log(e) }}
 
 
                                             />
@@ -171,7 +180,7 @@ export default function DataExport({ id }) {
                                                 label="Hospital Name"
                                                 placeholder="Hospital Name"
                                                 size="small"
-                                            onChange={e=>{console.log(e)}}
+                                                onChange={e => { console.log(e) }}
 
 
                                             />
@@ -313,7 +322,7 @@ export default function DataExport({ id }) {
                                                 label="Select File"
                                                 placeholder="Select File"
                                                 size="small"
-                                            onChange={e=>{console.log(e)}}
+                                                onChange={e => { console.log(e) }}
 
 
                                             />
@@ -376,20 +385,11 @@ export default function DataExport({ id }) {
                                     <p></p>
                                 </TabPanel>
 
-                    
-                                    
-
-
                             </TabContext>
                         </Box>
-
-
-
                     </Container>
                 </Layout>
             </LocalizationProvider>
-
-
 
         </>
     )
