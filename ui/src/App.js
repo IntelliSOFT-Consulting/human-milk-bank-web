@@ -9,7 +9,6 @@ import Account from './pages/Account'
 import Users from './pages/Users'
 import PatientDetails from './pages/PatientDetails'
 import PatientList from './pages/PatientList'
-import NewBornUnit from './pages/NewBornUnit'
 import DataImport from './pages/DataImport'
 import DataExport from './pages/DataExport'
 import Reports from './pages/Reports'
@@ -30,7 +29,6 @@ function App() {
           <Route path="/new-password" element={<SetNewPassword/>} />
           <Route path="/" element={<Index/>} />
           <Route path="/users" element={<Users/>} />
-          <Route path="/new-born-unit" element={<NewBornUnit/>} />
           <Route path="/patients" element={<PatientList/>} />
           <Route path="/patients/:id" element={<PatientDetails/>} />
           <Route path="/settings" element={<PatientDetails/>} />
