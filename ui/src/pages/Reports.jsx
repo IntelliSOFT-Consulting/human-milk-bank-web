@@ -69,7 +69,6 @@ export default function Reports() {
                 </Stack>
                 <br /><br />
                 <Container maxWidth="lg">
-                    
                 </Container>
             </Layout>
         </>
