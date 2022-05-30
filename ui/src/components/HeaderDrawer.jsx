@@ -170,12 +170,7 @@ export default function HeaderDrawer({ children }) {
               <ListItemText primary='Data Export' primaryTypographyProps={{ fontSize: "13px" }} />
             </ListItem>
 
-            <ListItem button onClick={e => navigate('/human-milk-bank')}>
-              <ListItemIcon>
-                <Kitchen sx={{ color: 'white' }} />
-              </ListItemIcon>
-              <ListItemText primary='Human Milk Bank' primaryTypographyProps={{ fontSize: "13px" }} />
-            </ListItem>
+            
             <Divider />
             <ListItem button onClick={e => navigate('/patients')}>
               <ListItemIcon>
@@ -204,12 +199,13 @@ export default function HeaderDrawer({ children }) {
           <br />
           <p></p>
           <br />
-          <p></p>
           <br />
           <p></p>
           <br />
           <p></p><br />
-          <p></p>
+          <p></p><br />
+          <p></p><br />
+
 
         </Box>
       </Drawer>

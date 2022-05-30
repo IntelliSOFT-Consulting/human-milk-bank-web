@@ -61,15 +61,14 @@ export default function Reports() {
                                     onChange={e => { setData({ ...data, role: e.target.value }) }}
                                     size="small"
                                 >
-                                    <MenuItem value={"ADMINISTRATOR"}>Administrator</MenuItem>
-                                    <MenuItem value={"STAFF"}>Staff</MenuItem>
-                                    <MenuItem value={"PRACTITIONER"}>Practitioner</MenuItem>
+                                    <MenuItem value={"ADMINISTRATOR"}>Report 1</MenuItem>
+                                    <MenuItem value={"STAFF"}>Report 1</MenuItem>
+                                    <MenuItem value={"PRACTITIONER"}>Report 1</MenuItem>
                                 </Select>
                             </FormControl>
                 </Stack>
                 <br /><br />
                 <Container maxWidth="lg">
-                    
                 </Container>
             </Layout>
         </>
