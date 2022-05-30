@@ -1,4 +1,4 @@
-import { Container, TextField, Stack, Button, Grid, Snackbar, Typography, Divider, useMediaQuery } from '@mui/material'
+import { Container, TextField, Stack, Input, Button, Grid, Snackbar, Typography, Divider, useMediaQuery } from '@mui/material'
 import { useEffect, useState, } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout'
@@ -55,6 +55,15 @@ export default function DataImport({ id }) {
     useEffect(() => {
         getPatientDetails(id)
     }, [])
+    useEffect(() => {
+        if (getCookie("token")) {
+            return
+        } else {
+            navigate('/login')
+            window.localStorage.setItem("next_page", "/import")
+            return
+        }
+    }, [])
     return (
         <>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -91,22 +100,34 @@ export default function DataImport({ id }) {
                                                 type="text"
                                                 multiline
                                                 minRows={4}
-                                                label="Select File"
-                                                placeholder="Select File"
+                                                label="Input FHIR Bundle"
+                                                placeholder="Input FHIR Bundle"
                                                 size="small"
-                                            onChange={e=>{console.log(e)}}
-
-
+                                                onChange={e => { console.log(e) }}
                                             />
                                         </Grid>
                                     </Grid>
                                     <p></p>
+                                    <Typography variant='p' sx={{ fontSize: 'large', fontWeight: 'bold', textAlign: "center" }}>or</Typography>
+                                    <Grid container spacing={1} padding=".5em" >
+                                        <Grid container spacing={1} padding=".5em" >
+                                            <Grid item xs={12} md={12} lg={8}>
+                                                <label htmlFor="contained-button-file">
+                                                    <Input accept="image/*" id="contained-button-file" multiple type="file" />
+                                                    <Button variant="contained" component="span">
+                                                        Upload FHIR Bundle (json file)
+                                                    </Button>
+                                                </label>
+
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
 
                                     <Divider />
                                     <p></p>
                                     <Typography variant='p' sx={{ fontSize: 'large', fontWeight: 'bold' }}></Typography>
                                     <Grid container spacing={1} padding=".5em" >
-                                       
+
                                     </Grid>
                                     <Divider />
                                     <p></p>
@@ -124,15 +145,10 @@ export default function DataImport({ id }) {
                                     <Divider />
                                     <p></p>
                                     <Grid container spacing={1} padding=".5em" >
-                                        
+
                                     </Grid>
                                     <p></p>
                                     <Divider />
-                                    <Typography variant='p' sx={{ fontSize: 'medium', fontWeight: 'bold', p: '1em' }}>Vitals</Typography>
-
-                                   
-                                   
-                                    
                                     <p></p>
                                     <Divider />
                                     <p></p>
@@ -148,145 +164,16 @@ export default function DataImport({ id }) {
 
                                 {/* Feeding Needs Assessment  */}
                                 <TabPanel value="3">
-                                    <Typography variant='p' sx={{ fontSize: 'large', fontWeight: 'bold' }}>Feeding Needs Assessment</Typography>
+                                    <Typography variant='p' sx={{ fontSize: 'large', fontWeight: 'bold' }}>Confirm and Begin Import</Typography>
                                     <Divider />
-                                    <p></p>
-                                    <Grid container spacing={1} padding=".5em" >
-                                        <Grid item xs={12} md={12} lg={6}>
-                                            <TextField
-                                                fullWidth="80%"
-                                                type="text"
-                                                label="Last Name"
-                                                placeholder="Last Name"
-                                                size="small"
-                                            onChange={e=>{console.log(e)}}
-
-
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12} md={12} lg={6}>
-                                            <TextField
-                                                fullWidth="80%"
-                                                type="text"
-                                                label="Hospital Name"
-                                                placeholder="Hospital Name"
-                                                size="small"
-                                            onChange={e=>{console.log(e)}}
-
-
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12} md={12} lg={6}>
-                                            {!isMobile ? <DesktopDatePicker
-                                                label="Date of admission"
-                                                inputFormat="MM/dd/yyyy"
-                                                value={value}
-                                                onChange={handleChange}
-                                                renderInput={(params) => <TextField {...params} size="small" fullWidth />}
-                                            /> :
-                                                <MobileDatePicker
-                                                    label="Date of admission"
-                                                    inputFormat="MM/dd/yyyy"
-                                                    value={value}
-                                                    onChange={handleChange}
-                                                    renderInput={(params) => <TextField {...params} size="small" fullWidth />}
-                                                />}
-                                        </Grid>
-                                        <Grid item xs={12} md={12} lg={6}>
-                                            {!isMobile ? <DesktopDatePicker
-                                                label="Date of birth"
-                                                inputFormat="MM/dd/yyyy"
-                                                value={value}
-                                                onChange={handleChange}
-                                                renderInput={(params) => <TextField {...params} size="small" fullWidth />}
-                                            /> :
-                                                <MobileDatePicker
-                                                    label="Date of birth"
-                                                    inputFormat="MM/dd/yyyy"
-                                                    value={value}
-                                                    onChange={handleChange}
-                                                    renderInput={(params) => <TextField {...params} size="small" fullWidth />}
-                                                />}
-                                        </Grid>
-                                        <Grid item xs={12} md={12} lg={6}>
-                                            {!isMobile ? <DesktopDatePicker
-                                                label="Date today"
-                                                inputFormat="MM/dd/yyyy"
-                                                value={value}
-                                                onChange={handleChange}
-                                                renderInput={(params) => <TextField {...params} size="small" fullWidth />}
-                                            /> :
-                                                <MobileDatePicker
-                                                    label="Date today"
-                                                    inputFormat="MM/dd/yyyy"
-                                                    value={value}
-                                                    onChange={handleChange}
-                                                    renderInput={(params) => <TextField {...params} size="small" fullWidth />}
-                                                />}
-                                        </Grid>
-                                        <Grid item xs={12} md={12} lg={6}>
-                                            <FormControl fullWidth>
-                                                <InputLabel id="demo-simple-select-label">Gender</InputLabel>
-                                                <Select
-                                                    labelId="demo-simple-select-label"
-                                                    id="demo-simple-select"
-                                                    value={data.labor_stage ? data.labor_stage : 1}
-                                                    label="Gender"
-                                                    onChange={handleChange}
-                                                    size="small"
-                                                >
-                                                    <MenuItem value={10}>Male</MenuItem>
-                                                    <MenuItem value={20}>Female</MenuItem>
-                                                </Select>
-                                            </FormControl>
-                                        </Grid>
-                                    </Grid>
                                     <p></p>
 
                                     <Divider />
                                     <p></p>
                                     <Typography variant='p' sx={{ fontSize: 'large', fontWeight: 'bold' }}></Typography>
-                                    <Grid container spacing={1} padding=".5em" >
-                                        <Grid item xs={12} md={12} lg={6}>
-                                            <FormControl fullWidth>
-                                                <InputLabel id="demo-simple-select-label">Does mother have any breast problems?</InputLabel>
-                                                <Select
-                                                    labelId="demo-simple-select-label"
-                                                    id="demo-simple-select"
-                                                    value={data.labor_stage ? data.labor_stage : 1}
-                                                    label="Resuscitation"
-                                                    onChange={handleChange}
-                                                    size="small"
-                                                >
-                                                    <MenuItem value={"Yes"}>Yes</MenuItem>
-                                                    <MenuItem value={"No"}>No</MenuItem>
-                                                </Select>
-                                            </FormControl>
-                                        </Grid>
 
-
-                                    </Grid>
                                     <p></p>
                                     <Divider />
-                                    <p></p>
-                                    <Grid container spacing={1} padding=".5em" >
-                                        <Grid item xs={12} md={12} lg={6}>
-                                            <FormControl fullWidth>
-                                                <InputLabel id="demo-simple-select-label">Is the mother well?</InputLabel>
-                                                <Select
-                                                    labelId="demo-simple-select-label"
-                                                    id="demo-simple-select"
-                                                    value={data.labor_stage ? data.labor_stage : 1}
-                                                    label="Baby Status"
-                                                    onChange={handleChange}
-                                                    size="small"
-                                                >
-                                                    <MenuItem value={"Yes"}>Yes</MenuItem>
-                                                    <MenuItem value={"No"}>No</MenuItem>
-                                                </Select>
-                                            </FormControl>
-                                        </Grid>
-                                    </Grid>
                                     <p></p>
                                     <Divider />
                                     <p></p>
@@ -300,100 +187,19 @@ export default function DataImport({ id }) {
 
                                 {/* Prescribe Feeds  */}
                                 <TabPanel value="4">
-                                    <Typography variant='p' sx={{ fontSize: 'large', fontWeight: 'bold' }}>Prescribe Feeds</Typography>
+                                    <Typography variant='p' sx={{ fontSize: 'large', fontWeight: 'bold' }}>Past Import Tasks</Typography>
                                     <Divider />
                                     <p></p>
-                                    <Grid container spacing={1} padding=".5em" >
-                                        <Grid item xs={12} md={12} lg={8}>
-                                            <TextField
-                                                fullWidth="80%"
-                                                type="text"
-                                                multiline
-                                                minRows={4}
-                                                label="Select File"
-                                                placeholder="Select File"
-                                                size="small"
-                                            onChange={e=>{console.log(e)}}
-
-
-                                            />
-                                        </Grid>
-                                    </Grid>
-                                    <p></p>
-
                                     <Divider />
-                                    <p></p>
-                                    <Typography variant='p' sx={{ fontSize: 'large', fontWeight: 'bold' }}></Typography>
-                                    <Grid container spacing={1} padding=".5em" >
-                                        <Grid item xs={12} md={12} lg={6}>
-                                            <FormControl fullWidth>
-                                                <InputLabel id="demo-simple-select-label">Does mother have any breast problems?</InputLabel>
-                                                <Select
-                                                    labelId="demo-simple-select-label"
-                                                    id="demo-simple-select"
-                                                    value={data.labor_stage ? data.labor_stage : 1}
-                                                    label="Resuscitation"
-                                                    onChange={handleChange}
-                                                    size="small"
-                                                >
-                                                    <MenuItem value={"Yes"}>Yes</MenuItem>
-                                                    <MenuItem value={"No"}>No</MenuItem>
-                                                </Select>
-                                            </FormControl>
-                                        </Grid>
-
-
-                                    </Grid>
-                                    <p></p>
-                                    <Divider />
-                                    <p></p>
-                                    <Grid container spacing={1} padding=".5em" >
-                                        <Grid item xs={12} md={12} lg={6}>
-                                            <FormControl fullWidth>
-                                                <InputLabel id="demo-simple-select-label">Is the mother well?</InputLabel>
-                                                <Select
-                                                    labelId="demo-simple-select-label"
-                                                    id="demo-simple-select"
-                                                    value={data.labor_stage ? data.labor_stage : 1}
-                                                    label="Baby Status"
-                                                    onChange={handleChange}
-                                                    size="small"
-                                                >
-                                                    <MenuItem value={"Yes"}>Yes</MenuItem>
-                                                    <MenuItem value={"No"}>No</MenuItem>
-                                                </Select>
-                                            </FormControl>
-                                        </Grid>
-                                    </Grid>
-                                    <p></p>
-                                    <Divider />
-                                    <p></p>
-                                    <Stack direction="row" spacing={2} alignContent="right" >
-                                        {(!isMobile) && <Typography sx={{ minWidth: '80%' }}></Typography>}
-                                        <Button variant='contained' disableElevation sx={{ backgroundColor: 'gray' }}>Cancel</Button>
-                                        <Button variant="contained" disableElevation sx={{ backgroundColor: "#115987" }}>Save</Button>
-                                    </Stack>
                                     <p></p>
                                 </TabPanel>
-
-                    
-                                    
-
-
                             </TabContext>
                         </Box>
-
-
-
                     </Container>
                 </Layout>
             </LocalizationProvider>
-
-
-
         </>
     )
-
 }
 
 
