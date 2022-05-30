@@ -12,6 +12,10 @@ export default function PatientList() {
     let [patients, setPatients] = useState()
     let navigate = useNavigate()
 
+    let selectPatient = (id) => {
+        window.localStorage.setItem("currentPatient", id)
+    }
+
     let getPatients = async () => {
 
         let data = await FhirApi({ url: '/fhir/Patient', method: 'GET'})
@@ -37,7 +41,7 @@ export default function PatientList() {
             return
         } else {
             navigate('/login')
-            window.localStorage.setItem("next_page", "/patients")
+            window.localStorage.setItem("next_page", "/")
             return
         }
     }, [])
@@ -46,11 +50,11 @@ export default function PatientList() {
     const [selectionModel, setSelectionModel] = useState([]);
 
     const columns = [
-        { field: 'id', headerName: 'ID', width: 150, editable: true },
+        { field: 'id', headerName: 'Patient ID', width: 150, editable: true },
         { field: 'lastName', headerName: 'Last Name', width: 150, editable: true },
         { field: 'firstName', headerName: 'First Name', width: 150, editable: true },
         { field: 'age', headerName: 'Age', width: 200 },
-        { field: 'role', headerName: 'Date of admission', width: 150 }
+        // { field: 'role', headerName: 'Date of admission', width: 150 }
     ];
 
     let isMobile = useMediaQuery('(max-width:600px)');
@@ -66,13 +70,13 @@ export default function PatientList() {
                     <TextField type={"text"} size="small" sx={{ width: "80%" }} placeholder='Patient Name or Patient ID' />
                     <Button variant="contained" size='small' sx={{ width: "20%" }} disableElevation>Search</Button>
                 </Stack>
-                <br /><br />
+                <br />
                 <Container maxWidth="lg">
                     <DataGrid
                         loading={patients ? false : true}
                         rows={patients ? patients : []}
                         columns={columns}
-                        pageSize={5}
+                        pageSize={4}
                         rowsPerPageOptions={[5]}
                         checkboxSelection
                         autoHeight

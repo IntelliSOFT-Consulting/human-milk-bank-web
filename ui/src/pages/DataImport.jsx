@@ -16,7 +16,7 @@ import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker'
 
 
-export default function NewBornUnit({ id }) {
+export default function DataImport({ id }) {
 
     let [patient, setPatient] = useState({})
     let [data, setData] = useState({})
@@ -91,8 +91,8 @@ export default function NewBornUnit({ id }) {
                                                 type="text"
                                                 multiline
                                                 minRows={4}
-                                                label="Mother's Health Status"
-                                                placeholder="Mother's Health Status"
+                                                label="Select File"
+                                                placeholder="Select File"
                                                 size="small"
                                             onChange={e=>{console.log(e)}}
 
@@ -310,8 +310,8 @@ export default function NewBornUnit({ id }) {
                                                 type="text"
                                                 multiline
                                                 minRows={4}
-                                                label="Mother's Health Status"
-                                                placeholder="Mother's Health Status"
+                                                label="Select File"
+                                                placeholder="Select File"
                                                 size="small"
                                             onChange={e=>{console.log(e)}}
 

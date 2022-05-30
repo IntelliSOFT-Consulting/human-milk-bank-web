@@ -11,6 +11,8 @@ import PatientDetails from './pages/PatientDetails'
 import PatientList from './pages/PatientList'
 import NewBornUnit from './pages/NewBornUnit'
 import DataImport from './pages/DataImport'
+import DataExport from './pages/DataExport'
+
 
 
 function App() {
@@ -31,6 +33,7 @@ function App() {
           <Route path="/patients/:id" element={<PatientDetails/>} />
           <Route path="/settings" element={<PatientDetails/>} />
           <Route path="/import" element={<DataImport/>} />
+          <Route path="/import" element={<DataExport/>} />
 
         </Routes>
     </Router>
