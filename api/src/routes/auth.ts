@@ -2,7 +2,7 @@ import express, {Request, Response} from "express";
 import { requireJWTMiddleware as requireJWT, encodeSession, decodeSession } from "../lib/jwt";
 import db from '../lib/prisma'
 import * as bcrypt from 'bcrypt'
-import { sendPasswordResetEmail, validateEmail } from "../lib/email";
+import { sendPasswordResetEmail, sendWelcomeEmail, validateEmail } from "../lib/email";
 
 const router = express.Router()
 router.use(express.json())
@@ -152,7 +152,7 @@ router.post("/register", async (req: Request, res: Response) => {
             }
         })
         let resetUrl = `${process.env['WEB_URL']}/new-password?id=${user?.id}&token=${user?.resetToken}`
-        let response = await sendPasswordResetEmail(user, resetUrl)
+        let response = await sendWelcomeEmail(user, resetUrl)
         console.log("Email API Response: ", response)
         let responseData = {id:user.id, createdAt:user.createdAt, updatedAt: user.updatedAt, names:user.names, email: user.email, role: user.role}
         res.statusCode = 201
