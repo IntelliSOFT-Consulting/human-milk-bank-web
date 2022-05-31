@@ -38,18 +38,18 @@ export let sendPasswordResetEmail = async (user:any, resetLink:string) => {
 
     try {
         let response = await sendEmail({
-            subject: "Reset Password: Human Milk Bank",
+            subject: "Reset Password: Neonatal Nutrition",
             to:{
                 email:user.email as string,
                 name: user.names as string
             },
             from:{
-                name: "Human Milk Bank",
+                name: "Neonatal Nutrition",
                 email: "railamolo@gmail.com"
             },
             body: `Dear ${user.username},\n\n\nUse the link below to reset your password \n\n${resetLink}`,
             html: `
-            <a href=${"https://human-milk-bank.netlify.app"}><button style="background-color: #115987;border: none;padding: 15px 32px;color: white;width: 400px;font-weight: bold;">HUMAN MILK BANK</button></a>
+            <a href=${"https://human-milk-bank.netlify.app"}><button style="background-color: #115987;border: none;padding: 15px 32px;color: white;width: 400px;font-weight: bold;">Neonatal Nutrition</button></a>
             
             <br/>
             <p>Dear ${user.username},<p>
@@ -58,7 +58,41 @@ export let sendPasswordResetEmail = async (user:any, resetLink:string) => {
             <br/><br/>
             <a href=${resetLink}>Reset Link</a>
             <br/><br/>
-            <a href=${"https://human-milk-bank.netlify.app"}>Human Milk Bank Website</a>
+            <a href=${"https://human-milk-bank.netlify.app"}>Neonatal Nutrition Website</a>
+            `
+        })
+        return response
+    } catch (error) {
+        console.error(error)
+        return error
+    }
+}
+
+
+export let sendWelcomeEmail = async (user:any, resetLink:string) => {
+
+    try {
+        let response = await sendEmail({
+            subject: "Welcome to Neonatal Nutrition",
+            to:{
+                email:user.email as string,
+                name: user.names as string
+            },
+            from:{
+                name: "Neonatal Nutrition",
+                email: "railamolo@gmail.com"
+            },
+            body: `Dear ${user.username},\n\nAn account was created for you.\nUse the link below to get started \n\n${resetLink}`,
+            html: `
+            <a href=${"https://human-milk-bank.netlify.app"}><button style="background-color: #115987;border: none;padding: 15px 32px;color: white;width: 400px;font-weight: bold;">Neonatal Nutrition</button></a>
+            <br/>
+            <p>Dear ${user.username},<p>
+            <h3>Click on the button or link below to get started<h3/>
+            <a href=${resetLink}><button style="background-color:#115987;border: none;padding: 15px 32px;">Click Here</button></a>
+            <br/><br/>
+            <a href=${resetLink}>Reset Link</a>
+            <br/><br/>
+            <a href=${"https://human-milk-bank.netlify.app"}>Neonatal Nutrition Website</a>
             `
         })
         return response

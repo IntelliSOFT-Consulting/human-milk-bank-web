@@ -1,5 +1,6 @@
 /auth/*  https://devnndak.intellisoftkenya.com/api/auth/:splat 200
 /users/*  https://devnndak.intellisoftkenya.com/api/users/:splat 200
+/fhir/*  https://devnndak.intellisoftkenya.com/api/fhir/:splat 200
 
 /files/*  https://z.dukr.xyz/files/:splat 200
 /* /  200
