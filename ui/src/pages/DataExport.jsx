@@ -33,8 +33,24 @@ export default function DataExport({ id }) {
     };
 
     let exportPatientData = async () => {
-        // let data  = await 
-    }
+            fetch("https://devnndak.intellisoftkenya.com/fhir/Patient?_include=Observation:patient")
+              .then(async(response) => {
+                let clone = response.clone();
+                let res = await clone.json();  
+                console.log(res);
+                return response.blob()
+              })
+              .then(blob => {
+                var url = window.URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = `${new Date().toUTCString()}.json`;
+                a.click();
+              })
+              .catch(function(err) {
+                console.error(err)
+              })
+          }
 
     let getPatientDetails = async ({ id }) => {
         setOpen(false)
