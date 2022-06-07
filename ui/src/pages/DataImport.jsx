@@ -81,9 +81,9 @@ export default function DataImport({ id }) {
                                         scrollButtons="auto"
                                         aria-label="scrollable auto tabs example">
                                         <Tab label="Select Import Data" value="1" />
-                                        <Tab label="Preview " value="2" />
-                                        <Tab label="Confirm Import" value="3" />
-                                        <Tab label="Past Import Tasks" value="4" />
+                                        {/* <Tab label="Preview " value="2" /> */}
+                                        {/* <Tab label="Confirm Import" value="3" /> */}
+                                        {/* <Tab label="Past Import Tasks" value="4" /> */}
                                     </TabList>
                                 </Box>
 
