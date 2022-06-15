@@ -12,26 +12,27 @@ export default function PatientList() {
     let [patients, setPatients] = useState()
     let navigate = useNavigate()
 
-    let selectPatient = (id) => {
-        window.localStorage.setItem("currentPatient", id)
+    let search = async (params) => {
+        let builder = `${params}`
+        let data = await FhirApi({ url: '/fhir/Patient?', method: 'GET'})
+
     }
 
     let getPatients = async () => {
 
-        let data = await FhirApi({ url: '/fhir/Patient', method: 'GET'})
+        let data = await FhirApi({ url: '/fhir/Patient?_count=20', method: 'GET'})
+        // console.log(data)
         let p = data.data.entry.map((i) => {
             let r = i.resource
-            return { id: r.id, lastName: r.name[0].family, firstName: r.name[0].given[0],
+            console.log(r.name)
+            return { id: r.id, lastName: r.name[0].family || " ", firstName: r.name[0].given[0] || " ",
                 age: `${(Math.floor((new Date() - new Date(r.birthDate).getTime()) / 3.15576e+10))} years`
             }
         })
         setPatients(p)
+        return
     }
 
-    let deletePatient = async () => {
-
-    }
- 
     useEffect(() => {
         getPatients()
     }, [])
@@ -41,7 +42,7 @@ export default function PatientList() {
             return
         } else {
             navigate('/login')
-            window.localStorage.setItem("next_page", "/")
+            window.localStorage.setItem("next_page", "/patients")
             return
         }
     }, [])
@@ -53,14 +54,13 @@ export default function PatientList() {
         { field: 'id', headerName: 'Patient ID', width: 150, editable: true },
         { field: 'lastName', headerName: 'Last Name', width: 150, editable: true },
         { field: 'firstName', headerName: 'First Name', width: 150, editable: true },
-        { field: 'age', headerName: 'Age', width: 200 },
-        // { field: 'role', headerName: 'Date of admission', width: 150 }
+        { field: 'age', headerName: 'Age', width: 150 },
+        { field: 'role', headerName: 'Patient on DHM?', width: 150 }
     ];
 
     let isMobile = useMediaQuery('(max-width:600px)');
 
     let args = qs.parse(window.location.search);
-    // console.log(args)
 
     return (
         <>
@@ -76,8 +76,8 @@ export default function PatientList() {
                         loading={patients ? false : true}
                         rows={patients ? patients : []}
                         columns={columns}
-                        pageSize={4}
-                        rowsPerPageOptions={[5]}
+                        pageSize={10}
+                        rowsPerPageOptions={[10]}
                         checkboxSelection
                         autoHeight
                         disableSelectionOnClick

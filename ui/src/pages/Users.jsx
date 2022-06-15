@@ -137,7 +137,7 @@ export default function Users() {
                     {(selected.length > 0) &&
                         <>
                             <Button variant="contained" onClick={e=>{deleteUsers()}} disableElevation sx={{ backgroundColor: 'red' }}>Delete User{(selected.length > 1) && `s`}</Button>
-                            <Button variant="contained" disableElevation sx={{ backgroundColor: 'gray' }}>Reset Password</Button>
+                            <Button variant="contained" onClick={e=>{resetPassword()}} disableElevation sx={{ backgroundColor: 'gray' }}>Reset Password</Button>
                         </>
                     }
                     <Button variant="contained" disableElevation sx={{ backgroundColor: "#115987" }} onClick={handleOpen}>Create New User</Button>
