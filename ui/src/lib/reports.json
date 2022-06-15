@@ -1,0 +1,116 @@
+{
+    "reports": [{
+            "Number of Term Babies": {
+                "q": "/Observation?code=11885-1&value-quantity=gt37",
+                "description": "Number of term babies",
+                "query": "total",
+                "type":"query"
+            }
+        },
+        {
+            "Number of Preterm Babies": {
+                "q": "/Observation?code=11885-1&value-quantity=lt37",
+                "description": "Number of preterm babies",
+                "query": "total",
+                "type":"query"
+            }
+        },
+        {
+            "Number of Babies": {
+                "q": "/Patient?",
+                "description": "Number of babies",
+                "query": "total",
+                "type":"query"
+            }
+        },
+        {
+            "% change of Term Babies": {
+                "type":"computed",
+                "range":"dates",
+                "numerator":"${Number of Term Babies}",
+                "denominator":"${Number of Babies}"
+            }
+        },
+        {
+            "% change of Preterm Babies": {
+                "type":"computed",
+                "range":"dates"
+
+            }
+        },
+        {
+            "Extremely, Very Low, Low Birth weight": {
+                "%-preterm-babies": "",
+                "type":"computed",
+                "range":"dates"
+
+            }
+        },
+        {
+            "No. of Infants on Donor Human Milk": {
+                "q": "/Observation?code=DHM-Volume-1",
+                "description": "Number of Infants on Donor Human Milk",
+                "query": "total",
+                "type":"query"
+            }
+        },
+        {
+            "Average length of DHM use ?": {
+                "q": "/Observation?code=11885-1&value-quantity=gt37",
+                "description": "Number of term babies",
+                "query": "total",
+                "type":"query"
+            }
+        },
+        {
+            "Total Term and Preterm DHM available?": {
+                "q": "/Observation?code=11885-1&value-quantity=gt37",
+                "description": "Number of term babies",
+                "query": "total",
+                "type":"query"
+            }
+        },
+        {
+            "Infants fully receiving DHM": {
+                "q": "/Observation?code=11885-1&value-quantity=gt37",
+                "description": "Number of term babies",
+                "query": "total",
+                "type":"query"
+            }
+        },
+        {
+            "Total volume of DHM available?": {
+                "q": "/Observation?code=11885-1&value-quantity=gt37",
+                "description": "Number of term babies",
+                "query": "total",
+                "type":"query"
+            }
+        },
+        {
+            "Total volume of DHM available?": {
+                "q": "/Observation?code=11885-1&value-quantity=gt37",
+                "description": "Number of term babies",
+                "query": "total",
+                "type":"query"
+            }
+        },
+        {
+            "Average volume of DHM use per day?": {
+                "q": "/Observation?code=11885-1&value-quantity=gt37",
+                "description": "Number of term babies",
+                "query": "total",
+                "type":"query"
+            }
+        },
+        {
+            "Infants partially receiving DHM?": {
+                "q": "/Observation?code=11885-1&value-quantity=gt37",
+                "description": "Number of term babies",
+                "query": "total",
+                "type":"query"
+            }
+        }
+        
+
+    ]
+}
