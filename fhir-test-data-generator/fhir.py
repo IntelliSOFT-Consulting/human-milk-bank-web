@@ -5,33 +5,34 @@ from faker import Faker
 fake = Faker()
 
 
-def sample_encounter(id, patient, practitioner=None):
+def encounter_gen(id, patient, practitioner=None):
     return {
         "resourceType": "Encounter",
-        "id": id, 
+        "id": id,
         "active": True,
         "gender": "female",
-        "date": (fake.date_of_birth(minimum_age=19).isoformat() 
-            if patient == "mother" else fake.date_of_birth(maximum_age=0).isoformat()),
+        "date": (fake.date_of_birth(minimum_age=19).isoformat()
+                 if patient == "mother" else fake.date_of_birth(maximum_age=0).isoformat()),
         "address": [{
             "postalCode": "Pumwani"
         }]
     }
 
-def sample_patient(id, patient="mother"):
+
+def patient_gen(id, patient="mother"):
     name = fake.name()
-    print("Patient Name: ",name)
+    print("Patient Name: ", name)
     return {
         "resourceType": "Patient",
-        "id": id, 
+        "id": id,
         "active": True,
         "name": [{
             "family": name.split(" ")[0],
             "given": [name.split(" ")[1]]
         }],
         "gender": "female",
-        "birthDate": (fake.date_of_birth(minimum_age=19).isoformat() 
-            if patient == "mother" else fake.date_of_birth(maximum_age=0).isoformat()),
+        "birthDate": (fake.date_of_birth(minimum_age=19).isoformat()
+                      if patient == "mother" else fake.date_of_birth(maximum_age=0).isoformat()),
         "address": [{
             "postalCode": "Pumwani"
         }]
@@ -70,13 +71,21 @@ observation_map = [
         "code": "8339-4",
         "range": "2000,3000",
         "display": "Birth weight Measured",
+        "system":"loinc",
         "units": "grams"
     }, {
         "code": "11885-1",
         "range": "20,40",
         "display": "Gestation",
         "units": "weeks",
+        "system":"loinc"
     },
+    {
+        "code": "419099009",
+        "type": "snomed",
+        "display": "Dead",
+        "system":"snomed"
+    }
 ]
 
 

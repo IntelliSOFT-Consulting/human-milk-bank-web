@@ -57,7 +57,7 @@
         {
             "Average length of DHM use ?": {
                 "q": "/Observation?code=11885-1&value-quantity=gt37",
-                "description": "Number of term babies",
+                "description": "Average length of DHM used",
                 "query": "total",
                 "type":"query"
             }
@@ -65,7 +65,7 @@
         {
             "Total Term and Preterm DHM available?": {
                 "q": "/Observation?code=11885-1&value-quantity=gt37",
-                "description": "Number of term babies",
+                "description": "Total Term and Preterm DHM available",
                 "query": "total",
                 "type":"query"
             }
