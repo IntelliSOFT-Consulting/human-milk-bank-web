@@ -9,7 +9,7 @@ import { getCookie } from '../lib/cookie';
 import { FhirApi } from './../lib/api'
 
 export default function PatientList() {
-    let [patients, setPatients] = useState()
+    let [patients, setPatients] = useState([])
     let navigate = useNavigate()
 
     let search = async (params) => {
@@ -73,7 +73,7 @@ export default function PatientList() {
                 <br />
                 <Container maxWidth="lg">
                     <DataGrid
-                        loading={patients ? false : true}
+                        loading={(patients && (patients.length > 0))  ? false : (patients.length === 0) ? false : true}
                         rows={patients ? patients : []}
                         columns={columns}
                         pageSize={10}

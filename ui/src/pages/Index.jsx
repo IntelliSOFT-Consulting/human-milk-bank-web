@@ -49,10 +49,10 @@ export default function Index() {
         <>
             <Layout>
                 <br />
-                <Stack direction="row" gap={1} sx={{ paddingLeft: isMobile ? "1em" : "2em", paddingRight: isMobile ? "1em" : "2em" }}>
+                {/* <Stack direction="row" gap={1} sx={{ paddingLeft: isMobile ? "1em" : "2em", paddingRight: isMobile ? "1em" : "2em" }}>
                     <TextField type={"text"} size="small" sx={{ width: "80%" }} placeholder='Patient Name or Patient ID' />
                     <Button variant="contained" size='small' sx={{ width: "20%" }} disableElevation>Search</Button>
-                </Stack>
+                </Stack> */}
                 <br />
                 <Container maxWidth="lg">
                    
