@@ -1,6 +1,6 @@
 import {getCookie} from './cookie';
 
-export let apiHost = (process.env['REACT_APP_NODE_ENV'] === "dev") ? 'http://localhost:8080' : '';
+export let apiHost = (process.env['REACT_APP_NODE_ENV'] === "dev") ? 'http://localhost:8080' : '/api';
 
 export let FhirApi = async (params) => {
     let _defaultHeaders = {
@@ -30,7 +30,6 @@ export let FhirApi = async (params) => {
         }
         console.error(error)
         return res
-
     }
 
     //To-do: process response and response type

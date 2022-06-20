@@ -143,8 +143,7 @@ router.post("/register", async (req: Request, res: Response) => {
         })
         user = await db.user.update({
             where: {
-                ...(email) && {email},
-                ...(username) && {username}
+                id:user?.id
             }, 
             data:{
                 resetToken:session.token,
@@ -197,7 +196,8 @@ router.post("/reset-password", async (req: Request, res: Response) => {
         user = await db.user.update({
             where: {
                 ...(email) && {email},
-                ...(username) && {username}
+                ...(username) && {username},
+                ...(id) && {id}
             }, 
             data:{
                 resetToken:session.token,

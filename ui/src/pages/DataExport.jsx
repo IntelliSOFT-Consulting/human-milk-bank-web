@@ -16,6 +16,7 @@ import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker'
 
 
+
 export default function DataExport({ id }) {
 
     let [patient, setPatient] = useState({})
@@ -30,6 +31,26 @@ export default function DataExport({ id }) {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
+    let exportPatientData = async () => {
+            fetch("https://devnndak.intellisoftkenya.com/fhir/Patient/$everything?_include=Observation:patient")
+              .then(async(response) => {
+                let clone = response.clone();
+                let res = await clone.json();  
+                console.log(res);
+                return response.blob()
+              })
+              .then(blob => {
+                var url = window.URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = `${new Date().toUTCString()}.json`;
+                a.click();
+              })
+              .catch(function(err) {
+                console.error(err)
+              })
+          }
 
     let getPatientDetails = async ({ id }) => {
         setOpen(false)
@@ -80,51 +101,40 @@ export default function DataExport({ id }) {
                                         variant="scrollable"
                                         scrollButtons="auto"
                                         aria-label="scrollable auto tabs example">
-                                        <Tab label="Select Export Data" value="1" />
-                                        <Tab label="Preview " value="2" />
-                                        <Tab label="Confirm Export" value="3" />
-                                        <Tab label="Past Export Tasks" value="4" />
+                                        <Tab label="Export Data" value="1" />
+                                        {/* <Tab label="Preview " value="2" /> */}
+                                        {/* <Tab label="Confirm Export" value="3" /> */}
+                                        {/* <Tab label="Past Export Tasks" value="4" /> */}
                                     </TabList>
                                 </Box>
 
                                 {/* 1. Rapid Assessment */}
                                 <TabPanel value="1">
                                     {/* <p></p> */}
-                                    <Typography variant='p' sx={{ fontSize: 'large', fontWeight: 'bold' }}>Select Input File</Typography>
+                                    <Typography variant='p' sx={{ fontSize: 'large', fontWeight: 'bold' }}>Export Patient Data</Typography>
                                     <Divider />
                                     <p></p>
                                     <Grid container spacing={1} padding=".5em" >
                                         <Grid item xs={12} md={12} lg={8}>
-                                            <TextField
-                                                fullWidth="80%"
-                                                type="text"
-                                                multiline
-                                                minRows={4}
-                                                label="Select File"
-                                                placeholder="Select File"
-                                                size="small"
-                                                onChange={e => { console.log(e) }}
-
-
-                                            />
+                                            <Button variant="contained" onClick={e=>{exportPatientData()}}>Export Patient Data</Button>
                                         </Grid>
                                     </Grid>
                                     <p></p>
 
-                                    <Divider />
+                                    {/* <Divider />
                                     <p></p>
                                     <Typography variant='p' sx={{ fontSize: 'large', fontWeight: 'bold' }}></Typography>
                                     <Grid container spacing={1} padding=".5em" >
 
-                                    </Grid>
+                                    </Grid> */}
                                     <Divider />
                                     <p></p>
-                                    <Stack direction="row" spacing={2} alignContent="right" >
+                                    {/* <Stack direction="row" spacing={2} alignContent="right" >
                                         {(!isMobile) && <Typography sx={{ minWidth: '80%' }}></Typography>}
                                         <Button variant='contained' disableElevation sx={{ backgroundColor: 'gray' }}>Cancel</Button>
                                         <Button variant="contained" disableElevation sx={{ backgroundColor: "#115987" }}>Next</Button>
                                     </Stack>
-                                    <p></p>
+                                    <p></p> */}
                                 </TabPanel>
 
                                 {/* Newborn Admission  */}
