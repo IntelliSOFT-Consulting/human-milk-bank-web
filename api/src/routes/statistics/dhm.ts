@@ -15,9 +15,8 @@ let days = [
 
 
 // DHM Statistics 
-router.get('/:ip', (req: Request, res: Response) => {
+router.get('/', (req: Request, res: Response) => {
 
-    let { ip } = req.params
     let dhmInfants = (Math.floor(Math.random() * 30))
     let fullyReceiving = Math.floor(dhmInfants * Math.random())
 
