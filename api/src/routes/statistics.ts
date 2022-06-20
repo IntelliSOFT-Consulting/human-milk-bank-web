@@ -4,9 +4,6 @@ const router = Router();
 
 router.use(express.json())
 
-
-
-
 let months = [
     "January", "Februrary", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"
@@ -21,7 +18,6 @@ router.get('/', (req: Request, res: Response) => {
     let totalBabies = (Math.floor(Math.random() * 500))
     let preterm  = Math.floor(totalBabies * Math.random())
     let term = totalBabies - preterm 
-    // let averageDays = 
 
     let dhm = (Math.floor(Math.random() * 20))
     let breastFeeding = (Math.floor(Math.random() * 30))
@@ -48,7 +44,7 @@ router.get('/', (req: Request, res: Response) => {
                 "formula": formula
             },
             "mortalityRate": {
-                "rate": "3%",
+                "rate": Math.floor(Math.random() * 10) + 1,
                 "data": months.map((month) => {
                     return {
                         "month": month,
