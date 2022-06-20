@@ -19,9 +19,8 @@ router.get('/:ip', (req: Request, res: Response) => {
     let { ip } = req.params
 
 
-    let totalBabies = (Math.floor(Math.random() * 50))
-    let preterm = Math.floor(totalBabies * Math.random())
-    let term = totalBabies - preterm
+    let amount = 
+   
 
     res.json(
         {
@@ -29,8 +28,20 @@ router.get('/:ip', (req: Request, res: Response) => {
             "varianceAmount": "10ml", //Compared to Previous Day
             "data": [
                 {
-                    "time": "11 AM", // 3Hour Interval
-                    "amount": 50
+                    "time": "12 AM", // 3Hour Interval
+                    "amount": (Math.floor(Math.random() * 50))
+                },
+                {
+                    "time": "3 AM", // 3Hour Interval
+                    "amount": (Math.floor(Math.random() * 50))
+                },
+                {
+                    "time": "6 AM", // 3Hour Interval
+                    "amount": (Math.floor(Math.random() * 50))
+                },
+                {
+                    "time": "9 AM", // 3Hour Interval
+                    "amount": (Math.floor(Math.random() * 50))
                 }
             ]
         }

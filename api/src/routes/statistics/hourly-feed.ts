@@ -17,11 +17,13 @@ let days = [
 router.get('/:ip', (req: Request, res: Response) => {
 
     let {ip} = req.params
+
+
      
 
     let totalBabies = (Math.floor(Math.random() * 50))
     let preterm  = Math.floor(totalBabies * Math.random())
-    let term = totalBabies - preterm 
+    let term = totalBabies - preterm
     
     res.json(
         {
@@ -30,6 +32,30 @@ router.get('/:ip', (req: Request, res: Response) => {
             "data": [
               {
                 "time": "11 AM", // 3 Hour Interval
+                "ivVolume": (Math.floor(Math.random() * 50)),
+                "ebmVolume": (Math.floor(Math.random() * 50)),
+                "dhmVolume": (Math.floor(Math.random() * 50))
+              },
+              {
+                "time": "2 PM", // 3 Hour Interval
+                "ivVolume": (Math.floor(Math.random() * 50)),
+                "ebmVolume": (Math.floor(Math.random() * 50)),
+                "dhmVolume": (Math.floor(Math.random() * 50))
+              },
+              {
+                "time": "5 PM", // 3 Hour Interval
+                "ivVolume": (Math.floor(Math.random() * 50)),
+                "ebmVolume": (Math.floor(Math.random() * 50)),
+                "dhmVolume": (Math.floor(Math.random() * 50))
+              },
+              {
+                "time": "8 PM", // 3 Hour Interval
+                "ivVolume": (Math.floor(Math.random() * 50)),
+                "ebmVolume": (Math.floor(Math.random() * 50)),
+                "dhmVolume": (Math.floor(Math.random() * 50))
+              },
+              {
+                "time": "11 PM", // 3 Hour Interval
                 "ivVolume": (Math.floor(Math.random() * 50)),
                 "ebmVolume": (Math.floor(Math.random() * 50)),
                 "dhmVolume": (Math.floor(Math.random() * 50))
