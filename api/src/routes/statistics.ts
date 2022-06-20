@@ -52,7 +52,7 @@ router.get('/', (req: Request, res: Response) => {
                 "data": months.map((month) => {
                     return {
                         "month": month,
-                        "value": `${Math.floor(Math.random() * 10) + 1}%`
+                        "value": Math.floor(Math.random() * 10) + 1
                     }
                 })
             },
