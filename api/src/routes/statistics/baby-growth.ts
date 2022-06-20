@@ -16,31 +16,31 @@ let days = [
 
 router.get('/:ip', (req: Request, res: Response) => {
 
-    let {ip} = req.params
-     
+    let { ip } = req.params
 
-    let totalBabies = (Math.floor(Math.random() * 50))
-    let preterm  = Math.floor(totalBabies * Math.random())
-    let term = totalBabies - preterm 
-    
+    let weight = (Math.floor(Math.random() * 2000))
+    if (weight < 1200) { weight += 1200 }
+    let noOfDays = Math.floor(Math.random() * 15)
+    if (noOfDays < 2) { noOfDays+=2 }
+    let _days = []
+
+    for (let i = 0; i < noOfDays; i++) {
+        _days.push(i)
+    }
     res.json(
         {
-            "dhmInfants": 10,
-            "dhmVolume": "1200 mls",
-            "dhmAverage": "68 mls",
-            "fullyReceiving": 8,
-            "dhmLength": "3 days",
-            "data": 
-            days.map((day) => {
+            "currentWeight": `${weight} gm`,
+            "data": _days.map((day) => {
+                let weight = (Math.floor(Math.random() * 2000))
+                if (weight < 1200) { weight += 1200 }
                 return {
-                    "day": day,
-                    "preterm": preterm,
-                    "term": term,
-                    "total": totalBabies
-                  }
+                    "projected": weight,
+                    "actual": weight - (Math.floor(Math.random() * 500)),
+                    "lifeDay": day,
+                }
             })
-          }
-          );
+        }
+    );
     return
 });
 
