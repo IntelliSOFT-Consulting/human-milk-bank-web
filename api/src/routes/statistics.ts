@@ -18,7 +18,6 @@ router.get('/', (req: Request, res: Response) => {
     let totalBabies = (Math.floor(Math.random() * 500))
     let preterm  = Math.floor(totalBabies * Math.random())
     let term = totalBabies - preterm 
-
     let dhm = (Math.floor(Math.random() * 20))
     let breastFeeding = (Math.floor(Math.random() * 30))
     let oral = (Math.floor(Math.random() * 20))
@@ -63,6 +62,9 @@ router.get('/', (req: Request, res: Response) => {
         });
     return
 });
+
+
+
 
 
 
