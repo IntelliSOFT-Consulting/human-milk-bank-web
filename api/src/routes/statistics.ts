@@ -5,8 +5,8 @@ const router = Router();
 router.use(express.json())
 
 let months = [
-    "January", "Februrary", "March", "April", "May", "June", "July",
-    "August", "September", "October", "November", "December"
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
+    "Aug", "Sep", "Oct", "Nov", "Dec"
 ]
 
 let days = [

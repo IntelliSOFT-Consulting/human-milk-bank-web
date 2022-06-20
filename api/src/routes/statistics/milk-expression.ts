@@ -5,8 +5,8 @@ const router = Router();
 router.use(express.json())
 
 let months = [
-    "January", "Februrary", "March", "April", "May", "June", "July",
-    "August", "September", "October", "November", "December"
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
+    "Aug", "Sep", "Oct", "Nov", "Dec"
 ]
 
 let days = [
@@ -16,31 +16,25 @@ let days = [
 
 router.get('/:ip', (req: Request, res: Response) => {
 
-    let {ip} = req.params
-     
+    let { ip } = req.params
+
 
     let totalBabies = (Math.floor(Math.random() * 50))
-    let preterm  = Math.floor(totalBabies * Math.random())
-    let term = totalBabies - preterm 
-    
+    let preterm = Math.floor(totalBabies * Math.random())
+    let term = totalBabies - preterm
+
     res.json(
         {
-            "dhmInfants": 10,
-            "dhmVolume": "1200 mls",
-            "dhmAverage": "68 mls",
-            "fullyReceiving": 8,
-            "dhmLength": "3 days",
-            "data": 
-            days.map((day) => {
-                return {
-                    "day": day,
-                    "preterm": preterm,
-                    "term": term,
-                    "total": totalBabies
-                  }
-            })
-          }
-          );
+            "totalAmount": "400 ml",
+            "varianceAmount": "10ml", //Compared to Previous Day
+            "data": [
+                {
+                    "time": "11 AM", // 3Hour Interval
+                    "amount": 50
+                }
+            ]
+        }
+    );
     return
 });
 
