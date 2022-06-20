@@ -28,19 +28,19 @@ router.get('/:ip', (req: Request, res: Response) => {
             "varianceAmount": "10ml", //Compared to Previous Day
             "data": [
                 {
-                    "time": "12 AM", // 3Hour Interval
+                    "time": "12:00 AM", // 3Hour Interval
                     "amount": (Math.floor(Math.random() * 50))
                 },
                 {
-                    "time": "3 AM", // 3Hour Interval
+                    "time": "3:00 AM", // 3Hour Interval
                     "amount": (Math.floor(Math.random() * 50))
                 },
                 {
-                    "time": "6 AM", // 3Hour Interval
+                    "time": "6:00 AM", // 3Hour Interval
                     "amount": (Math.floor(Math.random() * 50))
                 },
                 {
-                    "time": "9 AM", // 3Hour Interval
+                    "time": "9:00 AM", // 3Hour Interval
                     "amount": (Math.floor(Math.random() * 50))
                 }
             ]
