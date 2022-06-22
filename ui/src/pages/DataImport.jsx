@@ -11,13 +11,16 @@ import TabPanel from '@mui/lab/TabPanel';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-
+import { FhirApi } from '../lib/api'
+import { SignalCellularNullSharp } from '@mui/icons-material'
 
 export default function DataImport() {
 
-    
+
     let navigate = useNavigate()
     let [open, setOpen] = useState(false)
+    let [data, setData] = useState()
+    let [selectedFile, setFile] = useState(null)
     let [message, setMessage] = useState(false)
     let isMobile = useMediaQuery('(max-width:600px)');
 
@@ -27,7 +30,30 @@ export default function DataImport() {
         setValue(newValue);
     };
 
-    
+    let importData = async () => {
+        if (!selectedFile) {
+            setOpen(false)
+            setMessage("Import file not selected")
+            setOpen(true)
+            setTimeout(() => {
+                setOpen(false)
+            }, [1500])
+            return
+        }
+        let d;
+        d = await selectedFile.text()
+        console.log(JSON.parse(d))
+        let response = await FhirApi({url:"/api/fhir", method:"POST", data:d})
+        setMessage("PayloadTooLargeError: request entity too large")
+        setOpen(true)
+        setTimeout(() => {
+            setOpen(false)
+        }, [1500])
+        return
+        
+    }
+
+
     useEffect(() => {
         if (getCookie("token")) {
             return
@@ -42,6 +68,13 @@ export default function DataImport() {
             <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <Layout>
                     <Container sx={{ border: '1px white dashed' }}>
+                        <Snackbar
+                            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                            open={open}
+                            onClose={""}
+                            message={message}
+                            key={"loginAlert"}
+                        />
                         <Box sx={{ width: '100%', typography: 'body1' }}>
                             <TabContext value={value}>
                                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -63,31 +96,14 @@ export default function DataImport() {
                                     <Divider />
                                     <p></p>
                                     <Grid container spacing={1} padding=".5em" >
-                                        <Grid item xs={12} md={12} lg={8}>
-                                            <TextField
-                                                fullWidth="80%"
-                                                type="text"
-                                                multiline
-                                                minRows={4}
-                                                label="Input FHIR Bundle"
-                                                placeholder="Input FHIR Bundle"
-                                                size="small"
-                                                onChange={e => { console.log(e) }}
-                                            />
-                                        </Grid>
-                                    </Grid>
-                                    <p></p>
-                                    <Typography variant='p' sx={{ fontSize: 'large', fontWeight: 'bold', textAlign: "center" }}>or</Typography>
-                                    <Grid container spacing={1} padding=".5em" >
                                         <Grid container spacing={1} padding=".5em" >
                                             <Grid item xs={12} md={12} lg={8}>
                                                 <label htmlFor="contained-button-file">
-                                                    <Input accept="image/*" id="contained-button-file" multiple type="file" />
-                                                    <Button variant="contained" component="span">
-                                                        Upload FHIR Bundle (json file)
+                                                    <Input accept="application/JSON" id="import-file" type="file" placeholder={"FHIR Bundle (.json file)"} onChange={e => { setFile(e.target.files[0]) }} />
+                                                    <Button variant="contained" onClick={e => { importData() }} component="span">
+                                                        Import
                                                     </Button>
                                                 </label>
-
                                             </Grid>
                                         </Grid>
                                     </Grid>
@@ -98,13 +114,8 @@ export default function DataImport() {
                                     <Grid container spacing={1} padding=".5em" >
 
                                     </Grid>
-                                    <Divider />
                                     <p></p>
-                                    <Stack direction="row" spacing={2} alignContent="right" >
-                                        {(!isMobile) && <Typography sx={{ minWidth: '80%' }}></Typography>}
-                                        <Button variant='contained' disableElevation sx={{ backgroundColor: 'gray' }}>Cancel</Button>
-                                        <Button variant="contained" disableElevation sx={{ backgroundColor: "#115987" }}>Next</Button>
-                                    </Stack>
+                                    
                                     <p></p>
                                 </TabPanel>
 
