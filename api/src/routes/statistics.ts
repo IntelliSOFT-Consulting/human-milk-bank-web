@@ -1,23 +1,24 @@
 import express, { Router, Request, Response } from 'express';
+import { generateReport } from '../lib/fhir';
 
 const router = Router();
 
 router.use(express.json())
 
 let months = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
-    "Aug", "Sep", "Oct", "Nov", "Dec"
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ]
 
 let days = [
     "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
 ]
 
-router.get('/', (req: Request, res: Response) => {
+router.get('/', async (req: Request, res: Response) => {
 
-    let totalBabies = (Math.floor(Math.random() * 500))
-    let preterm  = Math.floor(totalBabies * Math.random())
-    let term = totalBabies - preterm 
+    let totalBabies = (Math.floor(Math.random() * 50))
+    if(totalBabies < 10){totalBabies+=20}
+    let preterm = Math.floor(totalBabies * Math.random())
+    let term = totalBabies - preterm
     let dhm = (Math.floor(Math.random() * 20))
     let breastFeeding = (Math.floor(Math.random() * 30))
     let oral = (Math.floor(Math.random() * 20))
@@ -25,6 +26,7 @@ router.get('/', (req: Request, res: Response) => {
     let formula = 100 - dhm - breastFeeding - oral - ebm
     res.json(
         {
+            "status":"success",
             "totalBabies": totalBabies,
             "preterm": preterm,
             "term": term,
@@ -62,10 +64,5 @@ router.get('/', (req: Request, res: Response) => {
         });
     return
 });
-
-
-
-
-
 
 export default router;

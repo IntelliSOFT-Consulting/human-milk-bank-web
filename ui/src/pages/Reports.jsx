@@ -4,33 +4,63 @@ import { useNavigate } from 'react-router-dom'
 import * as qs from 'query-string';
 import Layout from '../components/Layout';
 import { getCookie } from '../lib/cookie';
-import { FhirApi } from './../lib/api'
+import { apiHost, FhirApi } from './../lib/api'
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import reports from '../lib/reports.json'
 
 export default function Reports() {
     let [patients, setPatients] = useState()
     let [data, setData] = useState({ fromDate: new Date().toISOString(), toDate: new Date().toISOString() })
     let navigate = useNavigate()
+    let [report, selectReport] = useState()
     let [status, setStatus] = useState(null)
-    let [results, setResults] = useState(null)
+    let [results, setResults] = useState([])
+    let [reports, setReports] = useState([])
     let [open, setOpen] = useState(false)
     let [message, setMessage] = useState(false)
 
+    let availableReports = {
+        "General": [{ totalBabies: "Total Number of Babies" }, { "preterm": "Number of Preterm Babies" },
+        { "term": "Number of Term Babies" }],
+        "Feeding/BreastFeeding": [],
+        "Lactation Support": [],
+        "Infant Nutrition/Growth": [],
+        "Human Milk Bank": []
+    }
+
 
     let getReport = async (dates = null) => {
-        console.log(data.report)
         if (!dates) {
-            if (data.report.type === "query") {
+            if (report) {
                 setStatus("loading")
-                setResults(null)
-                let res = await FhirApi({ url: `/fhir${data.report.q}`, method: 'GET' })
-                console.log(res.data[data.report.query])
-                setResults({ results: res.data[data.report.query], description: data.report.description })
-                setStatus(null)
+                setResults([])
+                try {
+                    let data = (await (await fetch(`${apiHost}/statistics?${new URLSearchParams(
+                        {
+                            reports: JSON.stringify(availableReports[`${report}`].map((r) => {
+                                return Object.keys(r)[0]
+                            })),
+                        })}`,
+                        {
+                            method: 'GET',
+                            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getCookie("token")}` },
+                            arg: JSON.stringify()
+                        }
+                    )).json())
+                    setMessage((data.status === "success") ? "Data fetched successfully" : "Data fetch error")
+                    delete data.status
+                    setResults(data)
+                    setOpen(true)
+                    setTimeout(() => { setOpen(false) }, 1500)
+                    return
+                } catch (error) {
+                    setMessage(JSON.stringify(error))
+                    setOpen(true)
+                    setTimeout(() => { setOpen(false) }, 1500)
+                    return
+                }
             }
         } else {
             if (data.report.type === "query") {
@@ -41,10 +71,8 @@ export default function Reports() {
                     return
                 }
                 try {
-
                     setStatus("loading")
                     setResults(null)
-
                     let res = await FhirApi({ url: `/fhir${data.report.q}&_lastUpdated=ge${data.fromDate}&_lastUpdated=le${data.toDate}`, method: 'GET' })
                     console.log(res.data[data.report.query])
                     setResults({ results: res.data[data.report.query], description: data.report.description })
@@ -64,12 +92,30 @@ export default function Reports() {
 
     useEffect(() => {
         getReport()
-    }, [data.report])
+    }, [report])
 
     useEffect(() => {
         getReport(true)
     }, [data.fromDate, data.toDate])
 
+    useEffect(() => {
+        let _reports = []
+        results && Object.keys(results).map((result) => {
+            console.log(result)
+
+            for (let r of availableReports[report]) {
+                if (result === Object.keys(r)[0]) {
+                    _reports.push(r)
+                    // console.log(r)
+
+                }
+            }
+        })
+        setReports(_reports)
+        console.log("Reports: ", reports)
+        return
+
+    }, [results])
 
     useEffect(() => {
         if (getCookie("token")) {
@@ -104,14 +150,13 @@ export default function Reports() {
                             <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
-                                // value={data.report}
                                 label="Select Report"
-                                onChange={e => { setData({ ...data, report: e.target.value }); console.log(e.target.value) }}
+                                onChange={e => { selectReport(e.target.value); console.log(e.target.value) }}
                                 size="small"
                             >
 
-                                {reports && reports['reports'].map((k) => {
-                                    return <MenuItem value={k[(Object.keys(k)[0])]}>{Object.keys(k)[0]}</MenuItem>
+                                {availableReports && Object.keys(availableReports).map((k) => {
+                                    return <MenuItem value={k}>{k}</MenuItem>
 
                                 })}
                             </Select>
@@ -119,8 +164,16 @@ export default function Reports() {
                     </Stack>
                     <br />
                     <Container maxWidth="lg">
-                        {results &&
+                        {(report && (results.length < 1)) ?
                             <>
+                                <Typography>Loading...</Typography>
+                                <CircularProgress />
+                            </>
+                            :
+                            (!report && <Typography sx={{ textAlign: "center" }}>Select a report from the list</Typography>)}
+                        {(report && results) &&
+                            <>
+                                {report && <Typography variant="h4" sx={{ textAlign: "center" }}>{report}</Typography>}
                                 <Grid container spacing={1} padding=".5em" >
                                     <Grid item xs={12} md={12} lg={6}>
                                         {!isMobile ? <DesktopDatePicker
@@ -140,6 +193,7 @@ export default function Reports() {
                                             />}
                                     </Grid>
                                     <Grid item xs={12} md={12} lg={6}>
+
                                         {!isMobile ? <DesktopDatePicker
                                             label="To Date"
                                             inputFormat="yyyy-MM-dd"
@@ -150,7 +204,7 @@ export default function Reports() {
                                             <MobileDatePicker
                                                 label="To Date"
                                                 inputFormat="yyyy-MM-dd"
-                                            value={data.toDate ? data.toDate : (new Date().setHours(23)).toISOString()}
+                                                value={data.toDate ? data.toDate : (new Date().setHours(23)).toISOString()}
 
                                                 onChange={e => { console.log(e); setData({ ...data, toDate: new Date(e).toISOString() }) }}
                                                 renderInput={(params) => <TextField {...params} size="small" fullWidth />}
@@ -159,26 +213,23 @@ export default function Reports() {
                                 </Grid>
                             </>
                         }
-                        <Card>
-                            <CardContent>
-                                {(results) ?
+                        <br />
+                        <Grid container spacing={1} padding=".5em" >
+                            {/* {JSON.stringify(reports)} */}
+                            {(reports.length > 0) ? reports.map((report) => {
+                                return <Grid item xs={12} md={12} lg={4}>
+                                    <Card>
+                                        <CardContent>
+                                            <Typography>{report[(Object.keys(report)[0])]}</Typography>
+                                            <Typography variant="h3">{results[(Object.keys(report)[0])]}</Typography>
 
-                                    <>
-                                        <Typography>{results.description}</Typography>
-                                        <Typography variant='h4'>{results.results}</Typography>
-
-                                    </> : (!results && status && status === "loading") ?
-                                        <>
-                                            <Typography>Loading...</Typography>
-                                            <CircularProgress />
-                                        </>
-                                        :
-                                        <Typography>Select a report from the list</Typography>
-                                }
-                            </CardContent>
-
-                        </Card>
-
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            }) :
+                                ((results.length > 0) && <Typography sx={{ textAlign: "center" }}>No reports defined</Typography>)
+                            }
+                        </Grid>
                     </Container>
                 </Layout>
             </LocalizationProvider>
