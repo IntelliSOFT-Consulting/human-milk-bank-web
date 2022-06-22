@@ -208,9 +208,9 @@ export default function Users() {
                                     onChange={e => { setData({ ...data, role: e.target.value }) }}
                                     size="small"
                                 >
-                                    <MenuItem value={"ADMINISTRATOR"}>Administrator</MenuItem>
-                                    <MenuItem value={"STAFF"}>Staff</MenuItem>
-                                    <MenuItem value={"PRACTITIONER"}>Practitioner</MenuItem>
+                                    <MenuItem value={"ADMINISTRATOR"}>ADMINISTRATOR</MenuItem>
+                                    <MenuItem value={"SPECIALIST"}>SPECIALIST</MenuItem>
+                                    <MenuItem value={"NURSE"}>NURSE</MenuItem>
                                 </Select>
                             </FormControl>
 
