@@ -13,7 +13,7 @@
             "type": "query"
         },
         "noOfBabies": {
-            "q": "/Patient?",
+            "q": "/Patient?address=Pumwani",
             "description": "Number of babies",
             "query": "total",
             "type": "query"
@@ -21,6 +21,7 @@
         "%changeOfTermBabies": {
             "q": "/Observation?code=DHM-Volume-1",
             "type": "computed",
+            "query": "total",
             "range": "dates",
             "numerator": "${Number of Term Babies}",
             "denominator": "${Number of Babies}"
@@ -28,6 +29,7 @@
         "%changeOfPretermBabies": {
             "type": "computed",
             "range": "dates",
+            "query":"total",
             "q": "/Observation?code=DHM-Volume-1"
 
         },
@@ -35,7 +37,8 @@
             "%-preterm-babies": "",
             "q": "/Observation?code=DHM-Volume-1",
             "type": "computed",
-            "range": "dates"
+            "range": "dates",
+            "query":"total"
         },
         "noOfInfantsOnDHM": {
             "q": "/Observation?code=DHM-Volume-1",

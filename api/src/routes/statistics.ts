@@ -16,9 +16,12 @@ let days = [
 router.get('/', async (req: Request, res: Response) => {
 
     let totalBabies = (Math.floor(Math.random() * 50))
-    if(totalBabies < 10){totalBabies+=20}
+    totalBabies = await generateReport("noOfBabies")
     let preterm = Math.floor(totalBabies * Math.random())
+    preterm = await generateReport("noOfPretermBabies")
     let term = totalBabies - preterm
+
+    
     let dhm = (Math.floor(Math.random() * 20))
     let breastFeeding = (Math.floor(Math.random() * 30))
     let oral = (Math.floor(Math.random() * 20))
