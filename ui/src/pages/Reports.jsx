@@ -33,6 +33,11 @@ export default function Reports() {
 
     let getReport = async (dates = null) => {
         if (!dates) {
+            if (!(data.fromDate <= data.toDate)) {
+                setMessage("Invalid dates: *from date* must be less than or equal to *to date*")
+                setOpen(true)
+                return
+            }
             if (report) {
                 setStatus("loading")
                 setResults([])
@@ -95,8 +100,11 @@ export default function Reports() {
     }, [report])
 
     useEffect(() => {
-        getReport(true)
-    }, [data.fromDate, data.toDate])
+        getReport()
+    }, [data.toDate])
+    useEffect(() => {
+        getReport()
+    }, [data.fromDate])
 
     useEffect(() => {
         let _reports = []
@@ -144,26 +152,73 @@ export default function Reports() {
                         key={"loginAlert"}
                     />
                     <br />
-                    <Stack direction="row" gap={1} sx={{ paddingLeft: isMobile ? "1em" : "2em", paddingRight: isMobile ? "1em" : "2em" }}>
-                        <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">Select Report</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                label="Select Report"
-                                onChange={e => { selectReport(e.target.value); console.log(e.target.value) }}
-                                size="small"
-                            >
+                    <Grid container spacing={1} padding=".5em" >
+                        <Grid item xs={12} md={12} lg={6}>
+                            <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">Select Report</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    label="Select Report"
+                                    onChange={e => { selectReport(e.target.value); console.log(e.target.value) }}
+                                    size="small"
+                                >
 
-                                {availableReports && Object.keys(availableReports).map((k) => {
-                                    return <MenuItem value={k}>{k}</MenuItem>
+                                    {availableReports && Object.keys(availableReports).map((k) => {
+                                        return <MenuItem value={k}>{k}</MenuItem>
 
-                                })}
-                            </Select>
-                        </FormControl>
-                    </Stack>
-                    <br />
+                                    })}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+
+                        {(report && results) &&
+                            <>
+
+
+                                <Grid item xs={12} md={12} lg={3}>
+                                    {!isMobile ? <DesktopDatePicker
+                                        label="From Date"
+                                        inputFormat="yyyy-MM-dd"
+                                        value={data.fromDate ? data.fromDate : (new Date().setFullYear(2000)).toISOString()}
+                                        onChange={e => { console.log(e); setData({ ...data, fromDate: new Date(e).toISOString() }) }}
+                                        renderInput={(params) => <TextField {...params} size="small" fullWidth />}
+                                    /> :
+                                        <MobileDatePicker
+                                            label="From Date"
+                                            inputFormat="yyyy-MM-dd"
+                                            value={data.fromDate ? data.fromDate : (new Date().setFullYear(2000)).toISOString()}
+
+                                            onChange={e => { console.log(e); setData({ ...data, fromDate: new Date(e).toISOString() }) }}
+                                            renderInput={(params) => <TextField {...params} size="small" fullWidth />}
+                                        />}
+                                </Grid>
+                                <Grid item xs={12} md={12} lg={3}>
+
+                                    {!isMobile ? <DesktopDatePicker
+                                        label="To Date"
+                                        inputFormat="yyyy-MM-dd"
+                                        value={data.toDate ? data.toDate : (new Date().setHours(23)).toISOString()}
+                                        onChange={e => { console.log(e); setData({ ...data, toDate: new Date(e).toISOString() }) }}
+                                        renderInput={(params) => <TextField {...params} size="small" fullWidth />}
+                                    /> :
+                                        <MobileDatePicker
+                                            label="To Date"
+                                            inputFormat="yyyy-MM-dd"
+                                            value={data.toDate ? data.toDate : (new Date().setHours(23)).toISOString()}
+
+                                            onChange={e => { console.log(e); setData({ ...data, toDate: new Date(e).toISOString() }) }}
+                                            renderInput={(params) => <TextField {...params} size="small" fullWidth />}
+                                        />}
+                                </Grid>
+
+                            </>
+                        }
+
+                    </Grid>
+                    
                     <Container maxWidth="lg">
+                        {report && <Typography variant="h4" sx={{ textAlign: "center" }}>{report}</Typography>}
                         {(report && (results.length < 1)) ?
                             <>
                                 <Typography>Loading...</Typography>
@@ -171,49 +226,7 @@ export default function Reports() {
                             </>
                             :
                             (!report && <Typography sx={{ textAlign: "center" }}>Select a report from the list</Typography>)}
-                        {(report && results) &&
-                            <>
-                                {report && <Typography variant="h4" sx={{ textAlign: "center" }}>{report}</Typography>}
-                                <Grid container spacing={1} padding=".5em" >
-                                    <Grid item xs={12} md={12} lg={6}>
-                                        {!isMobile ? <DesktopDatePicker
-                                            label="From Date"
-                                            inputFormat="yyyy-MM-dd"
-                                            value={data.fromDate ? data.fromDate : (new Date().setFullYear(2000)).toISOString()}
-                                            onChange={e => { console.log(e); setData({ ...data, fromDate: new Date(e).toISOString() }) }}
-                                            renderInput={(params) => <TextField {...params} size="small" fullWidth />}
-                                        /> :
-                                            <MobileDatePicker
-                                                label="From Date"
-                                                inputFormat="yyyy-MM-dd"
-                                                value={data.fromDate ? data.fromDate : (new Date().setFullYear(2000)).toISOString()}
 
-                                                onChange={e => { console.log(e); setData({ ...data, fromDate: new Date(e).toISOString() }) }}
-                                                renderInput={(params) => <TextField {...params} size="small" fullWidth />}
-                                            />}
-                                    </Grid>
-                                    <Grid item xs={12} md={12} lg={6}>
-
-                                        {!isMobile ? <DesktopDatePicker
-                                            label="To Date"
-                                            inputFormat="yyyy-MM-dd"
-                                            value={data.toDate ? data.toDate : (new Date().setHours(23)).toISOString()}
-                                            onChange={e => { console.log(e); setData({ ...data, toDate: new Date(e).toISOString() }) }}
-                                            renderInput={(params) => <TextField {...params} size="small" fullWidth />}
-                                        /> :
-                                            <MobileDatePicker
-                                                label="To Date"
-                                                inputFormat="yyyy-MM-dd"
-                                                value={data.toDate ? data.toDate : (new Date().setHours(23)).toISOString()}
-
-                                                onChange={e => { console.log(e); setData({ ...data, toDate: new Date(e).toISOString() }) }}
-                                                renderInput={(params) => <TextField {...params} size="small" fullWidth />}
-                                            />}
-                                    </Grid>
-                                </Grid>
-                            </>
-                        }
-                        <br />
                         <Grid container spacing={1} padding=".5em" >
                             {/* {JSON.stringify(reports)} */}
                             {(reports.length > 0) ? reports.map((report) => {
