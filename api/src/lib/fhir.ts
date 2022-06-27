@@ -36,15 +36,13 @@ export let FhirApi = async (params:any) => {
 }
 
 export let generateReport = async (name: any) => {
-    //find report
     const reportName = name as keyof typeof reports
     let report = reports[reportName]
 
     console.log(report)
-    let data = await FhirApi({
-        url: report.q
-    })
+    let data = await FhirApi({url: report.q})
     if (data.status === 'success'){
-        return data.data
+        console.log(data.data[report.query])
+        return data.data[report.query]
     }
 }
