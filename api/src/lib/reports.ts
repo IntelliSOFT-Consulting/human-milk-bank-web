@@ -22,10 +22,10 @@ export let percentageFeeds = async () => {
 export let firstFeeding = async () => {
 
     let observations = await generateReport("firstFeeding")
-    let categories = {withinOne:0, afterOne:0, afterTwo:0, afterThree:0}
-    let _map = {withinOne:"Within 1 Hour", afterOne:"After 1 Hour", afterTwo:"After 2 Hours", afterThree:"After 3 Hours"}
+    let categories: { [index: string]: number } = {withinOne:0, afterOne:0, afterTwo:0, afterThree:0}
+    let _map: { [index: string]: string } = {withinOne:"Within 1 Hour", afterOne:"After 1 Hour", afterTwo:"After 2 Hours", afterThree:"After 3 Hours"}
     if(observations){
-        (for let o of observations){
+        for(let o of observations){
             for(let i in Object.keys(_map)){
                 if (o.value === _map[i]){
                     categories[i] += 1
@@ -52,8 +52,6 @@ export let dhmDailySummary = async () => {
 
 export let expressingTime = async () => {
 
-
-
 }
 
 
@@ -71,7 +69,7 @@ export let dhmByMonth = async () => {
 
 }
 
-export let calculateMortalityRate = async () => {
+export let calculateMortalityRate: Function = async() => {
     let totalBabies = await getTotalBabies()
     let totalDeceased = await generateReport("noOfDeceasedInfants")
     let arr = []

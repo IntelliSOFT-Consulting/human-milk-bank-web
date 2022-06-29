@@ -4,6 +4,8 @@ import { calculateMortalityRate, firstFeeding, expressingTime, percentageFeeds }
 
 const router = Router();
 
+// console.log(typeof calculateMortalityRate)
+
 router.use(express.json())
 
 let months = [
@@ -21,7 +23,7 @@ router.get('/', async (req: Request, res: Response) => {
     let preterm = Math.floor(totalBabies * Math.random())
     preterm = await generateReport("noOfPretermBabies")
     let term = totalBabies - preterm
-    let mortalityRate = await calculateMortalityRate()
+    let mortalityRate = 0
 
     res.json(
         {
