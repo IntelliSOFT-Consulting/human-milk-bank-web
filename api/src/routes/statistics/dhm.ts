@@ -1,4 +1,5 @@
 import express, { Router, Request, Response } from 'express';
+import { generateReport } from '../../lib/fhir';
 
 const router = Router();
 
@@ -15,15 +16,17 @@ let days = [
 
 
 // DHM Statistics 
-router.get('/', (req: Request, res: Response) => {
+router.get('/', async (req: Request, res: Response) => {
 
-    let dhmInfants = (Math.floor(Math.random() * 30))
+    let dhmInfants = await generateReport("noOfInfantsonDHM") || 0
+    let dhmVolume = await generateReport("noOfInfantsonDHM") || 0
+    let dhmAverage = await generateReport("noOfInfantsonDHM") || 0
     let fullyReceiving = Math.floor(dhmInfants * Math.random())
 
     res.json(
         {
             "dhmInfants": dhmInfants,
-            "dhmVolume": "1200 mls",
+            "dhmVolume": dhmVolume,
             "dhmAverage": "68 mls",
             "fullyReceiving": fullyReceiving,
             "dhmLength": "3 days",
