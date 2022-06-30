@@ -74,7 +74,7 @@
             "type": "query"
         },
         "volumeOfDHMAvailable": {
-            "more": "Get the sum total volume in DMH stock",
+            "more": "Get the sum total volume in DHM stock",
             "q": "/Observation?code=11885-1&value-quantity=gt37",
             "description": "Number of term babies",
             "query": "total",
@@ -116,7 +116,7 @@
             "query": "total",
             "type": "query"
         },
-        "noOfInfantsExpressingTime": {
+        "expressingTime": {
             "q": "/Observation?code=Breastfeeding",
             "description": "Number of infants breastfeeding",
             "query": "total",

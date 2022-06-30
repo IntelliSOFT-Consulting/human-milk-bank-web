@@ -38,11 +38,11 @@ export let FhirApi = async (params:any) => {
 export let generateReport = async (name: any) => {
     const reportName = name as keyof typeof reports
     let report = reports[reportName]
-    console.log(report)
+    // console.log(report)
     let data = await FhirApi({url: report.q})
     if (data.status === 'success'){
-        console.log(data.data[report.query])
-        if(report.query !== "data"){
+        // console.log(data.data[report.query])
+        if(report.query !== "entry"){
         return parseFloat(((data.data[report.query])).toString())
         }
         else {

@@ -19,16 +19,18 @@ export let percentageFeeds = async () => {
     }
 }
 
-
 export let firstFeeding = async () => {
 
     let observations = await generateReport("firstFeeding")
+    console.log(observations)
     let categories: { [index: string]: number } = { withinOne: 0, afterOne: 0, afterTwo: 0, afterThree: 0 }
     let _map: { [index: string]: string } = { withinOne: "Within 1 Hour", afterOne: "After 1 Hour", afterTwo: "After 2 Hours", afterThree: "After 3 Hours" }
     if (observations) {
         for (let o of observations) {
-            for (let i in Object.keys(_map)) {
-                if (o.value === _map[i]) {
+            // console.log(o)
+            for (let i of Object.keys(_map)) {
+
+                if (o.resource.valueString === _map[i]) {
                     categories[i] += 1
                 }
             }
@@ -38,27 +40,15 @@ export let firstFeeding = async () => {
 }
 
 
-
-
-// type of DHM
-export let dhmDailySummary = async () => {
-
-    // let currentMonth = months[new Date().getDays()]
-    let dayOfWeek = new Date().toLocaleString('en-us', { weekday: 'short' })
-
-    let high, low;
-
-    return
-}
-
 export let expressingTime = async () => {
     let observations = await generateReport("expressingTime")
     let categories: { [index: string]: number } = { withinOne: 0, afterOne: 0, afterTwo: 0, afterThree: 0 }
     let _map: { [index: string]: string } = { withinOne: "Within 1 Hour", afterOne: "After 1 Hour", afterTwo: "After 2 Hours", afterThree: "After 3 Hours" }
     if (observations) {
         for (let o of observations) {
+            console.log(o)
             for (let i in Object.keys(_map)) {
-                if (o.value === _map[i]) {
+                if (o.valueString === _map[i]) {
                     categories[i] += 1
                 }
             }
@@ -67,20 +57,11 @@ export let expressingTime = async () => {
 
 }
 
-
-export let averageDays = async () => {
-    return
-}
-
 export let calculateMortalityRateByMonth = async () => {
 
     return
 }
 
-export let dhmByMonth = async () => {
-    return
-
-}
 
 export let calculateMortalityRate = async () => {
     let totalBabies = await getTotalBabies()
@@ -98,3 +79,8 @@ export let calculateMortalityRate = async () => {
 }
 
 
+export let calculateExpressingTimes = async () => {
+
+
+    return
+}
