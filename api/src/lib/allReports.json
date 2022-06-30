@@ -29,15 +29,15 @@
         "%changeOfPretermBabies": {
             "type": "computed",
             "range": "dates",
-            "query":"total",
+            "query": "total",
             "q": "/Observation?code=DHM-Volume-1"
 
         },
-        "@:noOfDeceasedInfants": {
+        "noOfDeceasedInfants": {
             "type": "computed",
             "range": "dates",
-            "query":"total",
-            "q": "/Patient?address=Pumwani&deceasedDate="
+            "query": "total",
+            "q": "/Patient?address=Pumwani&deceased=true"
 
         },
         "extremely, Very Low, Low Birth weight": {
@@ -45,11 +45,11 @@
             "q": "/Observation?code=DHM-Volume-1",
             "type": "computed",
             "range": "dates",
-            "query":"total"
+            "query": "total"
         },
         "noOfInfantsOnDHM": {
-            "q": "/Observation?code=DHM-Volume-1",
-            "description": "Number of Infants on Donor Human Milk",
+            "q": "/NutritionOrder?_count",
+            "description": "Number of infants receiving DHM",
             "query": "total",
             "type": "query"
         },
@@ -60,21 +60,21 @@
             "type": "query"
         },
         "totalVolumeOfMilkExpressed": {
-            "p":"Patient/id",
+            "p": "Patient/id",
             "q": "/Observation?code=11885-1&value-quantity=gt37",
             "description": "Total Term and Preterm DHM available",
             "query": "total",
             "type": "query"
         },
         "infantsFullyReceivingDHM": {
-            "more":"The sum total of babies receiving DHM",
+            "more": "The sum total of babies receiving DHM",
             "q": "/Observation?code=11885-1&value-quantity=gt37",
             "description": "Number of term babies",
             "query": "total",
             "type": "query"
         },
         "volumeOfDHMAvailable": {
-            "more":"Get the sum total volume in DMH stock",
+            "more": "Get the sum total volume in DMH stock",
             "q": "/Observation?code=11885-1&value-quantity=gt37",
             "description": "Number of term babies",
             "query": "total",
@@ -116,37 +116,37 @@
             "query": "total",
             "type": "query"
         },
-        "noOfInfantsExpressingTime":{
+        "noOfInfantsExpressingTime": {
             "q": "/Observation?code=Breastfeeding",
             "description": "Number of infants breastfeeding",
             "query": "total",
             "type": "query"
         },
-        "dhmVolume":{
+        "dhmVolume": {
             "q": "/Observation?code=Breastfeeding",
             "description": "Number of infants breastfeeding",
             "query": "total",
             "type": "query"
         },
-        "totalFeed":{
+        "totalFeed": {
             "q": "/Observation?code=Breastfeeding",
             "description": "Number of infants breastfeeding",
             "query": "total",
             "type": "query"
         },
-        "firstFeeding":{
+        "firstFeeding": {
             "q": "/Observation?code=Fed-After",
             "description": "Number of infants breastfeeding",
             "query": "entry",
             "type": "all"
         },
-        "totalPrescribeFeed":{
+        "totalPrescribeFeed": {
             "q": "/Observation?code=Breastfeeding",
             "description": "Number of infants breastfeeding",
             "query": "total",
             "type": "query"
         },
-        "milkExpresssionTime":{
+        "milkExpresssionTime": {
             "q": "/Observation?code=Breastfeeding",
             "description": "Number of infants breastfeeding",
             "query": "total",
@@ -155,6 +155,3 @@
 
     }
 }
-
-
-

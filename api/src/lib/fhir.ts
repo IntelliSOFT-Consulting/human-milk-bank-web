@@ -1,4 +1,4 @@
-import {reports} from './reports.json'
+import {reports} from './allReports.json'
 import fetch from 'cross-fetch'
 
 export let apiHost = "http://localhost:8080/fhir"

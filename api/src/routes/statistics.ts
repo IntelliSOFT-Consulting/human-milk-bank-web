@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from 'express';
 import { generateReport } from '../lib/fhir';
-import { calculateMortalityRate, firstFeeding, expressingTime, percentageFeeds } from '../lib/reports';
+import { firstFeeding, expressingTime, percentageFeeds, calculateMortalityRate } from '../lib/reports';
 
 const router = Router();
 
@@ -23,7 +23,8 @@ router.get('/', async (req: Request, res: Response) => {
     let preterm = Math.floor(totalBabies * Math.random())
     preterm = await generateReport("noOfPretermBabies")
     let term = totalBabies - preterm
-    let mortalityRate = 0
+    let mortalityRate = await calculateMortalityRate()
+    // let mortalityRate = 0
 
     res.json(
         {
@@ -35,7 +36,7 @@ router.get('/', async (req: Request, res: Response) => {
             "firstFeeding": await firstFeeding(),
             "percentageFeeds":await percentageFeeds(),
             "mortalityRate": mortalityRate,
-            "expressingTime":await expressingTime()
+            // "expressingTime":await expressingTime()
         });
     return
 });
