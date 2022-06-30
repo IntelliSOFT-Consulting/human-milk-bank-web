@@ -8,17 +8,29 @@ let getTotalBabies = async () => {
 }
 
 export let percentageFeeds = async () => {
-    let totalBabies = await getTotalBabies();
-    let ebm = await generateReport("noOfInfantsOnEBM") 
-    let dhm = await generateReport("infantsPartiallyReceivingDHM") 
-    let breastFeeding = await generateReport("noOfInfantsBreastFeeding") 
-    let formula = await generateReport("noOfInfantsOnFormula") 
-    let total = (formula + ebm + dhm + breastFeeding)
+    let ebm = await generateReport("noOfInfantsOnEBM")
+    let dhm = await infantsOnDHM()
+    let breastFeeding = await generateReport("noOfInfantsBreastFeeding")
+    let formula = await generateReport("noOfInfantsOnFormula")
     return {
-        ebm: (ebm/total * 100), dhm: (dhm/total * 100), breastFeeding: (breastFeeding/total *100), formula: (formula/total * 100), oral: (breastFeeding/total *100)
+        ebm, dhm, breastFeeding, formula, oral: (breastFeeding)
     }
 }
 
+
+export let infantsOnDHM = async () => {
+    let patientIds = []
+    let infants = await generateReport("infantsOnDHM")
+    for (let i of infants) {
+        let x = i.resource.patient.reference
+        if (patientIds.indexOf(x) < 0) {
+            patientIds.push(x)
+        }
+    }
+    return patientIds.length
+}
+
+// infantsOnDHM()
 export let firstFeeding = async () => {
 
     let observations = await generateReport("firstFeeding")
@@ -75,7 +87,7 @@ export let calculateMortalityRate = async () => {
     })
     // get monthly values
 
-    return { rate: (totalDeceased / totalBabies), data:arr }
+    return { rate: (totalDeceased / totalBabies), data: arr }
 }
 
 
