@@ -10,17 +10,13 @@ let getTotalBabies = async () => {
 export let percentageFeeds = async () => {
     // latest unique one prescribed
     let ebm = await infantsOnEBM()
-    // let ebm = await generateReport("noOfInfantsOnEBM")
     let dhm = await infantsOnDHM()
     let breastFeeding = await infantsOnBreastFeeding()
-    // let ebm = await generateReport("noOfInfantsOnEBM")
     let formula = await infantsOnFormula()
-    // let ebm = await generateReport("noOfInfantsOnEBM")
     return {
         ebm, dhm, breastFeeding, formula, oral: (breastFeeding)
     }
 }
-
 
 export let infantsOnDHM = async () => {
     let patientIds = []
@@ -37,26 +33,29 @@ export let infantsOnDHM = async () => {
 export let infantsOnEBM = async () => {
     let patientIds = []
     let infants = await generateReport("infantsOnEBM")
-    console.log("inf", infants)
+    // console.log("inf", infants)
     for (let i of infants) {
-        let x = i.resource.subject
-        if (patientIds.indexOf(x) < 0) {
+        let x = i.resource.subject.reference
+        if (patientIds.indexOf(x) === -1) {
             patientIds.push(x)
         }
     }
-    return patientIds.length
+    console.log(patientIds)
+    let unique = [...new Set(patientIds)]
+    return unique.length
 }
 
 export let infantsOnBreastFeeding = async () => {
     let patientIds = []
     let infants = await generateReport("infantsOnBreastFeeding")
     for (let i of infants) {
-        let x = i.resource.subject
+        let x = i.resource.subject.reference
         if (patientIds.indexOf(x) < 0) {
             patientIds.push(x)
         }
     }
-    return patientIds.length
+    let unique = [...new Set(patientIds)]
+    return unique.length
 }
 
 export let infantsOnFormula = async () => {
@@ -68,7 +67,8 @@ export let infantsOnFormula = async () => {
             patientIds.push(x)
         }
     }
-    return patientIds.length
+    let unique = [...new Set(patientIds)]
+    return unique.length
 }
 // infantsOnDHM()
 export let firstFeeding = async () => {
