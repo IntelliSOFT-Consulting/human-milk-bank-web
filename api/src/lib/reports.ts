@@ -39,7 +39,7 @@ export let infantsOnEBM = async () => {
     let infants = await generateReport("infantsOnEBM")
     console.log("inf", infants)
     for (let i of infants) {
-        let x = i.resource.patient.reference
+        let x = i.resource.subject
         if (patientIds.indexOf(x) < 0) {
             patientIds.push(x)
         }

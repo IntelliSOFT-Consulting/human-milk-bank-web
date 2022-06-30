@@ -117,13 +117,13 @@
             "type": "all"
         },
         "noOfInfantsOnEBM": {
-            "q": "/Observation?code=EBM",
+            "q": "/Observation?code=EBM-Volume",
             "description": "Number of infants on EBM",
             "query": "total",
             "type": "query"
         },
         "infantsOnEBM": {
-            "q": "/Observation?code=EBM",
+            "q": "/Observation?code=EBM-Volume",
             "description": "Infants on EBM",
             "query": "entry",
             "type": "all"
