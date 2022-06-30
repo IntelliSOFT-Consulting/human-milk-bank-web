@@ -17,3 +17,13 @@
 
 
 
+https://devnndak.intellisoftkenya.com/fhir/Observation?code=Un-Pasteurized
+https://devnndak.intellisoftkenya.com/fhir/Observation?code=Pasteurized
+
+
+Lactation Support Encounter....
+
+
+
+https://devnndak.intellisoftkenya.com/fhir/Observation?code=Fed-After
+https://devnndak.intellisoftkenya.com/fhir/Observation?code=55420-4
