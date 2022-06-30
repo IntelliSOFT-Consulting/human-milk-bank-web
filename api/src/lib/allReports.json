@@ -52,7 +52,8 @@
             "description": "Number of infants receiving DHM",
             "query": "total",
             "type": "query"
-        },"infantsOnDHM": {
+        },
+        "infantsOnDHM": {
             "q": "/NutritionOrder?_count",
             "description": "Number of infants receiving DHM",
             "query": "entry",
@@ -109,17 +110,35 @@
             "query": "total",
             "type": "query"
         },
+        "infantsOnFormula": {
+            "q": "/Observation?code=Formula-Volume",
+            "description": "Number of infants of formula",
+            "query": "entry",
+            "type": "all"
+        },
         "noOfInfantsOnEBM": {
             "q": "/Observation?code=EBM",
             "description": "Number of infants on EBM",
             "query": "total",
             "type": "query"
         },
+        "infantsOnEBM": {
+            "q": "/Observation?code=EBM",
+            "description": "Infants on EBM",
+            "query": "entry",
+            "type": "all"
+        },
         "noOfInfantsBreastFeeding": {
             "q": "/Observation?code=Breast-Milk",
             "description": "Number of infants breastfeeding",
             "query": "total",
             "type": "query"
+        },
+        "infantsOnBreastFeeding": {
+            "q": "/Observation?code=Breast-Milk",
+            "description": "Number of infants breastfeeding",
+            "query": "entry",
+            "type": "all"
         },
         "expressingTime": {
             "q": "/Observation?code=Breastfeeding",

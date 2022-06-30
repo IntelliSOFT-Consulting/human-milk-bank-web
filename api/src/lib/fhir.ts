@@ -46,7 +46,7 @@ export let generateReport = async (name: any) => {
         return parseFloat(((data.data[report.query])).toString())
         }
         else {
-            return (data.data[report.query])
+            return (data.data[report.query] || [])
         }
     }
     return parseFloat("0.0")
