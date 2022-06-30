@@ -9,7 +9,7 @@ let getTotalBabies = async () => {
 
 export let percentageFeeds = async () => {
     let totalBabies = await getTotalBabies();
-    let ebm = await generateReport("noOfInfantsOnDHM") 
+    let ebm = await generateReport("noOfInfantsOnEBM") 
     let dhm = await generateReport("infantsPartiallyReceivingDHM") 
     let breastFeeding = await generateReport("noOfInfantsBreastFeeding") 
     let formula = await generateReport("noOfInfantsOnFormula") 
