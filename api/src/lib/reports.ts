@@ -30,7 +30,7 @@ export let infantsOnDHM = async () => {
     return patientIds.length
 }
 
-infantsOnDHM()
+// infantsOnDHM()
 export let firstFeeding = async () => {
 
     let observations = await generateReport("firstFeeding")
