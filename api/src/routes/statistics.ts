@@ -34,7 +34,7 @@ router.get('/', async (req: Request, res: Response) => {
             "term": term,
             "averageDays": 3,
             "firstFeeding": await firstFeeding(),
-            // "percentageFeeds":await percentageFeeds(),
+            "percentageFeeds":await percentageFeeds(),
             "mortalityRate": mortalityRate,
             // "expressingTime":await expressingTime()
         });
