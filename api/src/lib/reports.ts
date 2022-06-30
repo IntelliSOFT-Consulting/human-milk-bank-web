@@ -8,10 +8,14 @@ let getTotalBabies = async () => {
 }
 
 export let percentageFeeds = async () => {
-    let ebm = await generateReport("noOfInfantsOnEBM")
+    // latest unique one prescribed
+    let ebm = await infantsOnEBM()
+    // let ebm = await generateReport("noOfInfantsOnEBM")
     let dhm = await infantsOnDHM()
-    let breastFeeding = await generateReport("noOfInfantsBreastFeeding")
-    let formula = await generateReport("noOfInfantsOnFormula")
+    let breastFeeding = await infantsOnBreastFeeding()
+    // let ebm = await generateReport("noOfInfantsOnEBM")
+    let formula = await infantsOnFormula()
+    // let ebm = await generateReport("noOfInfantsOnEBM")
     return {
         ebm, dhm, breastFeeding, formula, oral: (breastFeeding)
     }
@@ -30,6 +34,42 @@ export let infantsOnDHM = async () => {
     return patientIds.length
 }
 
+export let infantsOnEBM = async () => {
+    let patientIds = []
+    let infants = await generateReport("infantsOnEBM")
+    console.log("inf", infants)
+    for (let i of infants) {
+        let x = i.resource.subject
+        if (patientIds.indexOf(x) < 0) {
+            patientIds.push(x)
+        }
+    }
+    return patientIds.length
+}
+
+export let infantsOnBreastFeeding = async () => {
+    let patientIds = []
+    let infants = await generateReport("infantsOnBreastFeeding")
+    for (let i of infants) {
+        let x = i.resource.subject
+        if (patientIds.indexOf(x) < 0) {
+            patientIds.push(x)
+        }
+    }
+    return patientIds.length
+}
+
+export let infantsOnFormula = async () => {
+    let patientIds = []
+    let infants = await generateReport("infantsOnFormula")
+    for (let i of infants) {
+        let x = i.resource.subject
+        if (patientIds.indexOf(x) < 0) {
+            patientIds.push(x)
+        }
+    }
+    return patientIds.length
+}
 // infantsOnDHM()
 export let firstFeeding = async () => {
 
@@ -74,10 +114,18 @@ export let calculateMortalityRateByMonth = async () => {
     return
 }
 
+// let getLastMonths = (12) => {
+//     let list = []
+//     while(list.length <= 12){
+//         list()
+//     }
+        
+// }
 
 export let calculateMortalityRate = async () => {
     let totalBabies = await getTotalBabies()
     let totalDeceased = await generateReport("noOfDeceasedInfants")
+    
     let arr: Array<any> = []
     months.map((month) => {
         arr.push({
