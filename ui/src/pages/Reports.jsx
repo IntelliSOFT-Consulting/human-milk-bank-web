@@ -91,8 +91,6 @@ export default function Reports() {
                 }
             }
         }
-
-
     }
 
     useEffect(() => {
@@ -110,7 +108,6 @@ export default function Reports() {
         let _reports = []
         results && Object.keys(results).map((result) => {
             console.log(result)
-
             for (let r of availableReports[report]) {
                 if (result === Object.keys(r)[0]) {
                     _reports.push(r)
@@ -175,7 +172,6 @@ export default function Reports() {
                         {(report && results) &&
                             <>
 
-
                                 <Grid item xs={12} md={12} lg={3}>
                                     {!isMobile ? <DesktopDatePicker
                                         label="From Date"
@@ -194,7 +190,6 @@ export default function Reports() {
                                         />}
                                 </Grid>
                                 <Grid item xs={12} md={12} lg={3}>
-
                                     {!isMobile ? <DesktopDatePicker
                                         label="To Date"
                                         inputFormat="yyyy-MM-dd"

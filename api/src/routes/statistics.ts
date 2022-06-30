@@ -1,7 +1,10 @@
 import express, { Router, Request, Response } from 'express';
 import { generateReport } from '../lib/fhir';
+import { firstFeeding, expressingTime, percentageFeeds, calculateMortalityRate } from '../lib/reports';
 
 const router = Router();
+
+// console.log(typeof calculateMortalityRate)
 
 router.use(express.json())
 
@@ -20,13 +23,9 @@ router.get('/', async (req: Request, res: Response) => {
     let preterm = Math.floor(totalBabies * Math.random())
     preterm = await generateReport("noOfPretermBabies")
     let term = totalBabies - preterm
+    let mortalityRate = await calculateMortalityRate()
+    // let mortalityRate = 0
 
-    
-    let dhm = (Math.floor(Math.random() * 20))
-    let breastFeeding = (Math.floor(Math.random() * 30))
-    let oral = (Math.floor(Math.random() * 20))
-    let ebm = (Math.floor(Math.random() * 20))
-    let formula = 100 - dhm - breastFeeding - oral - ebm
     res.json(
         {
             "status":"success",
@@ -34,36 +33,10 @@ router.get('/', async (req: Request, res: Response) => {
             "preterm": preterm,
             "term": term,
             "averageDays": 3,
-            "firstFeeding": {
-                "withinOne": 3,
-                "afterOne": 4,
-                "afterTwo": 1,
-                "afterThree": 2
-            },
-            "percentageFeeds": {
-                "dhm": dhm,
-                "breastFeeding": breastFeeding,
-                "oral": oral,
-                "ebm": ebm,
-                "formula": formula
-            },
-            "mortalityRate": {
-                "rate": Math.floor(Math.random() * 10) + 1,
-                "data": months.map((month) => {
-                    return {
-                        "month": month,
-                        "value": Math.floor(Math.random() * 10) + 1
-                    }
-                })
-            },
-            "expressingTime": months.map((month) => {
-                return {
-                    "month": month,
-                    "underFive": Math.floor(Math.random() * 10),
-                    "underSeven": Math.floor(Math.random() * 10),
-                    "aboveSeven": Math.floor(Math.random() * 10)
-                }
-            })
+            "firstFeeding": await firstFeeding(),
+            "percentageFeeds":await percentageFeeds(),
+            "mortalityRate": mortalityRate,
+            // "expressingTime":await expressingTime()
         });
     return
 });

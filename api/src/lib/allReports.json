@@ -29,8 +29,15 @@
         "%changeOfPretermBabies": {
             "type": "computed",
             "range": "dates",
-            "query":"total",
+            "query": "total",
             "q": "/Observation?code=DHM-Volume-1"
+
+        },
+        "noOfDeceasedInfants": {
+            "type": "computed",
+            "range": "dates",
+            "query": "total",
+            "q": "/Patient?address=Pumwani&deceased=true"
 
         },
         "extremely, Very Low, Low Birth weight": {
@@ -38,11 +45,11 @@
             "q": "/Observation?code=DHM-Volume-1",
             "type": "computed",
             "range": "dates",
-            "query":"total"
+            "query": "total"
         },
         "noOfInfantsOnDHM": {
-            "q": "/Observation?code=DHM-Volume-1",
-            "description": "Number of Infants on Donor Human Milk",
+            "q": "/NutritionOrder?_count",
+            "description": "Number of infants receiving DHM",
             "query": "total",
             "type": "query"
         },
@@ -53,19 +60,21 @@
             "type": "query"
         },
         "totalVolumeOfMilkExpressed": {
-            "p":"Patient/id",
+            "p": "Patient/id",
             "q": "/Observation?code=11885-1&value-quantity=gt37",
             "description": "Total Term and Preterm DHM available",
             "query": "total",
             "type": "query"
         },
         "infantsFullyReceivingDHM": {
+            "more": "The sum total of babies receiving DHM",
             "q": "/Observation?code=11885-1&value-quantity=gt37",
             "description": "Number of term babies",
             "query": "total",
             "type": "query"
         },
         "volumeOfDHMAvailable": {
+            "more": "Get the sum total volume in DMH stock",
             "q": "/Observation?code=11885-1&value-quantity=gt37",
             "description": "Number of term babies",
             "query": "total",
@@ -84,10 +93,65 @@
             "type": "query"
         },
         "infantsPartiallyReceivingDHM": {
-            "q": "/Observation?code=11885-1&value-quantity=gt37",
-            "description": "Number of term babies",
+            "q": "/NutritionOrder",
+            "description": "Number of infants receiving DHM",
+            "query": "total",
+            "type": "query"
+        },
+        "noOfInfantsOnFormula": {
+            "q": "/Observation?code=Formula",
+            "description": "Number of infants of formula",
+            "query": "total",
+            "type": "query"
+        },
+        "noOfInfantsOnEBM": {
+            "q": "/Observation?code=EBM",
+            "description": "Number of infants on EBM",
+            "query": "total",
+            "type": "query"
+        },
+        "noOfInfantsBreastFeeding": {
+            "q": "/Observation?code=Breastfeeding",
+            "description": "Number of infants breastfeeding",
+            "query": "total",
+            "type": "query"
+        },
+        "noOfInfantsExpressingTime": {
+            "q": "/Observation?code=Breastfeeding",
+            "description": "Number of infants breastfeeding",
+            "query": "total",
+            "type": "query"
+        },
+        "dhmVolume": {
+            "q": "/Observation?code=Breastfeeding",
+            "description": "Number of infants breastfeeding",
+            "query": "total",
+            "type": "query"
+        },
+        "totalFeed": {
+            "q": "/Observation?code=Breastfeeding",
+            "description": "Number of infants breastfeeding",
+            "query": "total",
+            "type": "query"
+        },
+        "firstFeeding": {
+            "q": "/Observation?code=Fed-After",
+            "description": "Number of infants breastfeeding",
+            "query": "entry",
+            "type": "all"
+        },
+        "totalPrescribeFeed": {
+            "q": "/Observation?code=Breastfeeding",
+            "description": "Number of infants breastfeeding",
+            "query": "total",
+            "type": "query"
+        },
+        "milkExpresssionTime": {
+            "q": "/Observation?code=Breastfeeding",
+            "description": "Number of infants breastfeeding",
             "query": "total",
             "type": "query"
         }
+
     }
 }
