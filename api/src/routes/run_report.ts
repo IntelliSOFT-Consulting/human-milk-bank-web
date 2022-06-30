@@ -41,9 +41,7 @@ router.get('/', async (req: Request, res: Response) => {
     return
 });
 
-let getMonthFromDate = (date:string) => {
-    return new Date(date).getMonth()
-}
+
 
 export default router;
 
