@@ -4,24 +4,14 @@ import { firstFeeding, expressingTime, percentageFeeds, calculateMortalityRate }
 
 const router = Router();
 
-// console.log(typeof calculateMortalityRate)
 
 router.use(express.json())
 
-let months = [
-     "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May"
-]
-
-let days = [
-    "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
-]
 
 router.get('/', async (req: Request, res: Response) => {
 
-    let totalBabies = (Math.floor(Math.random() * 50))
-    totalBabies = await generateReport("noOfBabies")
-    let preterm = Math.floor(totalBabies * Math.random())
-    preterm = await generateReport("noOfPretermBabies")
+    let totalBabies = await generateReport("noOfBabies")
+    let preterm = await generateReport("noOfPretermBabies")
     let term = await generateReport("noOfTermBabies")
     let mortalityRate = await calculateMortalityRate()
     // let mortalityRate = 0
