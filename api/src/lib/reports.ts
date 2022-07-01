@@ -143,7 +143,7 @@ export let expressingTime = async () => {
 
 }
 
-expressingTime()
+// expressingTime()
 
 export let calculateMortalityRateByMonth = async () => {
     let thisYear = ''
