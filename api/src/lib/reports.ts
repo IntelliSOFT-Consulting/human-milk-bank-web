@@ -5,7 +5,7 @@ let currentMonth = new Date().toLocaleString('default', { month: 'short' })
 let _months = _allMonths.slice(_allMonths.indexOf(currentMonth) + 1).concat()
 _months = _months.concat(_allMonths.slice(0, (_allMonths.indexOf(currentMonth) + 1)))
 
-const allMonths = _allMonths
+const allMonths = _months
 
 export let percentageFeeds = async () => {
     // latest unique one prescribed
