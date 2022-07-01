@@ -41,7 +41,7 @@ export let infantsOnEBM = async () => {
             patientIds.push(x)
         }
     }
-    console.log(patientIds)
+    // console.log(patientIds)
     let unique = [...new Set(patientIds)]
     return unique.length
 }
@@ -65,6 +65,7 @@ export let getGestation = async (type: string) => {
     deceasedInfants.map((i: any) => {
         ids.push("Patient/" + i.resource.id)
     })
+    console.log("ids", ids)
     let patientIds: Array<string> = []
     let infants = await generateReport((type === "preterm") ? "pretermBabies": "termBabies")
     for (let i of infants) {
@@ -73,9 +74,10 @@ export let getGestation = async (type: string) => {
             patientIds.push(x)
         }
     }
-    ids.map((id: any) => {
+    console.log(patientIds)
+    for(let id of ids){
         patientIds = patientIds.filter((item: string) => item !== id)
-    })
+    }
     let unique = [...new Set(patientIds)]
     return unique.length
 }
@@ -108,7 +110,7 @@ export let infantsOnFormula = async () => {
 export let firstFeeding = async () => {
 
     let observations = await generateReport("firstFeeding")
-    console.log(observations)
+    // console.log(observations)
     let categories: { [index: string]: number } = { withinOne: 0, afterOne: 0, afterTwo: 0, afterThree: 0 }
     let _map: { [index: string]: string } = { withinOne: "Within 1 Hour", afterOne: "After 1 Hour", afterTwo: "After 2 Hours", afterThree: "After 3 Hours" }
     if (observations) {
@@ -139,7 +141,7 @@ export let expressingTime = async () => {
     let now = new Date()
 
     let lastYear = now.setFullYear(now.getFullYear() - 1)
-    console.log(observations)
+    // console.log(observations)
     for (let i of observations) {
         let date = (new Date(i.resource.valueString)).getTime()
         let month = new Date(i.resource.valueString).toLocaleString('default', { month: 'short' })
