@@ -25,7 +25,7 @@
             "type": "query"
         },
         "noOfBabies": {
-            "q": "/Patient?address=Pumwani",
+            "q": "/Patient?address=Pumwani&active=true",
             "description": "Number of babies",
             "query": "total",
             "type": "query"
@@ -55,13 +55,13 @@
             "type": "computed",
             "range": "dates",
             "query": "total",
-            "q": "/Patient?address=Pumwani&deceased=true"
+            "q": "/Patient?active=false&deceased=true"
         },
         "deceasedInfants": {
             "type": "all",
             "range": "dates",
             "query": "entry",
-            "q": "/Patient?active=false"
+            "q": "/Patient?active=false&deceased=true"
         },
         "extremely, Very Low, Low Birth weight": {
             "%-preterm-babies": "",
