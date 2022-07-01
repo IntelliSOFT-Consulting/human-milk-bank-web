@@ -6,6 +6,18 @@
             "query": "total",
             "type": "query"
         },
+        "termBabies": {
+            "q": "/Observation?code=11885-1&value-quantity=gt37",
+            "description": "Number of term babies",
+            "query": "entry",
+            "type": "all"
+        },
+        "pretermBabies": {
+            "q": "/Observation?code=11885-1&value-quantity=lt37",
+            "description": "Number of preterm babies",
+            "query": "entry",
+            "type": "all"
+        },
         "noOfPretermBabies": {
             "q": "/Observation?code=11885-1&value-quantity=lt37",
             "description": "Number of preterm babies",
