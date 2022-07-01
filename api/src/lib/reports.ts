@@ -1,11 +1,7 @@
 import { generateReport } from "./fhir"
 
-let months = ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"]
+const allMonths = ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"]
 
-let getTotalBabies = async () => {
-    let totalBabies = await generateReport("noOfBabies");
-    return totalBabies
-}
 
 export let percentageFeeds = async () => {
     // latest unique one prescribed
@@ -27,7 +23,8 @@ export let infantsOnDHM = async () => {
             patientIds.push(x)
         }
     }
-    return patientIds.length
+    let unique = [...new Set(patientIds)]
+    return unique.length
 }
 
 export let infantsOnEBM = async () => {
@@ -50,7 +47,7 @@ export let infantsOnBreastFeeding = async () => {
     let infants = await generateReport("infantsOnBreastFeeding")
     for (let i of infants) {
         let x = i.resource.subject.reference
-        if (patientIds.indexOf(x) < 0) {
+        if (patientIds.indexOf(x) === -1) {
             patientIds.push(x)
         }
     }
@@ -79,7 +76,6 @@ export let firstFeeding = async () => {
     let _map: { [index: string]: string } = { withinOne: "Within 1 Hour", afterOne: "After 1 Hour", afterTwo: "After 2 Hours", afterThree: "After 3 Hours" }
     if (observations) {
         for (let o of observations) {
-            // console.log(o)
             for (let i of Object.keys(_map)) {
 
                 if (o.resource.valueString === _map[i]) {
@@ -93,49 +89,94 @@ export let firstFeeding = async () => {
 
 
 export let expressingTime = async () => {
-    let observations = await generateReport("expressingTime")
-    let categories: { [index: string]: number } = { withinOne: 0, afterOne: 0, afterTwo: 0, afterThree: 0 }
-    let _map: { [index: string]: string } = { withinOne: "Within 1 Hour", afterOne: "After 1 Hour", afterTwo: "After 2 Hours", afterThree: "After 3 Hours" }
-    if (observations) {
-        for (let o of observations) {
-            console.log(o)
-            for (let i in Object.keys(_map)) {
-                if (o.valueString === _map[i]) {
-                    categories[i] += 1
-                }
-            }
+    let patientIds = []
+    let months: { [index: string]: any } = {};
+    let patients: { [index: string]: number } = {};
+
+    for (let month of allMonths) {
+        months[month] = patients
+    }
+    let observations = await generateReport("expressingTimes")
+    let categories: { [index: string]: number } = { underFive: 0, underSeven: 0, aboveSeven: 0 }
+
+    let now = new Date()
+
+    let lastYear = now.setFullYear(now.getFullYear() - 1)
+    console.log(observations)
+    for (let i of observations) {
+        let date = (new Date(i.resource.valueString)).getTime()
+        let month = new Date(i.resource.valueString).toLocaleString('default', { month: 'short' })
+        months[month] = { [i.resource.subject.reference]: months[month][i.resource.subject.reference] || 0 }
+
+        if (date >= lastYear) {
+            months[month][i.resource.subject.reference]++
         }
     }
+    // console.log(months)
+    let results: Array<any> = [];
+    // do the counts
+    for (let i of Object.keys(months)) {
+        let underFive = 0
+        let underSeven = 0
+        let aboveSeven = 0;
+        if (months[i])
+            for (let x of Object.keys(months[i])) {
+                if (months[i][x] < 5) {
+                    underFive++
+                } else if (months[i][x] > 5 && months[i][x] < 7) {
+                    underSeven++
+                } else if (months[i][x] > 7) {
+                    aboveSeven++
+                }
+            }
+        results.push({
+            month: i,
+            underFive,
+            underSeven,
+            aboveSeven,
+        })
+
+    }
+
+    // console.log(results)
+    return results
 
 }
 
-export let calculateMortalityRateByMonth = async () => {
+// expressingTime()
 
+export let calculateMortalityRateByMonth = async () => {
+    let thisYear = ''
+    let lastYear = ''
     return
 }
 
-// let getLastMonths = (12) => {
-//     let list = []
-//     while(list.length <= 12){
-//         list()
-//     }
-        
-// }
 
 export let calculateMortalityRate = async () => {
-    let totalBabies = await getTotalBabies()
-    let totalDeceased = await generateReport("noOfDeceasedInfants")
-    
+    let patients = await generateReport("allPatients")
+    let count = 0
+    for (let p of patients) {
+        if (p.resource.id.length > 12) {
+            count++
+        }
+    }
+    let totalDeceased = 0
+    let deceased = await generateReport("deceasedInfants")
+    for (let p of deceased) {
+        if (p.resource.id.length > 12) {
+            totalDeceased++
+        }
+    }
+
     let arr: Array<any> = []
-    months.map((month) => {
+    allMonths.map((month) => {
         arr.push({
             "month": month,
             "value": 0
         })
     })
-    // get monthly values
 
-    return { rate: (totalDeceased / totalBabies), data: arr }
+    return { rate: (totalDeceased / count), data: arr }
 }
 
 

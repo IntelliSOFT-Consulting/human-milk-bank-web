@@ -36,14 +36,12 @@ router.get('/', async (req: Request, res: Response) => {
             "firstFeeding": await firstFeeding(),
             "percentageFeeds":await percentageFeeds(),
             "mortalityRate": mortalityRate,
-            "expressingTime":await expressingTime()
+            // "expressingTime":await expressingTime()
         });
     return
 });
 
-let getMonthFromDate = (date:string) => {
-    return new Date(date).getMonth()
-}
+
 
 export default router;
 

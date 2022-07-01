@@ -18,6 +18,12 @@
             "query": "total",
             "type": "query"
         },
+        "allPatients": {
+            "q": "/Patient?_all",
+            "description": "Number of babies",
+            "query": "entry",
+            "type": "all"
+        },
         "%changeOfTermBabies": {
             "q": "/Observation?code=DHM-Volume-1",
             "type": "computed",
@@ -38,7 +44,12 @@
             "range": "dates",
             "query": "total",
             "q": "/Patient?address=Pumwani&deceased=true"
-
+        },
+        "deceasedInfants": {
+            "type": "all",
+            "range": "dates",
+            "query": "entry",
+            "q": "/Patient?active=false"
         },
         "extremely, Very Low, Low Birth weight": {
             "%-preterm-babies": "",
@@ -141,10 +152,16 @@
             "type": "all"
         },
         "expressingTime": {
-            "q": "/Observation?code=Breastfeeding",
-            "description": "Number of infants breastfeeding",
+            "q": "/Observation?code=Time-Expressed",
+            "description": "Expressing time",
             "query": "total",
             "type": "query"
+        },
+        "expressingTimes": {
+            "q": "/Observation?code=Time-Expressed",
+            "description": "Expressing time",
+            "query": "entry",
+            "type": "all"
         },
         "dhmVolume": {
             "q": "/Observation?code=Breastfeeding",
@@ -164,17 +181,11 @@
             "query": "entry",
             "type": "all"
         },
-        "totalPrescribeFeed": {
-            "q": "/Observation?code=Breastfeeding",
-            "description": "Number of infants breastfeeding",
-            "query": "total",
-            "type": "query"
-        },
         "milkExpresssionTime": {
-            "q": "/Observation?code=Breastfeeding",
+            "q": "/Encounter?code=Breastfeeding",
             "description": "Number of infants breastfeeding",
-            "query": "total",
-            "type": "query"
+            "query": "entry",
+            "type": "all"
         }
 
     }
