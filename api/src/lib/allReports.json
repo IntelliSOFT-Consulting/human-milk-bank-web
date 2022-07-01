@@ -152,10 +152,16 @@
             "type": "all"
         },
         "expressingTime": {
-            "q": "/Observation?code=Breastfeeding",
-            "description": "Number of infants breastfeeding",
+            "q": "/Observation?code=Time-Expressed",
+            "description": "Expressing time",
             "query": "total",
             "type": "query"
+        },
+        "expressingTimes": {
+            "q": "/Observation?code=Time-Expressed",
+            "description": "Expressing time",
+            "query": "entry",
+            "type": "all"
         },
         "dhmVolume": {
             "q": "/Observation?code=Breastfeeding",
