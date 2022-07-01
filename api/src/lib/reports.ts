@@ -1,7 +1,11 @@
 import { generateReport } from "./fhir"
 
-const allMonths = ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"]
+const _allMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+let currentMonth = new Date().toLocaleString('default', { month: 'short' })
+let _months = _allMonths.slice(_allMonths.indexOf(currentMonth) + 1).concat()
+_months = _months.concat(_allMonths.slice(0, (_allMonths.indexOf(currentMonth) + 1)))
 
+const allMonths = _months
 
 export let percentageFeeds = async () => {
     // latest unique one prescribed
