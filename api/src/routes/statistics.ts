@@ -22,7 +22,7 @@ router.get('/', async (req: Request, res: Response) => {
     totalBabies = await generateReport("noOfBabies")
     let preterm = Math.floor(totalBabies * Math.random())
     preterm = await generateReport("noOfPretermBabies")
-    let term = totalBabies - preterm
+    let term = await generateReport("noOfTermBabies")
     let mortalityRate = await calculateMortalityRate()
     // let mortalityRate = 0
 
