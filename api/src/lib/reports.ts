@@ -59,6 +59,39 @@ export let infantsOnBreastFeeding = async () => {
     return unique.length
 }
 
+export let getGestation = async (type: string) => {
+    let deceasedInfants = await generateReport("deceasedInfants")
+    let ids: Array<string> = []
+    deceasedInfants.map((i: any) => {
+        ids.push("Patient/" + i.resource.id)
+    })
+    let patientIds: Array<string> = []
+    let infants = await generateReport((type === "preterm") ? "pretermBabies": "termBabies")
+    for (let i of infants) {
+        let x = i.resource.subject.reference
+        if (patientIds.indexOf(x) === -1) {
+            patientIds.push(x)
+        }
+    }
+    ids.map((id: any) => {
+        patientIds = patientIds.filter((item: string) => item !== id)
+    })
+    let unique = [...new Set(patientIds)]
+    return unique.length
+}
+
+export let term = async () => {
+    let patientIds = []
+    let infants = await generateReport("termBabies")
+    for (let i of infants) {
+        let x = i.resource.subject.reference
+        if (patientIds.indexOf(x) === -1) {
+            patientIds.push(x)
+        }
+    }
+    let unique = [...new Set(patientIds)]
+}
+
 export let infantsOnFormula = async () => {
     let patientIds = []
     let infants = await generateReport("infantsOnFormula")
@@ -180,7 +213,7 @@ export let calculateMortalityRate = async () => {
         })
     })
 
-    return { rate: (totalDeceased / count), data: arr }
+    return { rate: Math.round((totalDeceased / count) * 100) / 100, data: arr }
 }
 
 
