@@ -145,38 +145,33 @@ export let expressingTime = async () => {
     for (let i of observations) {
         let date = (new Date(i.resource.valueDateTime)).getTime()
         let month = new Date(i.resource.valueDateTime).toLocaleString('default', { month: 'short' })
-        months[month] = { ...months[month], [i.resource.subject.reference]: months[month][i.resource.subject.reference] }
+        months[month] = { [i.resource.subject.reference]: months[month][i.resource.subject.reference] || 0 }
 
         if (date >= lastYear) {
             months[month][i.resource.subject.reference]++
         }
     }
-    // console.log(months)
+    console.log("Months", months)
     let results: Array<any> = [];
     let underFive = 0
     let underSeven = 0
     let aboveSeven = 0;
     // do the counts
     for (let i of Object.keys(months)) {
-        if (months[i])
-            for (let x of Object.keys(months[i])) {
-                if (months[i][x] < 5) {
-                    underFive++
-                } else if (months[i][x] > 5 && months[i][x] <= 7) {
-                    underSeven++
-                } else if (months[i][x] > 7) {
-                    aboveSeven++
-                }
+        console.log(i)
+        for (let x of Object.keys(months[i])) {
+            // console.log(months[i])
+            if (months[i][x] < 5) {
+                underFive++
+            } else if (months[i][x] >= 5 && months[i][x] <= 7) {
+                underSeven++
+            } else if (months[i][x] > 7) {
+                aboveSeven++
             }
-        results.push({
-            month: i,
-            underFive,
-            underSeven,
-            aboveSeven,
-        })
-
+        }
+        results.push({ month: i, underFive, underSeven, aboveSeven, })
+        underFive=0;underSeven=0;aboveSeven=0;
     }
-
     // console.log(results)
     return results
 
