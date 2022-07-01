@@ -67,7 +67,7 @@ export let getGestation = async (type: string) => {
     })
     console.log("ids", ids)
     let patientIds: Array<string> = []
-    let infants = await generateReport((type === "preterm") ? "pretermBabies": "termBabies")
+    let infants = await generateReport((type === "preterm") ? "pretermBabies" : "termBabies")
     for (let i of infants) {
         let x = i.resource.subject.reference
         if (patientIds.indexOf(x) === -1) {
@@ -75,7 +75,7 @@ export let getGestation = async (type: string) => {
         }
     }
     console.log(patientIds)
-    for(let id of ids){
+    for (let id of ids) {
         patientIds = patientIds.filter((item: string) => item !== id)
     }
     let unique = [...new Set(patientIds)]
@@ -153,16 +153,16 @@ export let expressingTime = async () => {
     }
     // console.log(months)
     let results: Array<any> = [];
+    let underFive = 0
+    let underSeven = 0
+    let aboveSeven = 0;
     // do the counts
     for (let i of Object.keys(months)) {
-        let underFive = 0
-        let underSeven = 0
-        let aboveSeven = 0;
         if (months[i])
             for (let x of Object.keys(months[i])) {
                 if (months[i][x] < 5) {
                     underFive++
-                } else if (months[i][x] > 5 && months[i][x] < 7) {
+                } else if (months[i][x] > 5 && months[i][x] <= 7) {
                     underSeven++
                 } else if (months[i][x] > 7) {
                     aboveSeven++
