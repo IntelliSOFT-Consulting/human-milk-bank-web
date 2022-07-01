@@ -43,7 +43,7 @@ export let generateReport = async (name: any) => {
     if (data.status === 'success'){
         // console.log(data.data[report.query])
         if(report.query !== "entry"){
-        return parseFloat(((data.data[report.query])).toString())
+        return parseFloat(((data.data[report.query]) || 0).toString())
         }
         else {
             return (data.data[report.query] || [])
