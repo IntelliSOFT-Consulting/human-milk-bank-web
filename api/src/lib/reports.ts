@@ -143,9 +143,9 @@ export let expressingTime = async () => {
     let lastYear = now.setFullYear(now.getFullYear() - 1)
     // console.log(observations)
     for (let i of observations) {
-        let date = (new Date(i.resource.valueString)).getTime()
-        let month = new Date(i.resource.valueString).toLocaleString('default', { month: 'short' })
-        months[month] = { [i.resource.subject.reference]: months[month][i.resource.subject.reference] || 0 }
+        let date = (new Date(i.resource.valueDateTime)).getTime()
+        let month = new Date(i.resource.valueDateTime).toLocaleString('default', { month: 'short' })
+        months[month] = { ...months[month], [i.resource.subject.reference]: months[month][i.resource.subject.reference] }
 
         if (date >= lastYear) {
             months[month][i.resource.subject.reference]++
