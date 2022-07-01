@@ -180,7 +180,7 @@ export let calculateMortalityRate = async () => {
         })
     })
 
-    return { rate: (totalDeceased / count), data: arr }
+    return { rate: Math.round((totalDeceased / count) * 100) /100, data: arr }
 }
 
 
