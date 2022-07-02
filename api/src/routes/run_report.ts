@@ -4,7 +4,6 @@ import { firstFeeding, expressingTime, percentageFeeds, calculateMortalityRate }
 
 const router = Router();
 
-// console.log(typeof calculateMortalityRate)
 
 router.use(express.json())
 
