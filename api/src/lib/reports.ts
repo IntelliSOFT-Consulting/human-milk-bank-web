@@ -192,7 +192,6 @@ export let mortalityRateByMonth = async () => {
     for (let i of babiesBorn) {
         let date = (new Date(i.resource.birthDate)).getTime()
         let month = new Date(i.resource.birthDate).toLocaleString('default', { month: 'short' })
-
         if (date >= lastYear) {
             months[month].born++
         }
