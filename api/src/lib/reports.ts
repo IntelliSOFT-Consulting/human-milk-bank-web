@@ -82,17 +82,7 @@ export let getGestation = async (type: string) => {
     return unique.length
 }
 
-export let term = async () => {
-    let patientIds = []
-    let infants = await generateReport("termBabies")
-    for (let i of infants) {
-        let x = i.resource.subject.reference
-        if (patientIds.indexOf(x) === -1) {
-            patientIds.push(x)
-        }
-    }
-    let unique = [...new Set(patientIds)]
-}
+
 
 export let infantsOnFormula = async () => {
     let patientIds = []
@@ -128,7 +118,6 @@ export let firstFeeding = async () => {
 
 
 export let expressingTime = async () => {
-    let patientIds = []
     let months: { [index: string]: any } = {};
     let patients: { [index: string]: number } = {};
 
@@ -136,7 +125,6 @@ export let expressingTime = async () => {
         months[month] = patients
     }
     let observations = await generateReport("expressingTimes")
-    let categories: { [index: string]: number } = { underFive: 0, underSeven: 0, aboveSeven: 0 }
 
     let now = new Date()
 
@@ -172,19 +160,56 @@ export let expressingTime = async () => {
         results.push({ month: i, underFive, underSeven, aboveSeven, })
         underFive=0;underSeven=0;aboveSeven=0;
     }
-    // console.log(results)
     return results
 
 }
 
-// expressingTime()
 
-export let calculateMortalityRateByMonth = async () => {
-    let thisYear = ''
-    let lastYear = ''
-    return
+export let mortalityRateByMonth = async () => {
+    let months: { [index: string]: any } = {};
+    let patients: { [index: string]: number } = {};
+    let results: Array<any> = [];
+
+
+    for (let month of allMonths) {
+        months[month] = {born:0, died: 0}
+    }
+    let observations = await generateReport("deceasedInfants")
+    let babiesBorn = await generateReport("allBabies")
+
+    let now = new Date()
+
+    let lastYear = now.setFullYear(now.getFullYear() - 1)
+    // console.log(observations)
+    for (let i of observations) {
+        let date = (new Date(i.resource.meta.lastUpdated)).getTime()
+        let month = new Date(i.resource.meta.lastUpdated).toLocaleString('default', { month: 'short' })
+
+        if (date >= lastYear) {
+            months[month].died++
+        }
+    }
+    for (let i of babiesBorn) {
+        let date = (new Date(i.resource.birthDate)).getTime()
+        let month = new Date(i.resource.birthDate).toLocaleString('default', { month: 'short' })
+
+        if (date >= lastYear) {
+            months[month].born++
+        }
+    }
+
+    for(let i of Object.keys(months)){
+        console.log(months)
+        results.push({
+            month: i,
+            value: (Math.round((months[i].died / months[i].born) * 100) / 100 || 0)
+        })
+    }
+    // do the counts
+    
+    return results
+
 }
-
 
 export let calculateMortalityRate = async () => {
     let patients = await generateReport("allPatients")
@@ -202,20 +227,6 @@ export let calculateMortalityRate = async () => {
         }
     }
 
-    let arr: Array<any> = []
-    allMonths.map((month) => {
-        arr.push({
-            "month": month,
-            "value": 0
-        })
-    })
-
-    return { rate: Math.round((totalDeceased / count) * 100) / 100, data: arr }
+    return { rate: Math.round((totalDeceased / count) * 100) / 100, data: await mortalityRateByMonth() }
 }
 
-
-export let calculateExpressingTimes = async () => {
-
-
-    return
-}
