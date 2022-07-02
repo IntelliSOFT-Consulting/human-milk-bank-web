@@ -30,6 +30,12 @@
             "query": "total",
             "type": "query"
         },
+        "allBabies": {
+            "q": "/Patient?address=Pumwani&active=true",
+            "description": "Number of babies",
+            "query": "entry",
+            "type": "all"
+        },
         "allPatients": {
             "q": "/Patient?_all",
             "description": "Number of babies",
@@ -199,6 +205,5 @@
             "query": "entry",
             "type": "all"
         }
-
     }
 }
