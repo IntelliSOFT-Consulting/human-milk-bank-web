@@ -23,10 +23,10 @@ export default function Reports() {
 
     let availableReports = {
         "General": [{ totalBabies: "Total Number of Babies" }, { "preterm": "Number of Preterm Babies" },
-        { "term": "Number of Term Babies" }],
-        "Feeding/BreastFeeding": [],
-        "Lactation Support": [],
-        "Infant Nutrition/Growth": [],
+        { "term": "Number of Term Babies" }, { "mortalityRate": "Mortality Rate" }],
+        "Feeding/BreastFeeding": [{ "percentageFeeds": "Percentage Feeds" }, { "firstFeeding": "First Feeding" }],
+        "Lactation Support": [{ "expressingTime": "Expressing Times" }],
+        "Infant Nutrition/Growth": [{ "percentageFeeds": "Percentage Feeds" }],
         "Human Milk Bank": []
     }
 
@@ -132,6 +132,29 @@ export default function Reports() {
         }
     }, [])
 
+
+    let parseResults = (results) => {
+        if (typeof results === "object") {
+            return (
+                <>
+                    {(Object.keys(results).indexOf("rate") > 0) && <Typography>{results.rate}</Typography>}
+                    {(Object.keys(results).indexOf("0") < 0) && Object.keys(results).map((result) => {
+                        return <Typography>{(result).toUpperCase()} {": "} {JSON.stringify(results[result])}</Typography>
+                    })}
+                    {(Object.keys(results).indexOf("0") > -1) && results.map((result) => {
+                        // console.log(result)
+                        return <Typography variant="p" >{JSON.stringify(result , null, 2)}</Typography>
+                    })
+                    }
+                </>
+            )
+        }
+        return (
+            <Typography variant="h3">{JSON.stringify(results)}</Typography>
+        )
+
+    }
+
     let isMobile = useMediaQuery('(max-width:600px)');
 
     let args = qs.parse(window.location.search);
@@ -211,7 +234,7 @@ export default function Reports() {
                         }
 
                     </Grid>
-                    
+
                     <Container maxWidth="lg">
                         {report && <Typography variant="h4" sx={{ textAlign: "center" }}>{report}</Typography>}
                         {(report && (results.length < 1)) ?
@@ -229,7 +252,7 @@ export default function Reports() {
                                     <Card>
                                         <CardContent>
                                             <Typography>{report[(Object.keys(report)[0])]}</Typography>
-                                            <Typography variant="h3">{results[(Object.keys(report)[0])]}</Typography>
+                                            {parseResults(results[(Object.keys(report)[0])])}
 
                                         </CardContent>
                                     </Card>

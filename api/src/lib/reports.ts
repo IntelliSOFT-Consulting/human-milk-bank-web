@@ -5,7 +5,7 @@ let currentMonth = new Date().toLocaleString('default', { month: 'short' })
 let _months = _allMonths.slice(_allMonths.indexOf(currentMonth) + 1).concat()
 _months = _months.concat(_allMonths.slice(0, (_allMonths.indexOf(currentMonth) + 1)))
 
-const allMonths = _months
+const allMonths = _months;
 
 export let percentageFeeds = async () => {
     // latest unique one prescribed
@@ -24,7 +24,7 @@ export let infantsOnDHM = async () => {
     for (let i of infants) {
         let x = i.resource.patient.reference
         if (patientIds.indexOf(x) < 0) {
-            patientIds.push(x)
+            patientIds.push(x);
         }
     }
     let unique = [...new Set(patientIds)]
@@ -204,7 +204,6 @@ export let mortalityRateByMonth = async () => {
             value: (Math.round((months[i].died / months[i].born) * 100) / 100 || 0)
         })
     }
-    // do the counts
     
     return results
 
