@@ -33,7 +33,7 @@ export default function DataExport({ id }) {
     };
 
     let exportPatientData = async () => {
-            fetch("https://devnndak.intellisoftkenya.com/fhir/Patient?_revinclude:logical=Encounter:patient:Patient")
+            fetch("https://devnndak.intellisoftkenya.com/fhir/Patient/$everything?_count=9999999")
               .then(async(response) => {
                 let clone = response.clone();
                 let res = await clone.json();  
