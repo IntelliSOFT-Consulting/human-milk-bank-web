@@ -18,9 +18,9 @@ let days = [
 // DHM Statistics 
 router.get('/', async (req: Request, res: Response) => {
 
-    let dhmInfants = await generateReport("noOfInfantsonDHM") || 0
-    let dhmVolume = await generateReport("noOfInfantsonDHM") || 0
-    let dhmAverage = await generateReport("noOfInfantsonDHM") || 0
+    let dhmInfants = await generateReport("noOfInfantsOnDHM") || 0
+    let dhmVolume = await generateReport("noOfInfantsOnDHM") || 0
+    let dhmAverage = await generateReport("noOfInfantsOnDHM") || 0
     let fullyReceiving = Math.floor(dhmInfants * Math.random())
 
     res.json(
