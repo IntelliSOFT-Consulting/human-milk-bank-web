@@ -79,7 +79,7 @@ export default function Login() {
                 }}>
                     <Paper sx={{ backgroundColor: "#115987", color: 'white', minWidth: '100%' }}>
                         <br />
-                        <Typography variant="h6" sx={{ textAlign: "center", fontWeight: 'bold' }}>Welcome to the Human Milk Bank</Typography>
+                        <Typography variant="h6" sx={{ textAlign: "center", fontWeight: 'bold' }}>Neonatal Nutrition</Typography>
                         <br />
                     </Paper>
 
