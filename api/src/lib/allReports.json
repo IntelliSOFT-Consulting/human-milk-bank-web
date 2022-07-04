@@ -55,7 +55,6 @@
             "range": "dates",
             "query": "total",
             "q": "/Observation?code=DHM-Volume-1"
-
         },
         "noOfDeceasedInfants": {
             "type": "computed",
@@ -132,6 +131,18 @@
             "description": "Number of infants receiving DHM",
             "query": "total",
             "type": "query"
+        },
+        "prescribedFeeds": {
+            "q": "/CarePlan?status=active",
+            "description": "Number of infants receiving DHM",
+            "query": "entry",
+            "type": "all"
+        },
+        "prescriptionEncounters": {
+            "q": "/Encounter",
+            "description": "Prescription Encounters",
+            "query": "entry",
+            "type": "all"
         },
         "noOfInfantsOnFormula": {
             "q": "/Observation?code=Formula-Volume",
