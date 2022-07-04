@@ -11,7 +11,7 @@ export let percentageFeeds = async () => {
 
     let careplans = await generateReport("prescribedFeeds")
     let observations = []
-    let response = {dhm:0, formula:0, ebm:0, breastFeeding:0, oral:0}
+    let response: {[index: string]: number} = {dhm:0, formula:0, ebm:0, breastFeeding:0, oral:0}
 
     for(let plan of careplans){
         let o = await FhirApi({ url: `/Observation?encounter=${plan.resource.encounter.reference}` })
@@ -31,6 +31,15 @@ export let percentageFeeds = async () => {
             }
         }
 
+    }
+    let total = 0.0
+
+    for(let i of Object.keys(response)){
+        total += response[i]
+    }
+
+    for(let i of Object.keys(response)){
+        response[i] = Math.round((response[i] / total) * 100 * 100 ) / 100
     }
     response.oral = response.breastFeeding
     // latest unique one prescribed
