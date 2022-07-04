@@ -24,7 +24,7 @@ export let percentageFeeds = async () => {
                 response.dhm += _o.resource.valueQuantity.value
             }
             if(_o.resource.code.coding[0].code === "Breast-Milk"){
-                response.dhm += _o.resource.valueQuantity.value
+                response.breastFeeding += _o.resource.valueQuantity.value
             }
             if(_o.resource.code.coding[0].code === "EBM-Volume"){
                 response.ebm += _o.resource.valueQuantity.value
