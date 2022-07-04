@@ -1,4 +1,4 @@
-import { generateReport } from "./fhir"
+import { FhirApi, generateReport } from "./fhir"
 
 const _allMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 let currentMonth = new Date().toLocaleString('default', { month: 'short' })
@@ -8,15 +8,36 @@ _months = _months.concat(_allMonths.slice(0, (_allMonths.indexOf(currentMonth) +
 const allMonths = _months;
 
 export let percentageFeeds = async () => {
-    // latest unique one prescribed
-    let ebm = await infantsOnEBM()
-    let dhm = await infantsOnDHM()
-    let breastFeeding = await infantsOnBreastFeeding()
-    let formula = await infantsOnFormula()
-    return {
-        ebm, dhm, breastFeeding, formula, oral: (breastFeeding)
+
+    let careplans = await generateReport("prescribedFeeds")
+    let observations = []
+    let response = {dhm:0, formula:0, ebm:0, breastFeeding:0, oral:0}
+
+    for(let plan of careplans){
+        let o = await FhirApi({ url: `/Observation?encounter=${plan.resource.encounter.reference}` })
+        let observations = o.data.entry
+        for(let _o of observations){
+            if(_o.resource.code.coding[0].code === "Formula-Volume"){
+                response.formula += _o.resource.valueQuantity.value
+            }
+            if(_o.resource.code.coding[0].code === "DHM-Volume"){
+                response.dhm += _o.resource.valueQuantity.value
+            }
+            if(_o.resource.code.coding[0].code === "Breast-Milk"){
+                response.dhm += _o.resource.valueQuantity.value
+            }
+            if(_o.resource.code.coding[0].code === "EBM-Volume"){
+                response.ebm += _o.resource.valueQuantity.value
+            }
+        }
+
     }
+    response.oral = response.breastFeeding
+    // latest unique one prescribed
+    return response
+   // +
 }
+// percentageFeeds()
 
 export let infantsOnDHM = async () => {
     let patientIds = []
