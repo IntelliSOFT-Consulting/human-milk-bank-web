@@ -34,12 +34,13 @@ export default function Users() {
 
     // delete users
     let deleteUsers = async () => {
-        for(let i of selected){
+        for (let i of selected) {
             setOpenSnackBar(false)
             let response = (await (await fetch(`${apiHost}/auth/${i}`,
-                { method: "DELETE", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getCookie("token")}` }   
-            })).json())
-            if(response.status === "error"){
+                {
+                    method: "DELETE", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getCookie("token")}` }
+                })).json())
+            if (response.status === "error") {
                 setMessage(response.error || response.message)
                 setOpenSnackBar(true)
                 return
@@ -51,13 +52,14 @@ export default function Users() {
     }
     // reset Password
     let resetPassword = async () => {
-        for(let i of selected){
+        for (let i of selected) {
             setOpenSnackBar(false)
             let response = (await (await fetch(`${apiHost}/auth/reset-password`,
-                { method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getCookie("token")}` },
-                body:JSON.stringify({id: i})
-            })).json())
-            if(response.status === "error"){
+                {
+                    method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getCookie("token")}` },
+                    body: JSON.stringify({ id: i })
+                })).json())
+            if (response.status === "error") {
                 setMessage(response.error || response.message)
                 setOpenSnackBar(true)
                 return
@@ -72,14 +74,30 @@ export default function Users() {
         return
     }
 
+    let roles = [
+        "ADMINISTRATOR",
+        "DOCTOR",
+        "NURSE",
+        "NEONATAL_NURSES",
+        "NEONATOLOGIST",
+        "HMB_ASSISTANT",
+        "DEPUTY_NURSE_MANAGER",
+        "NUTRITION_OFFICER",
+        "PEDIATRICIAN",
+        "HEAD_OF_DEPARTMENT",
+        "NURSE_COUNSELLOR",
+        "NURSING_OFFICER_IN_CHARGE"
+    ]
+
     // create user
     let createUser = async () => {
         setOpenSnackBar(false)
         let response = (await (await fetch(`${apiHost}/auth/register`,
-            { method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getCookie("token")}` },
-            body:JSON.stringify({username:data.username, email:data.email, "names":data.names,"role":data.role})   
-        })).json())
-        if(response.status === "error"){
+            {
+                method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getCookie("token")}` },
+                body: JSON.stringify({ username: data.username, email: data.email, "names": data.names, "role": data.role })
+            })).json())
+        if (response.status === "error") {
             setMessage(response.error || response.message)
             setOpenSnackBar(true)
             return
@@ -122,20 +140,20 @@ export default function Users() {
     return (
         <>
             <Layout>
-            <Snackbar
-                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                open={openSnackBar}
-                onClose={""}
-                message={message}
-                key={"loginAlert"}
-            />
+                <Snackbar
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    open={openSnackBar}
+                    onClose={""}
+                    message={message}
+                    key={"loginAlert"}
+                />
 
                 <Stack direction="row" spacing={2} alignContent="right" >
                     {(!isMobile) && <Typography sx={{ minWidth: (selected.length > 0) ? '50%' : '80%' }}></Typography>}
                     {(selected.length > 0) &&
                         <>
-                            <Button variant="contained" onClick={e=>{deleteUsers()}} disableElevation sx={{ backgroundColor: 'red' }}>Delete User{(selected.length > 1) && `s`}</Button>
-                            <Button variant="contained" onClick={e=>{resetPassword()}} disableElevation sx={{ backgroundColor: 'gray' }}>Reset Password</Button>
+                            <Button variant="contained" onClick={e => { deleteUsers() }} disableElevation sx={{ backgroundColor: 'red' }}>Delete User{(selected.length > 1) && `s`}</Button>
+                            <Button variant="contained" onClick={e => { resetPassword() }} disableElevation sx={{ backgroundColor: 'gray' }}>Reset Password</Button>
                         </>
                     }
                     <Button variant="contained" disableElevation sx={{ backgroundColor: "#115987" }} onClick={handleOpen}>Create New User</Button>
@@ -144,7 +162,7 @@ export default function Users() {
 
                 <DataGrid
                     loading={users ? false : true}
-                    rows={users?users : []}
+                    rows={users ? users : []}
                     columns={columns}
                     pageSize={10}
                     rowsPerPageOptions={[5]}
@@ -206,14 +224,15 @@ export default function Users() {
                                     onChange={e => { setData({ ...data, role: e.target.value }) }}
                                     size="small"
                                 >
-                                    <MenuItem value={"ADMINISTRATOR"}>ADMINISTRATOR</MenuItem>
-                                    <MenuItem value={"SPECIALIST"}>SPECIALIST</MenuItem>
-                                    <MenuItem value={"NURSE"}>NURSE</MenuItem>
+                                    {roles.map((role) => {
+                                        return <MenuItem key={role} value={role}>{role}</MenuItem>
+                                    })}
+
                                 </Select>
                             </FormControl>
 
-                            <Button variant='contained' sx={{ backgroundColor: "#115987" }} onClick={e=>{createUser()}}>Create User</Button>
-                            <br/>
+                            <Button variant='contained' sx={{ backgroundColor: "#115987" }} onClick={e => { createUser() }}>Create User</Button>
+                            <br />
                         </Stack>
                     </Box>
                 </Modal>
