@@ -76,8 +76,6 @@ export default function Users() {
 
     let roles = [
         "ADMINISTRATOR",
-        "DOCTOR",
-        "NURSE",
         "NEONATAL_NURSES",
         "NEONATOLOGIST",
         "HMB_ASSISTANT",
