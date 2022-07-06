@@ -8,7 +8,7 @@ const router = express.Router()
 router.use(express.json())
 
 
-let roles: { [index: string]: string } = {
+let userRoles: { [index: string]: string } = {
     ADMINISTRATOR: "ADMINISTRATOR",
     NEONATAL_NURSES: "Neonatal Nurse",
     NEONATOLOGIST: "Neonatologist",
@@ -46,7 +46,7 @@ router.get("/me", [requireJWT], async (req: Request, res: Response) => {
                     id: userId
                 }
             })
-            let responseData = { id: user?.id, createdAt: user?.createdAt, updatedAt: user?.updatedAt, names: user?.names, email: user?.email, role: roles[String(user?.role)] }
+            let responseData = { id: user?.id, createdAt: user?.createdAt, updatedAt: user?.updatedAt, names: user?.names, email: user?.email, role: userRoles[String(user?.role)] }
             res.statusCode = 200
             res.json({ data: responseData, status: "success" })
             return
@@ -136,9 +136,7 @@ router.post("/register", async (req: Request, res: Response) => {
         if (!password) {
             password = (Math.random()).toString()
         }
-        let roles: string[];
-        roles = ["ADMINISTRATOR", "STAFF", "NURSE", "PEDIATRICIAN", "NURSE_COUNSELLOR", "CLINICIAN", "NUTRITIONIST"]
-        if (role && (roles.indexOf(role) < 0)) {
+        if (role && (Object.keys(userRoles).indexOf(role) < 0)) {
             res.json({ status: "error", message: `Invalid role name *${role}* provided` });
             return
         }
