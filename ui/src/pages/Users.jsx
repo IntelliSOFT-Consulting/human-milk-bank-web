@@ -76,18 +76,18 @@ export default function Users() {
         return
     }
 
-    let roles = [
-        "ADMINISTRATOR",
-        "NEONATAL_NURSES",
-        "NEONATOLOGIST",
-        "HMB_ASSISTANT",
-        "DEPUTY_NURSE_MANAGER",
-        "NUTRITION_OFFICER",
-        "PEDIATRICIAN",
-        "HEAD_OF_DEPARTMENT",
-        "NURSE_COUNSELLOR",
-        "NURSING_OFFICER_IN_CHARGE"
-    ]
+    let roles = {
+        ADMINISTRATOR: "ADMINISTRATOR",
+        NEONATAL_NURSES: "Neonatal Nurse",
+        NEONATOLOGIST: "Neonatologist",
+        HMB_ASSISTANT: "HMB Assistant",
+        DEPUTY_NURSE_MANAGER: "Deputy Nurse Manager",
+        NUTRITION_OFFICER: "Nutrition Officer",
+        PEDIATRICIAN: "Pediatrician",
+        HEAD_OF_DEPARTMENT: "Head of Department",
+        NURSE_COUNSELLOR: "Nurse Counsellor",
+        NURSING_OFFICER_IN_CHARGE: "Nursing Officer In Charge"
+    }
 
     // create user
     let createUser = async () => {
@@ -224,8 +224,8 @@ export default function Users() {
                                     onChange={e => { setData({ ...data, role: e.target.value }) }}
                                     size="small"
                                 >
-                                    {roles.map((role) => {
-                                        return <MenuItem key={role} value={role}>{role}</MenuItem>
+                                    {Object.keys(roles).map((role) => {
+                                        return <MenuItem key={role} value={role}>{roles[role]}</MenuItem>
                                     })}
 
                                 </Select>
