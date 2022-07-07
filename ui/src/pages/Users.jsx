@@ -76,14 +76,14 @@ export default function Users() {
 
     let roles = {
         ADMINISTRATOR: "ADMINISTRATOR",
-        NEONATAL_NURSES: "Neonatal Nurse",
+        // NEONATAL_NURSES: "Neonatal Nurse",
         NEONATOLOGIST: "Neonatologist",
         HMB_ASSISTANT: "HMB Assistant",
-        DEPUTY_NURSE_MANAGER: "Deputy Nurse Manager",
+        // DEPUTY_NURSE_MANAGER: "Deputy Nurse Manager",
         NUTRITION_OFFICER: "Nutrition Officer",
         PEDIATRICIAN: "Pediatrician",
         HEAD_OF_DEPARTMENT: "Head of Department",
-        NURSE_COUNSELLOR: "Nurse Counsellor",
+        // NURSE_COUNSELLOR: "Nurse Counsellor",
         NURSING_OFFICER_IN_CHARGE: "Nursing Officer In Charge"
     }
 
