@@ -64,13 +64,14 @@ router.get("/orders", async (req: Request, res: Response) => {
             let observationCodes: any = {
                 dhmType: "DHM-Type",
                 dhmReason: "DHM-Reason",
-                dhmVolume: "DHM-Volume"
+                dhmVolume: "DHM-Volume",
+                consentGiven: "Consent-Given"
             }
             for (let o of encounterObservations) {
                 // console.log(o)
                 for (let x of Object.keys(observationCodes)) {
-                    if (Object.keys(o).indexOf("code") > -1 && o.resource.code.coding[0].code === observationCodes[x]) {
-                        response[x] = observationCodes[x]
+                    if (Object.keys(o.resource).indexOf("code") > -1 && o.resource.code.coding[0].code === observationCodes[x]) {
+                        response[x] = o.resource.valueString || o.resource.valueQuantity.value || null
                     }
                 }
             }
