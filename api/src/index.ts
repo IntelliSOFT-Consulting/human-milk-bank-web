@@ -15,6 +15,7 @@ import BabyGrowth from './routes/statistics/baby-growth'
 import HourlyFeed from './routes/statistics/hourly-feed'
 import MilkExpression from './routes/statistics/milk-expression'
 import DHM from './routes/statistics/dhm'
+import Stock from './routes/stock'
 
 
 const app = express();
@@ -32,6 +33,8 @@ app.use('/baby-growth', BabyGrowth)
 app.use('/hourly-feed', HourlyFeed)
 app.use('/milk-expression', MilkExpression)
 app.use('/dhm', DHM)
+app.use('/stock', Stock)
+
 
 
 app.listen(PORT, () => {
