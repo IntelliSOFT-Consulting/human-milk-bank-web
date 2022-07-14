@@ -26,6 +26,8 @@ model User {
   updatedAt           DateTime  @updatedAt
   verified            Boolean   @default(false)
 
+  StockEntry StockEntry[]
+  Order      Order[]
 }
 
 model Patient {
@@ -36,6 +38,30 @@ model Patient {
   data      Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model StockEntry {
+  id            String   @id @default(uuid())
+  dhmType       DhmType
+  unPasteurized Float
+  pasteurized   Float
+  dhmVolume     Float
+  user          User     @relation(fields: [userId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  userId        String
+}
+
+model Order {
+  id        String           @id @default(uuid())
+  dhmType   DhmType
+  user      User             @relation(fields: [userId], references: [id])
+  userId    String
+  dhmVolume Float
+  remarks   String
+  status    DispensingStatus
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
 }
 
 enum ROLE {
@@ -49,4 +75,14 @@ enum ROLE {
   HEAD_OF_DEPARTMENT
   NURSE_COUNSELLOR
   NURSING_OFFICER_IN_CHARGE
+}
+
+enum DhmType {
+  Term
+  Preterm
+}
+
+enum DispensingStatus {
+  Pending
+  Dispensed
 }
