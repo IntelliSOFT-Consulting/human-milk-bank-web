@@ -102,7 +102,7 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
             let order = await db.order.create({
                 data: {
                     dhmType, dhmVolume: dhmVolume, remarks, status: "Dispensed",
-                    userId
+                    userId, nutritionOrder: orderId
                 }
             })
             res.json({ status: "success", message: "Stock Entry created successfully", id: order.id })
