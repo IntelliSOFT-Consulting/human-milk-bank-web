@@ -102,16 +102,23 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
             let order = await db.order.create({
                 data: {
                     dhmType, dhmVolume: dhmVolume, remarks, status: "Dispensed",
-                    userId, nutritionOrder: orderId
+                    userId:userId, nutritionOrder: orderId
                 }
             })
-            res.json({ status: "success", message: "Stock Entry created successfully", id: order.id })
+            // update fhir resource
+            let resource = await (await FhirApi({"url":`/NutritionOrder/${orderId}`})).data
+            resource.status = "completed"
+            // console.log(resource)
+
+            let resp = await (await FhirApi({"url":`/NutritionOrder/${orderId}`,method:"PUT", data: JSON.stringify(resource) })).data
+            // console.log(resp)
+            res.json({ status: "success", message: "Order processed created successfully", id: order.id })
             return
         }
     } catch (error) {
         console.error(error)
         res.statusCode = 400
-        res.json({ error, status: "error" });
+        res.json({ error, status: "false" });
         return
     }
 });
