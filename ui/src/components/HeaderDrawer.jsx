@@ -14,9 +14,10 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getCookie } from '../lib/cookie';
 import { Tooltip, IconButton, Avatar, Button, Container } from '@mui/material';
-import { AccountCircle, AppRegistration, BabyChangingStation, ChildCare, Dashboard, FileDownload, FileUpload, Kitchen, ListAlt, People, PivotTableChart, Settings } from '@mui/icons-material';
+import { AccountCircle, Dashboard, FileDownload, FileUpload, Kitchen, ListAlt, People, PivotTableChart, Settings } from '@mui/icons-material';
 import Menu from '@mui/material/Menu';
 import { MenuItem } from '@mui/material';
+
 const drawerWidth = 250;
 
 export default function HeaderDrawer({ children }) {
