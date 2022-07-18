@@ -88,7 +88,7 @@ export default function DataExport({ id }) {
                                     <p></p>
                                     <Grid container spacing={1} padding=".5em" >
                                         <Grid item xs={12} md={12} lg={8}>
-                                            <Button variant="contained" onClick={e=>{exportPatientData()}}>Export Patient Data</Button>
+                                            <Button sx={{backgroundColor:"#37379b"}} variant="contained" onClick={e=>{exportPatientData()}}>Export Patient Data</Button>
                                         </Grid>
                                     </Grid>
                                     <p></p>
