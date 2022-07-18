@@ -12,7 +12,7 @@ export default function Login() {
     let [open, setOpen] = useState(false)
     let [message, setMessage] = useState(false)
 
-    
+
 
     let login = async () => {
         setOpen(false)
@@ -28,28 +28,28 @@ export default function Login() {
         setOpen(false)
         try {
             let data = (await (await fetch(`${apiHost}/auth/login`,
-            {
-                method: 'POST',
-                headers: { "Content-Type": "application/json", },
-                body: JSON.stringify(loginInfo)
-            }
-        )).json())
-        console.log(data)
-        if (data.status === "error") {
-            setMessage(data.message)
-            setOpen(true)
-            return
-        }
-        else {
-            setCookie("token", data.token, 0.25)
-            if (window.localStorage.getItem("next_page")) {
-                navigate(window.localStorage.getItem("next_page"))
-                window.localStorage.removeItem("next_page")
+                {
+                    method: 'POST',
+                    headers: { "Content-Type": "application/json", },
+                    body: JSON.stringify(loginInfo)
+                }
+            )).json())
+            console.log(data)
+            if (data.status === "error") {
+                setMessage(data.message)
+                setOpen(true)
                 return
             }
-            navigate('/')
-            return
-        }
+            else {
+                setCookie("token", data.token, 0.25)
+                if (window.localStorage.getItem("next_page")) {
+                    navigate(window.localStorage.getItem("next_page"))
+                    window.localStorage.removeItem("next_page")
+                    return
+                }
+                navigate('/')
+                return
+            }
         } catch (error) {
             setMessage(error)
             setOpen(true)
@@ -59,7 +59,11 @@ export default function Login() {
     }
     return (
         <>
-
+            <Paper sx={{ backgroundColor: "#37379b", color: 'white', minWidth: '100%' }}>
+                <br />
+                <Typography variant="h5" sx={{ textAlign: "center", fontWeight: 'bold' }}>Neonatal Nutrition</Typography>
+                <br />
+            </Paper>
             <Snackbar
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                 open={open}
@@ -70,7 +74,7 @@ export default function Login() {
             <Stack
                 direction={{ xs: 'column', sm: 'column', md: 'column', lg: 'row', xl: 'row' }}
                 spacing={2}
-                divider={<Divider orientation="vertical" sx={{ color: "#115987", backgroundColor: "#115987", maxWidth: '100%' }} flexItem />}
+                divider={<Divider orientation="vertical" sx={{ color: "#37379b", backgroundColor: "#37379b", maxWidth: '100%' }} flexItem />}
             >
                 {/* Left Grid  */}
 
@@ -79,17 +83,13 @@ export default function Login() {
                     minWidth: (isMobile) ? '100%' : '50%',
                     maxWidth: (isMobile) ? '100%' : '50%'
                 }}>
-                    <Paper sx={{ backgroundColor: "#115987", color: 'white', minWidth: '100%' }}>
-                        <br />
-                        <Typography variant="h6" sx={{ textAlign: "center", fontWeight: 'bold' }}>Neonatal Nutrition</Typography>
-                        <br />
-                    </Paper>
+
 
                     <br />
                     <br />
                     <br />
                     <Typography variant="h4" sx={{ textAlign: "center", fontWeight: 'bold' }}>Login</Typography>
-                    <br/>
+                    <br />
                     <Container sx={{
                         padding: '3.5em', alignContent: 'center',
                         justifyContent: 'center', alignItems: 'center',
@@ -119,13 +119,13 @@ export default function Login() {
                         <br />
                         <Button variant="contained"
                             disableElevation onClick={e => { login() }}
-                            sx={{ width: "45%", backgroundColor: "#115987", borderRadius: "10px" }}>Login</Button>
+                            sx={{ width: "45%", backgroundColor: "#B00020", borderRadius: "10px" }}>Login</Button>
 
                         <br />
                         <br />
                         <br />
                         <br />
-                        <Typography sx={{ textDecoration: "underline", float:'right', color:'#115987' }}
+                        <Typography sx={{ textDecoration: "underline", float: 'right', color: '#37379b' }}
                             textAlign="center"
                         ><a href="/reset-password">Forgot Password?</a></Typography>
                         <br />

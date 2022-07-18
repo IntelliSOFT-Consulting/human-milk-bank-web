@@ -137,7 +137,7 @@ export default function DataImport() {
                                     <Stack direction="row" spacing={2} alignContent="right" >
                                         {(!isMobile) && <Typography sx={{ minWidth: '80%' }}></Typography>}
                                         <Button variant='contained' disableElevation sx={{ backgroundColor: 'gray' }}>Cancel</Button>
-                                        <Button variant="contained" disableElevation sx={{ backgroundColor: "#115987" }}>Save</Button>
+                                        <Button variant="contained" disableElevation sx={{ backgroundColor: "#37379b" }}>Save</Button>
                                     </Stack>
                                     <p></p>
                                 </TabPanel>
