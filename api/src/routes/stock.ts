@@ -99,18 +99,46 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
             let userId = decodedSession.session.userId
             let { dhmType, dhmVolume, remarks, orderId } = req.body;
             dhmVolume = parseFloat(dhmVolume)
+
+            // total volume dispensed after last closing stock...
+
+            let lastClosingStock = await db.stockEntry.findMany({
+                select: { updatedAt: true, dhmVolume: true },
+                where: { dhmType: dhmType },
+                orderBy: { updatedAt: 'desc' },
+                take: 1,
+            })
+            console.log(lastClosingStock)
+
+            let totalVolumeDispensed = await db.order.aggregate({
+                _sum: {
+                    dhmVolume: true
+                },
+                where: {
+                    status: "Dispensed",
+                    updatedAt: {
+                        gt: lastClosingStock[0].updatedAt
+                    }
+                }
+            })
+
+            if (lastClosingStock[0].dhmVolume <= (totalVolumeDispensed._sum.dhmVolume || 0 + dhmVolume)) {
+                res.json({ error: "No DHM in stock available to dispense", status: "false" });
+                return
+            }
+
             let order = await db.order.create({
                 data: {
                     dhmType, dhmVolume: dhmVolume, remarks, status: "Dispensed",
-                    userId:userId, nutritionOrder: orderId
+                    userId: userId, nutritionOrder: orderId
                 }
             })
             // update fhir resource
-            let resource = await (await FhirApi({"url":`/NutritionOrder/${orderId}`})).data
+            let resource = await (await FhirApi({ "url": `/NutritionOrder/${orderId}` })).data
             resource.status = "completed"
             // console.log(resource)
 
-            let resp = await (await FhirApi({"url":`/NutritionOrder/${orderId}`,method:"PUT", data: JSON.stringify(resource) })).data
+            let resp = await (await FhirApi({ "url": `/NutritionOrder/${orderId}`, method: "PUT", data: JSON.stringify(resource) })).data
             // console.log(resp)
             res.json({ status: "success", message: "Order processed created successfully", id: order.id })
             return
