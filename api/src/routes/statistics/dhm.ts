@@ -16,18 +16,17 @@ let getTotalDHMVolume = async () => {
         _sum:{
             dhmVolume:true
         }
-    }) 
-
-
+    })
+    return totalVolume._sum.dhmVolume
 }
 
 
 // DHM Statistics 
 router.get('/', async (req: Request, res: Response) => {
+    // let selectFields = []
 
     let dhmInfants = await generateReport("noOfInfantsOnDHM") || 0
-    let dhmVolume = await generateReport("noOfInfantsOnDHM") || 0
-    let dhmAverage = await generateReport("noOfInfantsOnDHM") || 0
+    let dhmVolume = await getTotalDHMVolume() || 0
     let fullyReceiving = Math.floor(dhmInfants * Math.random())
 
     let dhmLength = ''
