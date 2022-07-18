@@ -49,12 +49,12 @@ export let sendPasswordResetEmail = async (user:any, resetLink:string) => {
             },
             body: `Dear ${user.username},\n\n\nUse the link below to reset your password \n\n${resetLink}`,
             html: `
-            <a href=${"https://human-milk-bank.netlify.app"}><button style="background-color: #115987;border: none;padding: 15px 32px;color: white;width: 400px;font-weight: bold;">Neonatal Nutrition</button></a>
+            <a href=${"https://human-milk-bank.netlify.app"}><button style="background-color: #37379b;border: none;padding: 15px 32px;color: white;width: 400px;font-weight: bold;">Neonatal Nutrition</button></a>
             
             <br/>
             <p>Dear ${user.username},<p>
             <h3>Click on the button or link below to reset your password<h3/>
-            <a href=${resetLink}><button style="background-color:#115987;border: none;padding: 15px 32px;">Click Here</button></a>
+            <a href=${resetLink}><button style="background-color:#37379b;border: none;padding: 15px 32px;">Click Here</button></a>
             <br/><br/>
             <a href=${resetLink}>Reset Link</a>
             <br/><br/>
@@ -84,11 +84,11 @@ export let sendWelcomeEmail = async (user:any, resetLink:string) => {
             },
             body: `Dear ${user.username},\n\nAn account was created for you.\nUse the link below to get started \n\n${resetLink}`,
             html: `
-            <a href=${"https://human-milk-bank.netlify.app"}><button style="background-color: #115987;border: none;padding: 15px 32px;color: white;width: 400px;font-weight: bold;">Neonatal Nutrition</button></a>
+            <a href=${"https://human-milk-bank.netlify.app"}><button style="background-color: #37379b;border: none;padding: 15px 32px;color: white;width: 400px;font-weight: bold;">Neonatal Nutrition</button></a>
             <br/>
             <p>Dear ${user.username},<p>
             <h3>Click on the button or link below to get started<h3/>
-            <a href=${resetLink}><button style="background-color:#115987;border: none;padding: 15px 32px;">Click Here</button></a>
+            <a href=${resetLink}><button style="background-color:#37379b;border: none;padding: 15px 32px;">Click Here</button></a>
             <br/><br/>
             <a href=${resetLink}>Reset Link</a>
             <br/><br/>
