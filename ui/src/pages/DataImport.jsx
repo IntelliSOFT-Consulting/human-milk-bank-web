@@ -102,8 +102,8 @@ export default function DataImport() {
                                             <Grid item xs={12} md={12} lg={8}>
                                                 <label htmlFor="contained-button-file">
                                                     <Input accept="application/JSON" id="import-file" type="file" placeholder={"FHIR Bundle (.json file)"} onChange={e => { setFile(e.target.files[0]) }} />
-                                                    <Button variant="contained" onClick={e => { importData() }} component="span">
-                                                        Import
+                                                    <Button sx={{backgroundColor:"#37379b"}} variant="contained" onClick={e => { importData() }} component="span">
+                                                        Import Data
                                                     </Button>
                                                 </label>
                                             </Grid>
@@ -137,7 +137,7 @@ export default function DataImport() {
                                     <Stack direction="row" spacing={2} alignContent="right" >
                                         {(!isMobile) && <Typography sx={{ minWidth: '80%' }}></Typography>}
                                         <Button variant='contained' disableElevation sx={{ backgroundColor: 'gray' }}>Cancel</Button>
-                                        <Button variant="contained" disableElevation sx={{ backgroundColor: "#115987" }}>Save</Button>
+                                        <Button variant="contained" disableElevation sx={{ backgroundColor: "#37379b" }}>Save</Button>
                                     </Stack>
                                     <p></p>
                                 </TabPanel>

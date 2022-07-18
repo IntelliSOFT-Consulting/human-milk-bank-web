@@ -60,7 +60,7 @@ export default function HeaderDrawer({ children }) {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: '#115987' }} elevation={0}>
+      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: '#37379b' }} elevation={0}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Typography
@@ -90,7 +90,7 @@ export default function HeaderDrawer({ children }) {
                 <Button
                   key={Object.keys(page)[0]}
                   onClick={e => { navigate(`${page[Object.keys(page)[0]]}`); handleCloseNavMenu() }}
-                  sx={{ my: 2, color: '#115987', display: 'block' }}
+                  sx={{ my: 2, color: '#37379b', display: 'block' }}
                 >
                   {Object.keys(page)[0]}
                 </Button>
@@ -138,7 +138,7 @@ export default function HeaderDrawer({ children }) {
         }}
       >
         <Toolbar />
-        <Box sx={{ overflow: 'auto', backgroundColor: '#115987', color: 'white' }} >
+        <Box sx={{ overflow: 'auto', backgroundColor: '#37379b', color: 'white' }} >
           <List >
             <Divider />
             <ListItem button onClick={e => navigate('/')}>
