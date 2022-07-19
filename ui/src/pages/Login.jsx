@@ -34,7 +34,6 @@ export default function Login() {
                     body: JSON.stringify(loginInfo)
                 }
             )).json())
-            console.log(data)
             if (data.status === "error") {
                 setMessage(data.message)
                 setOpen(true)

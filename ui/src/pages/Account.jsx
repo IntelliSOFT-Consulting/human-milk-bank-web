@@ -36,32 +36,38 @@ export default function Account() {
 
     return (<>
         <Layout>
-            <Typography>Account Information</Typography>
-
+            <Typography variant="h5">Account Information</Typography>
+            <br />
             {profile &&
-                <Card>
+                <Card sx={{ backgroundColor: "#37379b", color: "white" }}>
                     <CardContent>
+                        <br />
+                        <Divider />
                         <Typography>User ID:</Typography>
-                        <Typography variant='h5'>{profile.id}</Typography>
+                        <Typography variant='p'>{profile.id}</Typography>
                         <Divider />
                         <Typography>Names:</Typography>
-                        <Typography variant='h5'>{profile.names}</Typography>
+                        <Typography variant='h4'>{profile.names}</Typography>
                         <Divider />
 
                         <Typography>Email Address:</Typography>
-                        <Typography variant='h5'>{profile.email}</Typography>
+                        <Typography variant='h6'>{profile.email}</Typography>
+                        <Divider />
+                        <br />
                         <Divider />
 
-                        <Typography>Role:</Typography>
-                        <Typography variant='h5'>{profile.role}</Typography>
+
+                        <Typography>User Role:</Typography>
+                        <Typography variant='h6'>{profile.role}</Typography>
                         <Divider />
 
                         <Typography>Created At:</Typography>
-                        <Typography variant='h5'>{new Date(profile.createdAt).toLocaleString()}</Typography>
+                        <Typography variant='h6'>{new Date(profile.createdAt).toLocaleString()}</Typography>
                         <Divider />
 
                         <Typography>Last Updated At:</Typography>
-                        <Typography variant='h5'>{new Date(profile.updatedAt).toLocaleString()}</Typography>
+                        <Typography variant='h6'>{new Date(profile.updatedAt).toLocaleString()}</Typography>
+
                         <Divider />
 
                     </CardContent>

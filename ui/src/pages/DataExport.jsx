@@ -1,4 +1,4 @@
-import { Container, TextField, Stack, Button, Grid, Snackbar, Typography, Divider, useMediaQuery } from '@mui/material'
+import { Container, Alert, AlertTitle, Button, Grid, Snackbar, Typography, Divider, useMediaQuery } from '@mui/material'
 import { useEffect, useState, } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout'
@@ -11,8 +11,6 @@ import TabPanel from '@mui/lab/TabPanel';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-
-
 
 
 export default function DataExport({ id }) {
@@ -30,26 +28,26 @@ export default function DataExport({ id }) {
     };
 
     let exportPatientData = async () => {
-            fetch("https://devnndak.intellisoftkenya.com/fhir/Patient/$everything?_count=9999999")
-              .then(async(response) => {
+        fetch("https://devnndak.intellisoftkenya.com/fhir/Patient/$everything?_count=9999999")
+            .then(async (response) => {
                 let clone = response.clone();
-                let res = await clone.json();  
+                let res = await clone.json();
                 console.log(res);
                 return response.blob()
-              })
-              .then(blob => {
+            })
+            .then(blob => {
                 var url = window.URL.createObjectURL(blob);
                 var a = document.createElement('a');
                 a.href = url;
                 a.download = `${new Date().toUTCString()}.json`;
                 a.click();
-              })
-              .catch(function(err) {
+            })
+            .catch(function (err) {
                 console.error(err)
-              })
-          }
+            })
+    }
 
-    
+
     useEffect(() => {
         if (getCookie("token")) {
             return
@@ -76,7 +74,7 @@ export default function DataExport({ id }) {
                                         scrollButtons="auto"
                                         aria-label="scrollable auto tabs example">
                                         <Tab label="Export Data" value="1" />
-                                       
+
                                     </TabList>
                                 </Box>
 
@@ -88,15 +86,20 @@ export default function DataExport({ id }) {
                                     <p></p>
                                     <Grid container spacing={1} padding=".5em" >
                                         <Grid item xs={12} md={12} lg={8}>
-                                            <Button sx={{backgroundColor:"#37379b"}} variant="contained" onClick={e=>{exportPatientData()}}>Export Patient Data</Button>
+                                            <Alert severity="info">
+                                                <AlertTitle>Exporting Patient Data</AlertTitle>
+                                                Export patients' clinical data as a FHIR JSON Bundle containing the following resources; Patients, Encounters, Observations, Orders and any other related FHIR Resources.
+                                            </Alert>
+                                            <br/>
+                                            <Button sx={{ backgroundColor: "#37379b" }} variant="contained" onClick={e => { exportPatientData() }}>Export Patient Data</Button>
                                         </Grid>
                                     </Grid>
                                     <p></p>
 
-                                    
+
                                     <Divider />
                                     <p></p>
-                                    
+
                                 </TabPanel>
 
                             </TabContext>

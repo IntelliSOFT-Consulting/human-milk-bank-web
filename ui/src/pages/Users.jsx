@@ -154,7 +154,7 @@ export default function Users() {
                             <Button variant="contained" onClick={e => { resetPassword() }} disableElevation sx={{ backgroundColor: 'gray' }}>Reset Password</Button>
                         </>
                     }
-                    <Button variant="contained" disableElevation sx={{ backgroundColor: "#37379b" }} onClick={handleOpen}>Create New User</Button>
+                    <Button variant="contained" disableElevation sx={{ backgroundColor: "#B00020" }} onClick={handleOpen}>Create New User</Button>
                 </Stack>
                 <p></p>
 

@@ -7,7 +7,6 @@ export let FhirApi = async (params) => {
         "Content-Type": 'application/json',
         "Authorization": `Bearer ${getCookie("token")}`,
     }
-    //To-do: replace with basicAuth configuration
     try {
         let response = await fetch(String(`${apiHost}${params.url}`), {
             headers: _defaultHeaders,
@@ -32,5 +31,12 @@ export let FhirApi = async (params) => {
         return res
     }
 
-    //To-do: process response and response type
+}
+
+
+
+let restrictRole = (role) => {
+    
+
+
 }
