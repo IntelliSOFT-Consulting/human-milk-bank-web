@@ -51,9 +51,8 @@ export default function Index() {
         <>
             <Layout>
                 <br />
-                <br />
                 <Container maxWidth="lg">
-                    <Typography variant="h5">{`Welcome ${user.names.split(" ")[0] || ''}`}</Typography>
+                    <Typography variant="h5">{`Welcome ${user.names ? user.names.split(" ")[0] : ''}`}</Typography>
                     <br/>
                     <Grid container rowSpacing={1} columnGap={1} minWidth="100%">
                         {menuItems.map((item) => {

@@ -17,7 +17,7 @@ export default function Account() {
         let data = (await (await fetch("/auth/me",
             {
                 method: "GET",
-                headers: { "Content-Type": "application/json", "Authorization":`Bearer ${getCookie("token")}` }
+                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getCookie("token")}` }
             })).json())
         console.log(data)
         setProfile(data.data)
@@ -35,39 +35,39 @@ export default function Account() {
     }, [])
 
     return (<>
-       <Layout>
-        <Typography>Account Information</Typography>
+        <Layout>
+            <Typography>Account Information</Typography>
 
-        {profile && <Card>
-            <CardContent> 
-            <Typography>User ID:</Typography>
-            <Typography variant='h5'>{profile.id}</Typography>
-            <Divider/>
-            <Typography>Names:</Typography>
-            <Typography variant='h5'>{profile.names}</Typography>
-            <Divider/>
-            
-            <Typography>Email Address:</Typography>
-            <Typography variant='h5'>{profile.email}</Typography>
-            <Divider/>
+            {profile &&
+                <Card>
+                    <CardContent>
+                        <Typography>User ID:</Typography>
+                        <Typography variant='h5'>{profile.id}</Typography>
+                        <Divider />
+                        <Typography>Names:</Typography>
+                        <Typography variant='h5'>{profile.names}</Typography>
+                        <Divider />
 
-            <Typography>Role:</Typography>
-            <Typography variant='h5'>{profile.role}</Typography>
-            <Divider/>
+                        <Typography>Email Address:</Typography>
+                        <Typography variant='h5'>{profile.email}</Typography>
+                        <Divider />
 
-            <Typography>Created At:</Typography>
-            <Typography variant='h5'>{new Date(profile.createdAt).toLocaleString()}</Typography>
-            <Divider/>
+                        <Typography>Role:</Typography>
+                        <Typography variant='h5'>{profile.role}</Typography>
+                        <Divider />
 
-            <Typography>Last Updated At:</Typography>
-            <Typography variant='h5'>{new Date(profile.updatedAt).toLocaleString()}</Typography>
-            <Divider/>
+                        <Typography>Created At:</Typography>
+                        <Typography variant='h5'>{new Date(profile.createdAt).toLocaleString()}</Typography>
+                        <Divider />
 
-            </CardContent>
+                        <Typography>Last Updated At:</Typography>
+                        <Typography variant='h5'>{new Date(profile.updatedAt).toLocaleString()}</Typography>
+                        <Divider />
 
-        </Card>}
+                    </CardContent>
+                </Card>}
 
-       </Layout>
+        </Layout>
 
     </>)
 }
