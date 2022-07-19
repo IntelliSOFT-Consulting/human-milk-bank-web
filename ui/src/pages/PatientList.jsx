@@ -107,7 +107,7 @@ export default function PatientList() {
                 />
                 <Stack direction="row" gap={1} sx={{ paddingLeft: isMobile ? "1em" : "2em", paddingRight: isMobile ? "1em" : "2em" }}>
                     <TextField type={"text"} size="small" sx={{ width: "80%" }} placeholder='Patient Name' onChange={e => { setName(e.target.value) }} />
-                    <Button variant="contained" size='small' sx={{ width: "20%", backgroundColor: "#37379b" }} onClick={e => { search(name) }} disableElevation>Search</Button>
+                    <Button variant="contained" size='small' sx={{ width: "20%", backgroundColor: "#B00020" }} onClick={e => { search(name) }} disableElevation>Search</Button>
                 </Stack>
                 <br />
                 <Container maxWidth="lg">

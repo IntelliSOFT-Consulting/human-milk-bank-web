@@ -10,7 +10,7 @@ const allMonths = _months;
 export let percentageFeeds = async (patient: string | null = null) => {
 
     let careplans = await generateReport("prescribedFeeds")
-    let response: { [index: string]: number } = { dhm: 0, formula: 0, ebm: 0, breastFeeding: 0, oral: 0 }
+    let response: { [index: string]: number } = { dhm: 0, formula: 0, ebm: 0, iv: 0, oral: 0 }
 
     if (patient) {
         for (let plan of careplans) {
@@ -24,8 +24,8 @@ export let percentageFeeds = async (patient: string | null = null) => {
                     if (_o.resource.code.coding[0].code === "DHM-Volume") {
                         response.dhm += _o.resource.valueQuantity.value
                     }
-                    if (_o.resource.code.coding[0].code === "Breast-Milk") {
-                        response.breastFeeding += _o.resource.valueQuantity.value
+                    if (_o.resource.code.coding[0].code === "IV-Volume") {
+                        response.iv += _o.resource.valueQuantity.value
                     }
                     if (_o.resource.code.coding[0].code === "EBM-Volume") {
                         response.ebm += _o.resource.valueQuantity.value
@@ -44,8 +44,8 @@ export let percentageFeeds = async (patient: string | null = null) => {
                 if (_o.resource.code.coding[0].code === "DHM-Volume") {
                     response.dhm += _o.resource.valueQuantity.value
                 }
-                if (_o.resource.code.coding[0].code === "Breast-Milk") {
-                    response.breastFeeding += _o.resource.valueQuantity.value
+                if (_o.resource.code.coding[0].code === "IV-Volume") {
+                    response.iv += _o.resource.valueQuantity.value
                 }
                 if (_o.resource.code.coding[0].code === "EBM-Volume") {
                     response.ebm += _o.resource.valueQuantity.value
@@ -62,7 +62,7 @@ export let percentageFeeds = async (patient: string | null = null) => {
     for (let i of Object.keys(response)) {
         response[i] = Math.round((response[i] / total) * 100 * 100) / 100
     }
-    response.oral = response.breastFeeding
+    response.oral = response.iv
     return response
 }
 
@@ -240,7 +240,7 @@ export let mortalityRateByMonth = async () => {
         console.log(months)
         results.push({
             month: i,
-            value: (Math.round((months[i].died / months[i].born) * 100) / 100 || 0)
+            value: (Math.round((months[i].died / months[i].born) * 100) / 100 || 0) || 0
         })
     }
 

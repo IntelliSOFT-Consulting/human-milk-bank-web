@@ -43,7 +43,9 @@ export default function DataImport() {
         let d;
         d = await selectedFile.text()
         console.log(JSON.parse(d))
+        // let response = await FhirApi({url:"https://hapi.fhir.org/baseR4", method:"POST", data:d})
         let response = await FhirApi({url:"/api/fhir", method:"POST", data:d})
+
         // setMessage("PayloadTooLargeError: request entity too large")
         console.log(response)
         setMessage("PayloadError: Data already exists")

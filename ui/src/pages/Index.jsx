@@ -18,7 +18,6 @@ export default function Index() {
                 method: "GET",
                 headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getCookie("token")}` }
             })).json())
-        console.log(data)
         setUser(data.data)
         return
     }
