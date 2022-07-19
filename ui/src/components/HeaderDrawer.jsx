@@ -32,17 +32,21 @@ export default function HeaderDrawer({ children }) {
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
+    return
   };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
+    return
   };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+    return
   };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+    return
   };
 
   useEffect(() => {
@@ -171,7 +175,7 @@ export default function HeaderDrawer({ children }) {
               <ListItemText primary='Data Export' primaryTypographyProps={{ fontSize: "13px" }} />
             </ListItem>
 
-            
+
             <Divider />
             <ListItem button onClick={e => navigate('/patients')}>
               <ListItemIcon>

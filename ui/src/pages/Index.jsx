@@ -1,26 +1,30 @@
-import { Paper, Stack, TextField, Button, Container, useMediaQuery } from '@mui/material'
+import { Grid, Container, useMediaQuery, CardContent, Card, MenuItem, Typography } from '@mui/material'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as qs from 'query-string';
 import Layout from '../components/Layout';
 import { getCookie } from '../lib/cookie';
-
 import { FhirApi } from './../lib/api'
+import { AccountCircle, Dashboard, FileDownload, FileUpload, Kitchen, ListAlt, People, PivotTableChart, Settings } from '@mui/icons-material';
+
 
 export default function Index() {
     let navigate = useNavigate()
+    let [user, setUser] = useState({})
 
-    let selectPatient = (id) => {
-        window.localStorage.setItem("currentPatient", id)
+    let getUser = async () => {
+        let data = (await (await fetch("/auth/me",
+            {
+                method: "GET",
+                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getCookie("token")}` }
+            })).json())
+        setUser(data.data)
+        return
     }
 
-    
-
-    
- 
-    
     useEffect(() => {
         if (getCookie("token")) {
+            getUser();
             return
         } else {
             navigate('/login')
@@ -29,33 +33,31 @@ export default function Index() {
         }
     }, [])
 
-
-    const [selectionModel, setSelectionModel] = useState([]);
-
-    const columns = [
-        { field: 'id', headerName: 'Patient ID', width: 150, editable: true },
-        { field: 'lastName', headerName: 'Last Name', width: 150, editable: true },
-        { field: 'firstName', headerName: 'First Name', width: 150, editable: true },
-        { field: 'age', headerName: 'Age', width: 200 },
-        // { field: 'role', headerName: 'Date of admission', width: 150 }
-    ];
-
     let isMobile = useMediaQuery('(max-width:600px)');
 
     let args = qs.parse(window.location.search);
-    // console.log(args)
+    let menuItems = [
+        { title: "Reports", url: "/reports", icon: <PivotTableChart sx={{ color: "#B00020" }} /> },
+        { title: "Data Import", url: "/import", icon: <FileUpload sx={{ color: "#B00020" }} /> },
+        { title: "Data Export", url: "/export", icon: <FileDownload sx={{ color: "#B00020" }} /> },
+        { title: "Patient List", url: "/patients", icon: <ListAlt sx={{ color: "#B00020" }} /> },
+        { title: "Users", url: "/users", icon: <People sx={{ color: "#B00020" }} /> },
+        { title: "My Account", url: "/account", icon: <AccountCircle sx={{ color: "#B00020" }} /> },
+
+    ]
 
     return (
         <>
             <Layout>
                 <br />
-                {/* <Stack direction="row" gap={1} sx={{ paddingLeft: isMobile ? "1em" : "2em", paddingRight: isMobile ? "1em" : "2em" }}>
-                    <TextField type={"text"} size="small" sx={{ width: "80%" }} placeholder='Patient Name or Patient ID' />
-                    <Button variant="contained" size='small' sx={{ width: "20%" }} disableElevation>Search</Button>
-                </Stack> */}
-                <br />
                 <Container maxWidth="lg">
-                   
+                    <Typography variant="h5">{`Welcome ${user.names ? user.names.split(" ")[0] : ''}`}</Typography>
+                    <br/>
+                    <Grid container rowSpacing={1} columnGap={1} minWidth="100%">
+                        {menuItems.map((item) => {
+                            return <MenuCard title={item.title} url={item.url} icon={item.icon} />
+                        })}
+                    </Grid>
                 </Container>
             </Layout>
         </>
@@ -63,5 +65,17 @@ export default function Index() {
 }
 
 
-
+let MenuCard = ({ title, url, icon }) => {
+    let navigate = useNavigate()
+    return (
+        <Grid item xs={6} md={6} lg={3}>
+            <Card sx={{ backgroundColor: "#37379b", borderRadius: "10px" }} onClick={e => { navigate(`${url}`) }}>
+                <CardContent sx={{ textAlign: "center" }}>
+                    {icon}
+                    <Typography variant='h6' sx={{ color: "white" }}>{title}</Typography>
+                </CardContent>
+            </Card>
+        </Grid>
+    )
+}
 

@@ -9,6 +9,8 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import GeneralReport from '../components/Reports/GeneralReport';
+
 
 export default function Reports() {
     let [patients, setPatients] = useState()
@@ -21,14 +23,13 @@ export default function Reports() {
     let [open, setOpen] = useState(false)
     let [message, setMessage] = useState(false)
 
-    let availableReports = {
-        "General": [{ totalBabies: "Total Number of Babies" }, { "preterm": "Number of Preterm Babies" },
-        { "term": "Number of Term Babies" }, { "mortalityRate": "Mortality Rate" }],
-        "Feeding/BreastFeeding": [{ "percentageFeeds": "Percentage Feeds" }, { "firstFeeding": "First Feeding" }],
-        "Lactation Support": [{ "expressingTime": "Expressing Times" }],
-        "Infant Nutrition/Growth": [{ "percentageFeeds": "Percentage Feeds" }],
-        "Human Milk Bank": []
-    }
+    let availableReports = [
+        { "General": { url: "/statistics" } },
+        { "Feeding/BreastFeeding": { url: "/statistics" } },
+        { "Lactation Support": { url: "/statistics" } },
+        { "Infant Nutrition/Growth": { url: "/statistics" } },
+        { "Human Milk Bank": { url: "/statistics" } }
+    ]
 
 
     let getReport = async (dates = null) => {
@@ -133,27 +134,7 @@ export default function Reports() {
     }, [])
 
 
-    let parseResults = (results) => {
-        if (typeof results === "object") {
-            return (
-                <>
-                    {(Object.keys(results).indexOf("rate") > 0) && <Typography>{results.rate}</Typography>}
-                    {(Object.keys(results).indexOf("0") < 0) && Object.keys(results).map((result) => {
-                        return <Typography>{(result).toUpperCase()} {": "} {JSON.stringify(results[result])}</Typography>
-                    })}
-                    {(Object.keys(results).indexOf("0") > -1) && results.map((result) => {
-                        // console.log(result)
-                        return <Typography variant="p" >{JSON.stringify(result , null, 2)}</Typography>
-                    })
-                    }
-                </>
-            )
-        }
-        return (
-            <Typography variant="h3">{JSON.stringify(results)}</Typography>
-        )
 
-    }
 
     let isMobile = useMediaQuery('(max-width:600px)');
 
@@ -247,19 +228,7 @@ export default function Reports() {
 
                         <Grid container spacing={1} padding=".5em" >
                             {/* {JSON.stringify(reports)} */}
-                            {(reports.length > 0) ? reports.map((report) => {
-                                return <Grid item xs={12} md={12} lg={4}>
-                                    <Card>
-                                        <CardContent>
-                                            <Typography>{report[(Object.keys(report)[0])]}</Typography>
-                                            {parseResults(results[(Object.keys(report)[0])])}
-
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
-                            }) :
-                                ((results.length > 0) && <Typography sx={{ textAlign: "center" }}>No reports defined</Typography>)
-                            }
+                            
                         </Grid>
                     </Container>
                 </Layout>
