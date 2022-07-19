@@ -7,46 +7,65 @@ _months = _months.concat(_allMonths.slice(0, (_allMonths.indexOf(currentMonth) +
 
 const allMonths = _months;
 
-export let percentageFeeds = async () => {
+export let percentageFeeds = async (patient: string | null = null) => {
 
     let careplans = await generateReport("prescribedFeeds")
-    let observations = []
-    let response: {[index: string]: number} = {dhm:0, formula:0, ebm:0, breastFeeding:0, oral:0}
+    let response: { [index: string]: number } = { dhm: 0, formula: 0, ebm: 0, breastFeeding: 0, oral: 0 }
 
-    for(let plan of careplans){
-        let o = await FhirApi({ url: `/Observation?encounter=${plan.resource.encounter.reference}` })
-        let observations = o.data.entry
-        for(let _o of observations){
-            if(_o.resource.code.coding[0].code === "Formula-Volume"){
-                response.formula += _o.resource.valueQuantity.value
-            }
-            if(_o.resource.code.coding[0].code === "DHM-Volume"){
-                response.dhm += _o.resource.valueQuantity.value
-            }
-            if(_o.resource.code.coding[0].code === "Breast-Milk"){
-                response.breastFeeding += _o.resource.valueQuantity.value
-            }
-            if(_o.resource.code.coding[0].code === "EBM-Volume"){
-                response.ebm += _o.resource.valueQuantity.value
+    if (patient) {
+        for (let plan of careplans) {
+            let o = await FhirApi({ url: `/Observation?encounter=${plan.resource.encounter.reference}` })
+            let observations = o.data.entry
+            for (let _o of observations) {
+                if (_o.resource.subject.reference === `Patient/${patient}`) {
+                    if (_o.resource.code.coding[0].code === "Formula-Volume") {
+                        response.formula += _o.resource.valueQuantity.value
+                    }
+                    if (_o.resource.code.coding[0].code === "DHM-Volume") {
+                        response.dhm += _o.resource.valueQuantity.value
+                    }
+                    if (_o.resource.code.coding[0].code === "Breast-Milk") {
+                        response.breastFeeding += _o.resource.valueQuantity.value
+                    }
+                    if (_o.resource.code.coding[0].code === "EBM-Volume") {
+                        response.ebm += _o.resource.valueQuantity.value
+                    }
+                }
             }
         }
+    } else {
+        for (let plan of careplans) {
+            let o = await FhirApi({ url: `/Observation?encounter=${plan.resource.encounter.reference}` })
+            let observations = o.data.entry
+            for (let _o of observations) {
+                if (_o.resource.code.coding[0].code === "Formula-Volume") {
+                    response.formula += _o.resource.valueQuantity.value
+                }
+                if (_o.resource.code.coding[0].code === "DHM-Volume") {
+                    response.dhm += _o.resource.valueQuantity.value
+                }
+                if (_o.resource.code.coding[0].code === "Breast-Milk") {
+                    response.breastFeeding += _o.resource.valueQuantity.value
+                }
+                if (_o.resource.code.coding[0].code === "EBM-Volume") {
+                    response.ebm += _o.resource.valueQuantity.value
+                }
+            }
 
+        }
     }
     let total = 0.0
-
-    for(let i of Object.keys(response)){
+    for (let i of Object.keys(response)) {
         total += response[i]
     }
 
-    for(let i of Object.keys(response)){
-        response[i] = Math.round((response[i] / total) * 100 * 100 ) / 100
+    for (let i of Object.keys(response)) {
+        response[i] = Math.round((response[i] / total) * 100 * 100) / 100
     }
     response.oral = response.breastFeeding
-    // latest unique one prescribed
     return response
-   // +
 }
-// percentageFeeds()
+
 
 export let infantsOnDHM = async () => {
     let patientIds = []
@@ -64,14 +83,12 @@ export let infantsOnDHM = async () => {
 export let infantsOnEBM = async () => {
     let patientIds = []
     let infants = await generateReport("infantsOnEBM")
-    // console.log("inf", infants)
     for (let i of infants) {
         let x = i.resource.subject.reference
         if (patientIds.indexOf(x) === -1) {
             patientIds.push(x)
         }
     }
-    // console.log(patientIds)
     let unique = [...new Set(patientIds)]
     return unique.length
 }
@@ -95,7 +112,6 @@ export let getGestation = async (type: string) => {
     deceasedInfants.map((i: any) => {
         ids.push("Patient/" + i.resource.id)
     })
-    console.log("ids", ids)
     let patientIds: Array<string> = []
     let infants = await generateReport((type === "preterm") ? "pretermBabies" : "termBabies")
     for (let i of infants) {
@@ -104,7 +120,6 @@ export let getGestation = async (type: string) => {
             patientIds.push(x)
         }
     }
-    console.log(patientIds)
     for (let id of ids) {
         patientIds = patientIds.filter((item: string) => item !== id)
     }
@@ -126,11 +141,9 @@ export let infantsOnFormula = async () => {
     let unique = [...new Set(patientIds)]
     return unique.length
 }
-// infantsOnDHM()
 export let firstFeeding = async () => {
 
     let observations = await generateReport("firstFeeding")
-    // console.log(observations)
     let categories: { [index: string]: number } = { withinOne: 0, afterOne: 0, afterTwo: 0, afterThree: 0 }
     let _map: { [index: string]: string } = { withinOne: "Within 1 Hour", afterOne: "After 1 Hour", afterTwo: "After 2 Hours", afterThree: "After 3 Hours" }
     if (observations) {
@@ -159,7 +172,6 @@ export let expressingTime = async () => {
     let now = new Date()
 
     let lastYear = now.setFullYear(now.getFullYear() - 1)
-    // console.log(observations)
     for (let i of observations) {
         let date = (new Date(i.resource.valueDateTime)).getTime()
         let month = new Date(i.resource.valueDateTime).toLocaleString('default', { month: 'short' })
@@ -178,7 +190,6 @@ export let expressingTime = async () => {
     for (let i of Object.keys(months)) {
         console.log(i)
         for (let x of Object.keys(months[i])) {
-            // console.log(months[i])
             if (months[i][x] < 5) {
                 underFive++
             } else if (months[i][x] >= 5 && months[i][x] <= 7) {
@@ -188,7 +199,7 @@ export let expressingTime = async () => {
             }
         }
         results.push({ month: i, underFive, underSeven, aboveSeven, })
-        underFive=0;underSeven=0;aboveSeven=0;
+        underFive = 0; underSeven = 0; aboveSeven = 0;
     }
     return results
 
@@ -197,12 +208,11 @@ export let expressingTime = async () => {
 
 export let mortalityRateByMonth = async () => {
     let months: { [index: string]: any } = {};
-    let patients: { [index: string]: number } = {};
     let results: Array<any> = [];
 
 
     for (let month of allMonths) {
-        months[month] = {born:0, died: 0}
+        months[month] = { born: 0, died: 0 }
     }
     let observations = await generateReport("deceasedInfants")
     let babiesBorn = await generateReport("allBabies")
@@ -210,7 +220,6 @@ export let mortalityRateByMonth = async () => {
     let now = new Date()
 
     let lastYear = now.setFullYear(now.getFullYear() - 1)
-    // console.log(observations)
     for (let i of observations) {
         let date = (new Date(i.resource.meta.lastUpdated)).getTime()
         let month = new Date(i.resource.meta.lastUpdated).toLocaleString('default', { month: 'short' })
@@ -227,14 +236,14 @@ export let mortalityRateByMonth = async () => {
         }
     }
 
-    for(let i of Object.keys(months)){
+    for (let i of Object.keys(months)) {
         console.log(months)
         results.push({
             month: i,
             value: (Math.round((months[i].died / months[i].born) * 100) / 100 || 0)
         })
     }
-    
+
     return results
 
 }

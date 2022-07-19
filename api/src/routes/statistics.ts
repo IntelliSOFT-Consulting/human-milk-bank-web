@@ -4,36 +4,25 @@ import { firstFeeding, expressingTime, percentageFeeds, calculateMortalityRate, 
 
 const router = Router();
 
-
 router.use(express.json())
 
 
 router.get('/', async (req: Request, res: Response) => {
 
-    let totalBabies = await generateReport("noOfBabies")
-    let preterm = await generateReport("noOfPretermBabies")
-    let term = await generateReport("noOfTermBabies")
-    let mortalityRate = await calculateMortalityRate()
-    // let mortalityRate = 0
-
     res.json(
         {
             "status":"success",
-            "totalBabies": totalBabies,
+            "totalBabies": await generateReport("noOfBabies"),
             "preterm": await getGestation("preterm"),
             "term": await getGestation("term"),
             "averageDays": 3,
             "firstFeeding": await firstFeeding(),
             "percentageFeeds":await percentageFeeds(),
-            "mortalityRate": mortalityRate,
+            "mortalityRate": await calculateMortalityRate(),
             "expressingTime":await expressingTime()
         });
     return
 });
-
-let getMonthFromDate = (date:string) => {
-    return new Date(date).getMonth()
-}
 
 export default router;
 
