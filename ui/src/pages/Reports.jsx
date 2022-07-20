@@ -12,8 +12,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import GeneralReport from '../components/Reports/GeneralReport';
 import LactationSupport from '../components/Reports/LactationSupport';
 // import Feeding from '../components/Reports/Feeding';
-// import HMB from '../components/Reports/HMB';
-// import InfantNutrition from '../components/Reports/InfantNutrition';
+import HMB from '../components/Reports/HMB';
+import InfantNutrition from '../components/Reports/InfantNutrition';
 // import LactationSupport from '../components/Reports/LactationSupport';
 
 
@@ -33,10 +33,10 @@ export default function Reports() {
     let availableReports =
     {
         "General": { url: "/statistics/general" },
-        "Feeding/BreastFeeding": { url: "/statistics/feeding" },
+        // "Feeding/BreastFeeding": { url: "/statistics/feeding" },
         "Lactation Support": { url: "/statistics/lactation-support" },
-        // { "Infant Nutrition/Growth": InfantNutrition },
-        // { "Human Milk Bank": HMB }
+        "Infant Nutrition/Growth": { url: "/statistics/growth" },
+        "Human Milk Bank": { url: "/statistics/hmb" },
     }
 
     let getReport = async (dates = null) => {
@@ -75,14 +75,7 @@ export default function Reports() {
 
     useEffect(() => {
         getReport()
-    }, [report])
-
-    useEffect(() => {
-        getReport()
-    }, [data.toDate])
-    useEffect(() => {
-        getReport()
-    }, [data.fromDate])
+    }, [report, data.toDate, data.fromDate])
 
 
     useEffect(() => {
@@ -97,8 +90,6 @@ export default function Reports() {
 
     let isMobile = useMediaQuery('(max-width:600px)');
 
-    let args = qs.parse(window.location.search);
-    // console.log(args)
 
     return (
         <>
@@ -123,7 +114,6 @@ export default function Reports() {
                                     onChange={e => { selectReport(e.target.value); console.log(e.target.value) }}
                                     size="small"
                                 >
-
                                     {availableReports && Object.keys(availableReports).map((k) => {
                                         return <MenuItem value={k}>{k}</MenuItem>
 
@@ -134,18 +124,17 @@ export default function Reports() {
 
                         {(report && results) &&
                             <>
-
                                 <Grid item xs={12} md={12} lg={3}>
                                     {!isMobile ? <DesktopDatePicker
                                         label="From Date"
-                                        inputFormat="yyyy-MM-dd"
+                                        // inputFormat="yyyy-MM-dd"
                                         value={data.fromDate ? data.fromDate : (new Date().setFullYear(2000)).toISOString()}
                                         onChange={e => { console.log(e); setData({ ...data, fromDate: new Date(e).toISOString() }) }}
                                         renderInput={(params) => <TextField {...params} size="small" fullWidth />}
                                     /> :
                                         <MobileDatePicker
                                             label="From Date"
-                                            inputFormat="yyyy-MM-dd"
+                                            // inputFormat="yyyy-MM-dd"
                                             value={data.fromDate ? data.fromDate : (new Date().setFullYear(2000)).toISOString()}
 
                                             onChange={e => { console.log(e); setData({ ...data, fromDate: new Date(e).toISOString() }) }}
@@ -170,14 +159,13 @@ export default function Reports() {
                                 </Grid>
                             </>
                         }
-
                     </Grid>
 
                     <Container maxWidth="lg">
                         {report && <Typography variant="h4" sx={{ textAlign: "center" }}>{report}</Typography>}
                         {(report && (results.length < 1)) ?
                             <>
-                                <br /><br /><br />
+                                <br />
                                 <Paper sx={{ backgroundColor: "whitesmoke" }}>
                                     <br />
                                     <Typography variant="h5" sx={{ textAlign: "center" }}>Generating report...</Typography>
@@ -191,8 +179,9 @@ export default function Reports() {
 
                         <Grid container spacing={1} padding=".5em" >
                             {(report === "General") && <GeneralReport results={results || null} />}
+                            {(report === "Infant Nutrition/Growth") && <InfantNutrition results={results || null} />}
                             {(report === "Lactation Support") && <LactationSupport results={results || null} />}
-
+                            {(report === "Human Milk Bank") && <HMB results={results || null} />}
 
                         </Grid>
                     </Container>
