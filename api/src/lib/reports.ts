@@ -2,7 +2,7 @@ import { count } from "console"
 import { FhirApi, generateReport } from "./fhir"
 
 const _allMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-let currentMonth = new Date().toLocaleString('default', { month: 'short' })
+let currentMonth = (new Date()).toLocaleString('default', { month: 'short' })
 let _months = _allMonths.slice(_allMonths.indexOf(currentMonth) + 1).concat()
 _months = _months.concat(_allMonths.slice(0, (_allMonths.indexOf(currentMonth) + 1)))
 
@@ -127,6 +127,7 @@ export let getGestation = async (type: string) => {
     let unique = [...new Set(patientIds)]
     return unique.length
 }
+
 
 export let firstFeeding = async () => {
 
@@ -349,7 +350,22 @@ export let generateFeedingReport = async (patients: any[]) => {
         })
     }
     return results
+}
 
+export let generalPatientLevelReport = async (patients: any[]) => {
+    let report: any[] = [];
+    for (let p of patients) {
+        let patient = await (await FhirApi({ url: `/Patient/${p}` })).data
+        report.push({
+            dob: patient.birthDate,
+            gestation: await getPatientGestation(p),
+            ipNumber: p,
+            id: p,
+            birthWeight: await getBirthWeight(p),
+            babyNames: (patient.name[0].family + " " + patient.name[0].given[0])
+        })
+    }
+    return report
 }
 
 
@@ -363,6 +379,20 @@ export let lowBirthWeight = async () => {
     // below 2500g
     let observations = await generateReport("lowBirthweight")
     return countPatients(observations)
+}
+
+export let getBirthWeight = async (patientId: string) => {
+    let gestation = await (await FhirApi({ url: `/Observation?code=8339-4&patient=${patientId}` })).data
+    return gestation?.entry ? ((gestation.entry[0].resource.valueQuantity.value < 2500) ? "Low" : (gestation.entry[0].resource.valueQuantity.value < 1500) ? "Very Low" : (gestation.entry[0].resource.valueQuantity.value < 1500) ? "Extermely Low" : "Normal") : "-"
+}
+
+// export let weightRateChange = async (patientId: string) => {
+
+// }
+
+export let getPatientGestation = async (patientId: string) => {
+    let gestation = await (await FhirApi({ url: `/Observation?code=11885-1&patient=${patientId}` })).data
+    return gestation?.entry ? (gestation.entry[0].resource.valueQuantity.value >= 37) ? "Preterm" : "Term" : "-"
 }
 
 
