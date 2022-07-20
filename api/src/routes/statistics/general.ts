@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from 'express';
 import { generateReport } from '../../lib/fhir';
-import { calculateMortalityRate, getGestation } from '../../lib/reports';
+import { calculateMortalityRate, getGestation, lowBirthWeight } from '../../lib/reports';
 
 const router = Router();
 
@@ -16,6 +16,7 @@ router.get('/', async (req: Request, res: Response) => {
                 totalBabies: await generateReport("noOfBabies"),
                 preterm: await getGestation("preterm"),
                 term: await getGestation("term"),
+                lowBirthWeight: await lowBirthWeight(),
                 mortalityRate: mortalityRate.rate,
                 mortalityRates: mortalityRate.data
             }
@@ -25,8 +26,6 @@ router.get('/', async (req: Request, res: Response) => {
 
 
 router.get('/patient-level', async (req: Request, res: Response) => {
-
-    let mortalityRate = await calculateMortalityRate()
     res.json(
         {
             status: "success",
@@ -34,8 +33,7 @@ router.get('/patient-level', async (req: Request, res: Response) => {
                 totalBabies: await generateReport("noOfBabies"),
                 preterm: await getGestation("preterm"),
                 term: await getGestation("term"),
-                mortalityRate: mortalityRate.rate,
-                mortalityRates: mortalityRate.data
+
             }
         });
     return

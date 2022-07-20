@@ -68,12 +68,11 @@
             "query": "entry",
             "q": "/Patient?active=false&deceased=true"
         },
-        "extremely, Very Low, Low Birth weight": {
-            "%-preterm-babies": "",
-            "q": "/Observation?code=DHM-Volume-1",
-            "type": "computed",
-            "range": "dates",
-            "query": "total"
+        "lowBirthweight": {
+            "q": "/Observation?code=8339-4&value-quantity=lt2500",
+            "description": "Low birth weight",
+            "query": "entry",
+            "type": "all"
         },
         "noOfInfantsOnDHM": {
             "q": "/NutritionOrder?_count",
@@ -222,6 +221,5 @@
             "query": "entry",
             "type": "all"
         }
-
     }
 }

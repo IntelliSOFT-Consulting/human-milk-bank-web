@@ -16,7 +16,7 @@ import HourlyFeed from './routes/statistics/hourly-feed'
 import MilkExpression from './routes/statistics/milk-expression'
 import DHM from './routes/statistics/dhm'
 import Stock from './routes/stock'
-import HMB  from './routes/statistics/dhm'
+import HMB  from './routes/statistics/hmb'
 import General from './routes/statistics/general'
 import LactationSupport from './routes/statistics/lactation-support'
 
@@ -44,6 +44,7 @@ app.use('/stock', Stock)
 
 app.use('/statistics/general', General)
 app.use('/statistics/hmb', HMB)
+app.use('/statistics/growth', BabyGrowth)
 app.use('/statistics/lactation-support', LactationSupport)
 // app.use('/statistics/', Stock)
 

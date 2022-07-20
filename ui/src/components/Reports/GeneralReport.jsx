@@ -15,12 +15,13 @@ export default function GeneralReport({ results }) {
 
     let args = qs.parse(window.location.search);
     let descriptions = {
-        term: "Term Babies",
-        preterm: "Preterm Babies",
-        totalBabies: "Total Babies",
-        mortalityRate: "Mortality Rate"
+        term: "Term babies",
+        preterm: "Preterm babies",
+        totalBabies: "Total babies",
+        lowBirthWeight: "Low birth weight",
+        mortalityRate: "Mortality rate"
     }
-    
+
     return (
         <>
 
@@ -51,7 +52,7 @@ export default function GeneralReport({ results }) {
                         }
                     </Grid>}
 
-                {(Object.keys(results).length > 0) && (Object.keys(results).indexOf('mortalityRates') > -1)&& <Table  rows={results.mortalityRates} title="Mortality Rates by Month"/>}
+                {(Object.keys(results).length > 0) && (Object.keys(results).indexOf('mortalityRates') > -1) && <Table rows={results.mortalityRates} title="Mortality Rates by Month" />}
             </Container>
 
         </>
