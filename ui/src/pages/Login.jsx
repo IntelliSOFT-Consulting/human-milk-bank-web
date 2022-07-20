@@ -1,4 +1,4 @@
-import { Divider, Container, TextField, Button, Stack, Typography, Snackbar, Paper, useMediaQuery, Box } from '@mui/material'
+import { Divider, Container, TextField, Button, Stack, Grid, Typography, Snackbar, Paper, useMediaQuery, Box } from '@mui/material'
 import { useState, } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { apiHost } from '../lib/api'
@@ -11,8 +11,6 @@ export default function Login() {
     let isMobile = useMediaQuery('(max-width:600px)');
     let [open, setOpen] = useState(false)
     let [message, setMessage] = useState(false)
-
-
 
     let login = async () => {
         setOpen(false)
@@ -60,9 +58,11 @@ export default function Login() {
         <>
             <Paper sx={{ backgroundColor: "#37379b", color: 'white', minWidth: '100%' }}>
                 <br />
-                <Typography variant="h5" sx={{ textAlign: "center", fontWeight: 'bold' }}>Neonatal Nutrition</Typography>
+                <Typography variant="h5" sx={{ textAlign: "center", fontWeight: 'bold' }}>Neonatal Nutrition Digital Adaptation Kit</Typography>
                 <br />
             </Paper>
+            {/* <br/> */}
+            <Typography variant="h6" sx={{ textAlign: "center" }}>Diving Digital Excellence to Optimize Newborn Feeding in Kenya and Beyond</Typography>
             <Snackbar
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                 open={open}
@@ -82,8 +82,6 @@ export default function Login() {
                     minWidth: (isMobile) ? '100%' : '50%',
                     maxWidth: (isMobile) ? '100%' : '50%'
                 }}>
-
-
                     <br />
                     <br />
                     <br />
@@ -140,12 +138,29 @@ export default function Login() {
 
                 {/* Right Grid  */}
                 <Box sx={{ padding: '3em' }}>
-                    <br />
-                    <br />
-                    <br />
+                    <p></p>
+
                     {(!isMobile) &&
-                        <img src={'landing_page.svg'} style={{ width: "500px" }} alt="landing_page_img"></img>
+                        <img src={'landing_page.svg'} style={{ width: "500px" }} alt="landing_page_img" />
                     }
+                    <p></p>
+
+                    <Divider />
+                    <p></p>
+
+                    <Grid container gap={2}>
+                        <Grid item sx={4}>
+                            <Typography variant="p" sx={{ textDecoration: "underline" }}>In partnership with:</Typography>
+                            <p></p>
+                        </Grid>
+                        <Grid item sx={4}>
+                            <img src="philips-foundation.jpg" style={{ maxWidth: "100px" }} />
+                        </Grid>
+                        <Grid item sx={4}>
+                            <img src="/path-logo.png" style={{ maxWidth: "100px" }} />
+                        </Grid>
+                    </Grid>
+
                 </Box>
             </Stack>
         </>

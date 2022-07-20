@@ -1,4 +1,4 @@
-import { Stack, FormControl, Select, MenuItem, InputLabel, Grid, Container, Snackbar, CircularProgress, useMediaQuery, TextField, Typography, CardContent, Card } from '@mui/material'
+import { Paper, FormControl, Select, MenuItem, InputLabel, Grid, Container, Snackbar, CircularProgress, useMediaQuery, TextField, Typography, CardContent, Card, Alert } from '@mui/material'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as qs from 'query-string';
@@ -10,6 +10,11 @@ import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import GeneralReport from '../components/Reports/GeneralReport';
+// import Feeding from '../components/Reports/Feeding';
+// import HMB from '../components/Reports/HMB';
+// import InfantNutrition from '../components/Reports/InfantNutrition';
+// import LactationSupport from '../components/Reports/LactationSupport';
+
 
 
 export default function Reports() {
@@ -25,10 +30,10 @@ export default function Reports() {
 
     let availableReports = [
         { "General": { url: "/statistics" } },
-        { "Feeding/BreastFeeding": { url: "/statistics" } },
-        { "Lactation Support": { url: "/statistics" } },
-        { "Infant Nutrition/Growth": { url: "/statistics" } },
-        { "Human Milk Bank": { url: "/statistics" } }
+        // { "Feeding/BreastFeeding": Feeding },
+        // { "Lactation Support": LactationSupport },
+        // { "Infant Nutrition/Growth": InfantNutrition },
+        // { "Human Milk Bank": HMB }
     ]
 
 
@@ -43,12 +48,7 @@ export default function Reports() {
                 setStatus("loading")
                 setResults([])
                 try {
-                    let data = (await (await fetch(`${apiHost}/statistics?${new URLSearchParams(
-                        {
-                            reports: JSON.stringify(availableReports[`${report}`].map((r) => {
-                                return Object.keys(r)[0]
-                            })),
-                        })}`,
+                    let data = (await (await fetch(`${apiHost}/statistics`,
                         {
                             method: 'GET',
                             headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getCookie("token")}` },
@@ -68,29 +68,6 @@ export default function Reports() {
                     return
                 }
             }
-        } else {
-            if (data.report.type === "query") {
-
-                if (!(data.fromDate <= data.toDate)) {
-                    setMessage("Invalid dates: *from date* must be less than or equal to *to date*")
-                    setOpen(true)
-                    return
-                }
-                try {
-                    setStatus("loading")
-                    setResults(null)
-                    let res = await FhirApi({ url: `/fhir${data.report.q}&_lastUpdated=ge${data.fromDate}&_lastUpdated=le${data.toDate}`, method: 'GET' })
-                    console.log(res.data[data.report.query])
-                    setResults({ results: res.data[data.report.query], description: data.report.description })
-                    setStatus(null)
-                    return
-                }
-                catch (e) {
-                    setMessage(JSON.stringify(e))
-                    setOpen(true)
-                    return
-                }
-            }
         }
     }
 
@@ -105,23 +82,6 @@ export default function Reports() {
         getReport()
     }, [data.fromDate])
 
-    useEffect(() => {
-        let _reports = []
-        results && Object.keys(results).map((result) => {
-            console.log(result)
-            for (let r of availableReports[report]) {
-                if (result === Object.keys(r)[0]) {
-                    _reports.push(r)
-                    // console.log(r)
-
-                }
-            }
-        })
-        setReports(_reports)
-        console.log("Reports: ", reports)
-        return
-
-    }, [results])
 
     useEffect(() => {
         if (getCookie("token")) {
@@ -165,8 +125,8 @@ export default function Reports() {
                                     size="small"
                                 >
 
-                                    {availableReports && Object.keys(availableReports).map((k) => {
-                                        return <MenuItem value={k}>{k}</MenuItem>
+                                    {availableReports && availableReports.map((k) => {
+                                        return <MenuItem value={Object.keys(k)[0]}>{Object.keys(k)[0]}</MenuItem>
 
                                     })}
                                 </Select>
@@ -205,12 +165,10 @@ export default function Reports() {
                                             label="To Date"
                                             inputFormat="yyyy-MM-dd"
                                             value={data.toDate ? data.toDate : (new Date().setHours(23)).toISOString()}
-
                                             onChange={e => { console.log(e); setData({ ...data, toDate: new Date(e).toISOString() }) }}
                                             renderInput={(params) => <TextField {...params} size="small" fullWidth />}
                                         />}
                                 </Grid>
-
                             </>
                         }
 
@@ -220,15 +178,21 @@ export default function Reports() {
                         {report && <Typography variant="h4" sx={{ textAlign: "center" }}>{report}</Typography>}
                         {(report && (results.length < 1)) ?
                             <>
-                                <Typography>Loading...</Typography>
-                                <CircularProgress />
+                                <br /><br /><br />
+                                <Paper sx={{ backgroundColor: "whitesmoke" }}>
+                                    <br />
+                                    <Typography variant="h5" sx={{ textAlign: "center" }}>Generating report...</Typography>
+                                    <br />
+                                    <CircularProgress sx={{ marginLeft: "47%" }} />
+                                    <br /><br />
+                                </Paper>
                             </>
                             :
-                            (!report && <Typography sx={{ textAlign: "center" }}>Select a report from the list</Typography>)}
+                            (!report && <Alert severity="info" sx={{ textAlign: "center", maxWidth: "50%" }} >No Report Selected: Select one from the list</Alert>)}
 
                         <Grid container spacing={1} padding=".5em" >
-                            {/* {JSON.stringify(reports)} */}
-                            
+                            {(report === "General") && <GeneralReport results={results || null} />}
+
                         </Grid>
                     </Container>
                 </Layout>

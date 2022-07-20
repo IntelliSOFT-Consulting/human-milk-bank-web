@@ -263,7 +263,19 @@ export let calculateMortalityRate = async () => {
             totalDeceased++
         }
     }
-
     return { rate: Math.round((totalDeceased / count) * 100) / 100, data: await mortalityRateByMonth() }
 }
 
+
+
+// patient level reports
+
+
+let _r = [
+    ""
+]
+export let patientLevelReport = async (report:string) => {
+
+    
+
+}
