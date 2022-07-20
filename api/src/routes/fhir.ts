@@ -14,7 +14,7 @@ router.use(bodyParser.urlencoded({
 
 // router.use(express.json({limit: '50mb'}));
 
-router.use('/', [createProxyMiddleware(
+router.use('/', [ createProxyMiddleware(
     {
         target: 'https://devnndak.intellisoftkenya.com', changeOrigin: true,
         pathRewrite: {

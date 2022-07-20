@@ -274,8 +274,36 @@ export let calculateMortalityRate = async () => {
 let _r = [
     ""
 ]
-export let patientLevelReport = async (report:string) => {
+export let patientLevelReport = async (report: string) => {
 
-    
+
+
+}
+
+export let babiesReceivingFeeds = async () => {
+    let observations = await generateReport("firstFeeding")
+    let babies = [];
+    for (let observation of observations) {
+        console.log(observation)
+        if (babies.indexOf(observation.resource.subject.reference) < 0) {
+            if (observation.resource.valueString === "Within 1 Hour") {
+                babies.push(observation.resource.subject.reference)
+            }
+        }
+    }
+    return babies.length
+}
+
+export let mothersInitiatingLactation = async () => {
+
+    let observations = await generateReport("mothersInitiatingLactation")
+    let mothers = [];
+    for (let observation of observations) {
+        console.log(observation)
+        if (mothers.indexOf(observation.resource.subject.reference) < 0) {
+            mothers.push(observation.resource.subject.reference)
+        }
+    }
+    return mothers.length
 
 }

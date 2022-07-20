@@ -22,9 +22,17 @@ let userRoles: { [index: string]: string } = {
 }
 
 // Generate Access Token
-router.post("/token", async (req, res) => {
-    let { name } = req.query;
-    // console.log(req.headers.authorization)
+router.post("/refresh-token", async (req, res) => {
+    try {
+        let token = req.headers.authorization || null;
+        if (!token) {
+            res.statusCode = 401
+            res.json({ error: "Invalid access token", status: "error" });
+            return
+        }
+    } catch (error) {
+        
+    }
 
 });
 

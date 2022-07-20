@@ -10,6 +10,7 @@ import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import GeneralReport from '../components/Reports/GeneralReport';
+import LactationSupport from '../components/Reports/LactationSupport';
 // import Feeding from '../components/Reports/Feeding';
 // import HMB from '../components/Reports/HMB';
 // import InfantNutrition from '../components/Reports/InfantNutrition';
@@ -190,8 +191,7 @@ export default function Reports() {
 
                         <Grid container spacing={1} padding=".5em" >
                             {(report === "General") && <GeneralReport results={results || null} />}
-                            {/* {(report === "General") && <GeneralReport results={results || null} />}
-                            {(report === "General") && <GeneralReport results={results || null} />} */}
+                            {(report === "Lactation Support") && <LactationSupport results={results || null} />}
 
 
                         </Grid>
