@@ -136,7 +136,6 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
             // update fhir resource
             let resource = await (await FhirApi({ "url": `/NutritionOrder/${orderId}` })).data
             resource.status = "completed"
-            // console.log(resource)
 
             let resp = await (await FhirApi({ "url": `/NutritionOrder/${orderId}`, method: "PUT", data: JSON.stringify(resource) })).data
             // console.log(resp)

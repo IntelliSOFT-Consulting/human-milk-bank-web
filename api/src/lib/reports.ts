@@ -1,3 +1,4 @@
+import { count } from "console"
 import { FhirApi, generateReport } from "./fhir"
 
 const _allMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -127,20 +128,6 @@ export let getGestation = async (type: string) => {
     return unique.length
 }
 
-
-
-export let infantsOnFormula = async () => {
-    let patientIds = []
-    let infants = await generateReport("infantsOnFormula")
-    for (let i of infants) {
-        let x = i.resource.subject
-        if (patientIds.indexOf(x) < 0) {
-            patientIds.push(x)
-        }
-    }
-    let unique = [...new Set(patientIds)]
-    return unique.length
-}
 export let firstFeeding = async () => {
 
     let observations = await generateReport("firstFeeding")
@@ -149,7 +136,6 @@ export let firstFeeding = async () => {
     if (observations) {
         for (let o of observations) {
             for (let i of Object.keys(_map)) {
-
                 if (o.resource.valueString === _map[i]) {
                     categories[i] += 1
                 }
@@ -181,14 +167,13 @@ export let expressingTime = async () => {
             months[month][i.resource.subject.reference]++
         }
     }
-    // console.log("Months", months)
     let results: Array<any> = [];
     let underFive = 0;
     let underSeven = 0;
     let aboveSeven = 0;
     // do the counts
     for (let i of Object.keys(months)) {
-        console.log(i)
+        // console.log(i)
         for (let x of Object.keys(months[i])) {
             if (months[i][x] < 5) {
                 underFive++
@@ -237,7 +222,7 @@ export let mortalityRateByMonth = async () => {
     }
 
     for (let i of Object.keys(months)) {
-        console.log(months)
+        // console.log(months)
         results.push({
             month: i,
             value: (Math.round((months[i].died / months[i].born) * 100) / 100 || 0) || 0
@@ -284,26 +269,101 @@ export let babiesReceivingFeeds = async () => {
     let observations = await generateReport("firstFeeding")
     let babies = [];
     for (let observation of observations) {
-        console.log(observation)
         if (babies.indexOf(observation.resource.subject.reference) < 0) {
             if (observation.resource.valueString === "Within 1 Hour") {
                 babies.push(observation.resource.subject.reference)
             }
         }
     }
-    return babies.length
+    let unique = [...new Set(babies)]
+    return unique.length
 }
 
 export let mothersInitiatingLactation = async () => {
-
     let observations = await generateReport("mothersInitiatingLactation")
-    let mothers = [];
+    return countPatients(observations)
+}
+
+
+export let infantsExposedToFormula = async () => {
+    let observations = await generateReport("infantsOnFormula")
+    return countPatients(observations)
+}
+
+export let infantsFullyFedOnMothersMilk = async () => {
+    let observations = await generateReport("infantsOnFormula")
+    let babies = [];
     for (let observation of observations) {
-        console.log(observation)
-        if (mothers.indexOf(observation.resource.subject.reference) < 0) {
-            mothers.push(observation.resource.subject.reference)
+        if (babies.indexOf(observation.resource.subject.reference) < 0) {
+            babies.push(observation.resource.subject.reference)
         }
     }
-    return mothers.length
+    let unique = [...new Set(babies)]
+    return unique.length
+}
+
+export let exclusiveHumanMilkDiets = async () => {
+    let observations = await generateReport("infantsOnFormula")
+    let babies = [];
+    for (let observation of observations) {
+        if (babies.indexOf(observation.resource.subject.reference) < 0) {
+            babies.push(observation.resource.subject.reference)
+        }
+    }
+    let unique = [...new Set(babies)]
+    return unique.length
+}
+
+let countPatients = (observations: any) => {
+    let babies = [];
+    for (let observation of observations) {
+        if (babies.indexOf(observation.resource.subject.reference) < 0) {
+            babies.push(observation.resource.subject.reference)
+        }
+    }
+    let unique = [...new Set(babies)]
+    return unique.length
+}
+
+
+export let volumeOfMilkExpressed = async (patientId: string) => {
+    return await getObservationsTotal(patientId, "62578-0")
+}
+
+let getObservationsTotal = async (patientId: string, code: string) => {
+    let total = 0.0
+    let o = await FhirApi({ url: `/Observation?patient=${patientId}&code=${code}` })
+    let observations = o.data.entry
+    for (let o of observations) {
+        total += o.resource.valueQuantity.value
+    }
+    return total
+}
+
+
+export let generateFeedingReport = async (patients: any[]) => {
+    let results: any[] = [];
+    for (let patient of patients) {
+        results.push({
+            volumeOfMilkExpressed: await volumeOfMilkExpressed(patient)
+        })
+    }
+    return results
 
 }
+
+
+export let infantNutritionReport = async (patients: any[]) => {
+    let results: any[] = [];
+    return results
+
+}
+
+export let lowBirthWeight = async () => {
+    // below 2500g
+    let observations = await generateReport("lowBirthweight")
+    return countPatients(observations)
+}
+
+
+// 1. Count Patients from code when value 
