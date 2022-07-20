@@ -11,8 +11,6 @@ export default function GeneralReport({ results }) {
 
     let [open, setOpen] = useState(false)
     let [message, setMessage] = useState(false)
-
-
     let isMobile = useMediaQuery('(max-width:600px)');
 
     let args = qs.parse(window.location.search);
@@ -22,9 +20,7 @@ export default function GeneralReport({ results }) {
         totalBabies: "Total Babies",
         mortalityRate: "Mortality Rate"
     }
-    let table = {
-        // mortalityRate: ""
-    }
+    
     return (
         <>
 
@@ -55,14 +51,10 @@ export default function GeneralReport({ results }) {
                         }
                     </Grid>}
 
-                {(Object.keys(results).length > 0) && <Table  rows={results.mortalityRates} title="Mortality Rates by Month"/>}
+                {(Object.keys(results).length > 0) && (Object.keys(results).indexOf('mortalityRates') > -1)&& <Table  rows={results.mortalityRates} title="Mortality Rates by Month"/>}
             </Container>
 
         </>
     )
 
 }
-
-
-
-
