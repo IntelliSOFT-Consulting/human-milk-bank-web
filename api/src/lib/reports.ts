@@ -181,10 +181,10 @@ export let expressingTime = async () => {
             months[month][i.resource.subject.reference]++
         }
     }
-    console.log("Months", months)
+    // console.log("Months", months)
     let results: Array<any> = [];
-    let underFive = 0
-    let underSeven = 0
+    let underFive = 0;
+    let underSeven = 0;
     let aboveSeven = 0;
     // do the counts
     for (let i of Object.keys(months)) {
@@ -263,7 +263,19 @@ export let calculateMortalityRate = async () => {
             totalDeceased++
         }
     }
-
     return { rate: Math.round((totalDeceased / count) * 100) / 100, data: await mortalityRateByMonth() }
 }
 
+
+
+// patient level reports
+
+
+let _r = [
+    ""
+]
+export let patientLevelReport = async (report:string) => {
+
+    
+
+}

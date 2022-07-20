@@ -1,0 +1,16 @@
+{
+    "reports": {
+        "milkExpressed": {
+            "q": "/Observation?code=62578",
+            "description": "Number of term babies",
+            "query": "total",
+            "type": "query"
+        },
+        "volume": {
+            "q": "/Observation?code=11885-1&value-quantity=gt37",
+            "description": "Number of term babies",
+            "query": "entry",
+            "type": "all"
+        }
+    }
+}
