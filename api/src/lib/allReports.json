@@ -87,6 +87,12 @@
             "query": "entry",
             "type": "all"
         },
+        "mothersInitiatingLactation": {
+            "q": "/Observation?code=62578-0",
+            "description": "Number of infants receiving DHM",
+            "query": "entry",
+            "type": "all"
+        },
         "averageLengthofDHMUse": {
             "q": "/Observation?code=11885-1&value-quantity=gt37",
             "description": "Average length of DHM used",
@@ -206,7 +212,7 @@
         },
         "firstFeeding": {
             "q": "/Observation?code=Fed-After",
-            "description": "Number of infants breastfeeding",
+            "description": "First Feeding",
             "query": "entry",
             "type": "all"
         },

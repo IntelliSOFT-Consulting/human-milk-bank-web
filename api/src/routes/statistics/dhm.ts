@@ -20,6 +20,7 @@ let getTotalDHMVolume = async () => {
     return totalVolume._sum.dhmVolume
 }
 
+let getWeekl
 
 // DHM Statistics 
 router.get('/', async (req: Request, res: Response) => {
