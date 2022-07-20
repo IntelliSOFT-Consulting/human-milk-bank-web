@@ -14,6 +14,7 @@ import LactationSupport from '../components/Reports/LactationSupport';
 // import Feeding from '../components/Reports/Feeding';
 import HMB from '../components/Reports/HMB';
 import InfantNutrition from '../components/Reports/InfantNutrition';
+import GeneralPatientLevel from '../components/Reports/GeneralPatientLevel';
 // import LactationSupport from '../components/Reports/LactationSupport';
 
 
@@ -33,6 +34,7 @@ export default function Reports() {
     let availableReports =
     {
         "General": { url: "/statistics/general" },
+        "General - Patient level": { url: "/statistics/general/patient-level" },
         // "Feeding/BreastFeeding": { url: "/statistics/feeding" },
         "Lactation Support": { url: "/statistics/lactation-support" },
         "Infant Nutrition/Growth": { url: "/statistics/growth" },
@@ -162,7 +164,8 @@ export default function Reports() {
                     </Grid>
 
                     <Container maxWidth="lg">
-                        {report && <Typography variant="h4" sx={{ textAlign: "center" }}>{report}</Typography>}
+                        <p></p>
+                        {report && <Typography variant="h5" sx={{ textAlign: "center" }}>{report}</Typography>}
                         {(report && (results.length < 1)) ?
                             <>
                                 <br />
@@ -178,7 +181,9 @@ export default function Reports() {
                             (!report && <Alert severity="info" sx={{ textAlign: "center", maxWidth: "50%" }} >No Report Selected: Select one from the list</Alert>)}
 
                         <Grid container spacing={1} padding=".5em" >
+
                             {(report === "General") && <GeneralReport results={results || null} />}
+                            {(report === "General - Patient level") && <GeneralPatientLevel results={results || null} />}
                             {(report === "Infant Nutrition/Growth") && <InfantNutrition results={results || null} />}
                             {(report === "Lactation Support") && <LactationSupport results={results || null} />}
                             {(report === "Human Milk Bank") && <HMB results={results || null} />}
