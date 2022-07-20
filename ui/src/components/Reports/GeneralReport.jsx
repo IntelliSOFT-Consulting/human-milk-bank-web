@@ -5,12 +5,10 @@ import * as qs from 'query-string';
 import { getCookie } from '../../lib/cookie';
 import { apiHost, FhirApi } from '../../lib/api'
 import Table from '../Table'
+import InfoCard from '../InfoCard'
 
 export default function GeneralReport({ results }) {
 
-    let [report, selectReport] = useState()
-    let [status, setStatus] = useState(null)
-    let [reports, setReports] = useState([])
     let [open, setOpen] = useState(false)
     let [message, setMessage] = useState(false)
 
@@ -20,12 +18,12 @@ export default function GeneralReport({ results }) {
     let args = qs.parse(window.location.search);
     let descriptions = {
         term: "Term Babies",
-        preterm: "PreTerm Babies",
+        preterm: "Preterm Babies",
         totalBabies: "Total Babies",
         mortalityRate: "Mortality Rate"
     }
     let table = {
-        mortalityRate: "Morta"
+        // mortalityRate: ""
     }
     return (
         <>
@@ -46,15 +44,18 @@ export default function GeneralReport({ results }) {
                     </>
                     :
                     <Grid container spacing={1} padding=".5em" >
-                        {(reports.length > 0) ? reports.map((report) => {
-                            //switch statement
-                            return <Grid item xs={12} md={12} lg={4}>
-
-                            </Grid>
+                        {(Object.keys(results).length > 0) ? Object.keys(results).map((report) => {
+                            if (Object.keys(descriptions).indexOf(report) > -1) {
+                                return <Grid item xs={12} md={12} lg={3}>
+                                    <InfoCard value={results[report]} title={descriptions[report]} />
+                                </Grid>
+                            }
                         }) :
                             ((results.length > 0) && <Typography sx={{ textAlign: "center" }}>No reports defined</Typography>)
                         }
                     </Grid>}
+
+                {(Object.keys(results).length > 0) && <Table  rows={results.mortalityRates} title="Mortality Rates by Month"/>}
             </Container>
 
         </>

@@ -27,15 +27,16 @@ export default function Reports() {
     let [reports, setReports] = useState([])
     let [open, setOpen] = useState(false)
     let [message, setMessage] = useState(false)
+    let [reportLevel, setReportLevel] = useState(false)
 
-    let availableReports = [
-        { "General": { url: "/statistics" } },
-        // { "Feeding/BreastFeeding": Feeding },
-        // { "Lactation Support": LactationSupport },
+    let availableReports =
+    {
+        "General": { url: "/statistics/general" },
+        "Feeding/BreastFeeding": { url: "/statistics/feeding" },
+        "Lactation Support": { url: "/statistics/lactation-support" },
         // { "Infant Nutrition/Growth": InfantNutrition },
         // { "Human Milk Bank": HMB }
-    ]
-
+    }
 
     let getReport = async (dates = null) => {
         if (!dates) {
@@ -48,7 +49,7 @@ export default function Reports() {
                 setStatus("loading")
                 setResults([])
                 try {
-                    let data = (await (await fetch(`${apiHost}/statistics`,
+                    let data = (await (await fetch(`${apiHost}${availableReports[report].url}`,
                         {
                             method: 'GET',
                             headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getCookie("token")}` },
@@ -57,7 +58,7 @@ export default function Reports() {
                     )).json())
                     setMessage((data.status === "success") ? "Data fetched successfully" : "Data fetch error")
                     delete data.status
-                    setResults(data)
+                    setResults(data.report)
                     setOpen(true)
                     setTimeout(() => { setOpen(false) }, 1500)
                     return
@@ -93,9 +94,6 @@ export default function Reports() {
         }
     }, [])
 
-
-
-
     let isMobile = useMediaQuery('(max-width:600px)');
 
     let args = qs.parse(window.location.search);
@@ -125,8 +123,8 @@ export default function Reports() {
                                     size="small"
                                 >
 
-                                    {availableReports && availableReports.map((k) => {
-                                        return <MenuItem value={Object.keys(k)[0]}>{Object.keys(k)[0]}</MenuItem>
+                                    {availableReports && Object.keys(availableReports).map((k) => {
+                                        return <MenuItem value={k}>{k}</MenuItem>
 
                                     })}
                                 </Select>
@@ -192,6 +190,9 @@ export default function Reports() {
 
                         <Grid container spacing={1} padding=".5em" >
                             {(report === "General") && <GeneralReport results={results || null} />}
+                            {/* {(report === "General") && <GeneralReport results={results || null} />}
+                            {(report === "General") && <GeneralReport results={results || null} />} */}
+
 
                         </Grid>
                     </Container>

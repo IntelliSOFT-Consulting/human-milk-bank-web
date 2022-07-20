@@ -15,15 +15,15 @@ export default function TableView({ rows, title }) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
+                    {Object.keys(rows).map((row) => (
                         <TableRow
-                            key={row.name}
+                            key={row}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
                             <TableCell component="th" scope="row">
-                                {row[title]}
+                                {rows[row].month}
                             </TableCell>
-                            <TableCell align="right">{row.value}</TableCell>
+                            <TableCell align="right">{rows[row].value}</TableCell>
                             
                         </TableRow>
                     ))}
