@@ -100,7 +100,7 @@ export default function Index() {
                     y: (statistics.expressingTime).map((x) => { return (x.aboveSeven) }),
                     mode: "lines+markers",
                     name: "Above Seven"
-                }], { title: "Mortality Rates" });
+                }], { title: "Number of times all mothers are expressing" });
             }
             return
         }
