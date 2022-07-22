@@ -28,16 +28,11 @@ export default function Index() {
     useEffect(() => {
         if (Object.keys(statistics).length > 0) {
 
-            var layout = {
-                height: 350,
-                width: 350
-            };
+            var layout = { height: 350, width: 350 };
             if (document.getElementById("firstFeeds")) {
                 let total = (Object.keys(statistics.firstFeeding).map((x) => { return statistics.firstFeeding[x] })).reduce((a, b) => a + b, 0)
                 Plotly.newPlot('firstFeeds', [{
-                    type: 'pie',
-                    name:"First Feeds",
-                    automargin:true,
+                    type: 'pie', name: "First Feeds", automargin: true,
                     labels: Object.keys(statistics.firstFeeding).map((x) => { return (x) }),
                     values: Object.keys(statistics.firstFeeding).map((x) => { return (statistics.firstFeeding[x] / total * 100) })
                 }], { ...layout, title: "Time all babies were given first feeds" });
@@ -45,12 +40,18 @@ export default function Index() {
             if (document.getElementById("percentageFeeds")) {
                 let total = (Object.keys(statistics.percentageFeeds).map((x) => { return statistics.percentageFeeds[x] })).reduce((a, b) => a + b, 0)
                 Plotly.newPlot('percentageFeeds', [{
-                    type: 'pie',
-                    name:"Percentage Feeds",
+                    type: 'pie', name: "Percentage Feeds",
                     labels: Object.keys(statistics.percentageFeeds).map((x) => { return (x) }),
                     values: Object.keys(statistics.percentageFeeds).map((x) => { return statistics.percentageFeeds[x] / total * 100 })
                 }], { ...layout, title: "Percentage feeds infants are feeding on" });
-
+            }
+            if (document.getElementById("mortalityRates")) {
+                // let total = (Object.keys(statistics.mortalityRate.data).map((x) => { return statistics.firstFeeding[x] })).reduce((a, b) => a + b, 0)
+                Plotly.newPlot('mortalityRates', [{
+                    name: "Mortality Rates", automargin: true,
+                    y: (statistics.mortalityRate.data).map((x) => { return (x.value) }),
+                    x: (statistics.mortalityRate.data).map((x) => { return (x.month) })
+                }], { ...layout, title: "Mortality Rates" });
             }
             return
         }
@@ -98,7 +99,7 @@ export default function Index() {
         preterm: "Total Number of Preterm babies",
         totalBabies: "Total number of babies",
         // lowBirthWeight: "Low birth weight",
-        averageDays:"Average days to receiving mothers own milk"
+        averageDays: "Average days to receiving mothers own milk"
     }
 
 
@@ -140,6 +141,20 @@ export default function Index() {
                             <Grid container gap={2} >
                                 <Grid item xs={12} md={12} lg={5} sx={{ border: "1px solid grey", borderRadius: "10px" }}>
                                     <div id="firstFeeds" ></div>
+                                </Grid>
+                                <Grid item xs={12} md={12} lg={5} sx={{ border: "1px solid grey", borderRadius: "10px" }}>
+                                    <div id="percentageFeeds"></div>
+                                </Grid>
+                            </Grid>
+                        </>
+                    }
+                    {
+                        (Object.keys(statistics).length > 1) &&
+                        <>
+                            <br />
+                            <Grid container gap={2} >
+                                <Grid item xs={12} md={12} lg={5} sx={{ border: "1px solid grey", borderRadius: "10px" }}>
+                                    <div id="mortalityRates" ></div>
                                 </Grid>
                                 <Grid item xs={12} md={12} lg={5} sx={{ border: "1px solid grey", borderRadius: "10px" }}>
                                     <div id="percentageFeeds"></div>
