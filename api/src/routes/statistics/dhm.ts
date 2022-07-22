@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from 'express';
 import { generateReport } from '../../lib/fhir';
-import { availableDHMVolume, countPatients } from '../../lib/reports';
+import { availableDHMVolume, avgDaysToReceivingMothersOwnMilk, countPatients, countPatientsFromNutritionOrders } from '../../lib/reports';
 const router = Router();
 
 router.use(express.json())
@@ -21,10 +21,10 @@ router.get('/', async (req: Request, res: Response) => {
 
     res.json(
         {
-            "dhmInfants": countPatients(dhmInfants) || 0,
+            "dhmInfants": countPatientsFromNutritionOrders(dhmInfants) || 0,
             "dhmVolume": dhmVolume,
-            "dhmAverage": dhmVolume / dhmInfants,
-            "fullyReceiving": fullyReceiving,
+            "dhmAverage": (dhmVolume / dhmInfants) || 0,
+            "fullyReceiving": await avgDaysToReceivingMothersOwnMilk(),
             "dhmLength": "3 days",
             "data": days.map((day) => {
                 let totalBabies = (Math.floor(Math.random() * 50))
