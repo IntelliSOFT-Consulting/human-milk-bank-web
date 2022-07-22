@@ -1,18 +1,22 @@
 import { Grid, Container, Snackbar, CircularProgress, useMediaQuery, TextField, Typography, CardContent, Card } from '@mui/material'
 import { useState, useEffect } from 'react'
 
-import { getCookie } from '../../lib/cookie';
-import { apiHost, FhirApi } from '../../lib/api'
+// import { getCookie } from '../../lib/cookie';
+// import { apiHost, FhirApi } from '../../lib/api'
 import InfoCard from '../InfoCard'
+import Table from '../Table'
 
 export default function LactationSupport({ results }) {
+
+    console.log(results)
 
     let [open, setOpen] = useState(false)
     let [message, setMessage] = useState(false)
     let descriptions = {
         infantsExposedToFormula: "Number of Infants Exposed To Formula",
         infantsFullyFedOnMothersMilk: "Infants fully fed on mother's own milk",
-        infantsReceivingExclusiveHumanMilkDiets: "Infants receiving exclusive human milk diets"
+        infantsReceivingExclusiveHumanMilkDiets: "Infants receiving exclusive human milk diets",
+        // percentageFeeds: "Percentage feeds received by all infants"
     }
 
     let isMobile = useMediaQuery('(max-width:600px)');
@@ -44,6 +48,15 @@ export default function LactationSupport({ results }) {
                         }) :
                             ((results.length > 0) && <Typography sx={{ textAlign: "center" }}>No reports defined</Typography>)
                         }
+                    </Grid>}
+                <br />
+                {(Object.keys(results).length > 0) && (Object.keys(results).indexOf('percentageFeeds') > -1) &&
+                    <Grid container spacing={1} padding=".5em" >
+                        <Grid item xs={12} md={12} lg={6}>
+                            <Table rows={(Object.keys(results.percentageFeeds).map((feed) => {
+                                return { month: feed, value: results.percentageFeeds[feed] }
+                            }))} title="Percentage feeds received by all infants" />
+                        </Grid>
                     </Grid>}
             </Container>
 
