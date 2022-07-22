@@ -12,7 +12,7 @@ export default function InfoCard({ title, value }) {
         <>
             <Card>
                 <CardContent>
-                    <Typography variant='p'>{title}</Typography>
+                    <Typography variant='p' sx={{minHeight:"2em"}}>{title}</Typography>
                     <Typography variant='h5' sx={{fontWeight:"bold"}}>{value}</Typography>
                 </CardContent>
             </Card>
