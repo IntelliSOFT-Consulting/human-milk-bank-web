@@ -285,8 +285,6 @@ export let calculateMortalityRate = async () => {
 
 export let patientLevelReport = async (report: string) => {
 
-
-
 }
 
 export let babiesReceivingFeeds = async () => {
