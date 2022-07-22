@@ -7,7 +7,7 @@ export default function TableView({ rows, title }) {
 
     return (
         <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <Table sx={{ minWidth: "50%" }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
                         <TableCell>{title.toUpperCase()}</TableCell>
