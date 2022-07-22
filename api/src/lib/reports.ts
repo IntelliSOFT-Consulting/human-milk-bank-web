@@ -28,7 +28,10 @@ export let getTotalDHMOrders = async (all: boolean = false) => {
 }
 
 export let availableDHMVolume = async () => {
-    let volume = (await getLastStockEntry())?.dhmVolume || 0 - (await getTotalDHMOrders() || 0)
+    let volume = (await getLastStockEntry())?.dhmVolume - (await getTotalDHMOrders() || 0)
+    if (volume < 0) {
+        return 0
+    }
     return volume
 }
 
