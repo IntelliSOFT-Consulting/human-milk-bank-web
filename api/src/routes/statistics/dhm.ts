@@ -1,5 +1,6 @@
 import express, { Router, Request, Response } from 'express';
 import { generateReport } from '../../lib/fhir';
+import { requireJWTMiddleware } from '../../lib/jwt';
 import { availableDHMVolume, avgDaysToReceivingMothersOwnMilk, countPatients, countPatientsFromNutritionOrders } from '../../lib/reports';
 const router = Router();
 
@@ -13,7 +14,7 @@ let days = [
 
 
 // DHM Statistics 
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', [requireJWTMiddleware], async (req: Request, res: Response) => {
     // let selectFields = []
     let dhmVolume = await availableDHMVolume()
     let dhmInfants = await generateReport("infantsOnDHM") || 0

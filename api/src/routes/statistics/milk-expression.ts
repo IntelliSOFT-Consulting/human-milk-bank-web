@@ -4,23 +4,7 @@ const router = Router();
 
 router.use(express.json())
 
-let months = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
-    "Aug", "Sep", "Oct", "Nov", "Dec"
-]
-
-let days = [
-    "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
-]
-
-
 router.get('/:ip', (req: Request, res: Response) => {
-
-    let { ip } = req.params
-
-
-    let amount = 
-   
 
     res.json(
         {
@@ -48,9 +32,5 @@ router.get('/:ip', (req: Request, res: Response) => {
     );
     return
 });
-
-
-
-
 
 export default router;

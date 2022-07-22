@@ -1,12 +1,13 @@
 import express, { Router, Request, Response } from 'express';
 import { generateReport } from '../../lib/fhir';
+import { requireJWTMiddleware } from '../../lib/jwt';
 import { availableDHMVolume, countPatients } from '../../lib/reports';
 const router = Router();
 
 router.use(express.json())
 
 
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', [requireJWTMiddleware], async (req: Request, res: Response) => {
     let infantsOnDHM = countPatients(await generateReport("infantsOnDHM")) || 0
     let totalVolumeOfDHM = await availableDHMVolume() || 0
     res.json(
