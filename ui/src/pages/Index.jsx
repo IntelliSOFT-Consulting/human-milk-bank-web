@@ -36,6 +36,8 @@ export default function Index() {
                 let total = (Object.keys(statistics.firstFeeding).map((x) => { return statistics.firstFeeding[x] })).reduce((a, b) => a + b, 0)
                 Plotly.newPlot('firstFeeds', [{
                     type: 'pie',
+                    name:"First Feeds",
+                    automargin:true,
                     labels: Object.keys(statistics.firstFeeding).map((x) => { return (x) }),
                     values: Object.keys(statistics.firstFeeding).map((x) => { return (statistics.firstFeeding[x] / total * 100) })
                 }], { ...layout, title: "Time all babies were given first feeds" });
@@ -44,6 +46,7 @@ export default function Index() {
                 let total = (Object.keys(statistics.percentageFeeds).map((x) => { return statistics.percentageFeeds[x] })).reduce((a, b) => a + b, 0)
                 Plotly.newPlot('percentageFeeds', [{
                     type: 'pie',
+                    name:"Percentage Feeds",
                     labels: Object.keys(statistics.percentageFeeds).map((x) => { return (x) }),
                     values: Object.keys(statistics.percentageFeeds).map((x) => { return statistics.percentageFeeds[x] / total * 100 })
                 }], { ...layout, title: "Percentage feeds infants are feeding on" });
@@ -91,10 +94,11 @@ export default function Index() {
 
     let args = qs.parse(window.location.search);
     let descriptions = {
-        term: "Term babies",
-        preterm: "Preterm babies",
+        term: "Total Number of Term babies",
+        preterm: "Total Number of Preterm babies",
         totalBabies: "Total number of babies",
-        lowBirthWeight: "Low birth weight",
+        // lowBirthWeight: "Low birth weight",
+        averageDays:"Average days to receiving mothers own milk"
     }
 
 

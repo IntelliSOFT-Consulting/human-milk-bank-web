@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from 'express';
 import { generateReport } from '../lib/fhir';
-import { firstFeeding, expressingTime, percentageFeeds, calculateMortalityRate, getGestation } from '../lib/reports';
+import { firstFeeding, expressingTime, percentageFeeds, calculateMortalityRate, getGestation, avgDaysToReceivingMothersOwnMilk } from '../lib/reports';
 
 const router = Router();
 
@@ -15,7 +15,7 @@ router.get('/', async (req: Request, res: Response) => {
             "totalBabies": await generateReport("noOfBabies"),
             "preterm": await getGestation("preterm"),
             "term": await getGestation("term"),
-            "averageDays": 3,
+            "averageDays": await avgDaysToReceivingMothersOwnMilk(),
             "firstFeeding": await firstFeeding(),
             "percentageFeeds":await percentageFeeds(),
             "mortalityRate": await calculateMortalityRate(),

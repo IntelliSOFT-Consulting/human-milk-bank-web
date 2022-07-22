@@ -347,6 +347,10 @@ export let patientsOnBreastMilk = async () => {
 
 }
 
+export let avgDaysToReceivingMothersOwnMilk = async () => {
+    return 2
+}
+
 export let countPatients = (observations: any) => {
     let babies = [];
     for (let observation of observations) {
