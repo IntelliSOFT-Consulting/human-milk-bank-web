@@ -4,6 +4,7 @@ import db from './prisma'
 
 const _allMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 let currentMonth = (new Date()).toLocaleString('default', { month: 'short' })
+
 let _months = _allMonths.slice(_allMonths.indexOf(currentMonth) + 1).concat()
 _months = _months.concat(_allMonths.slice(0, (_allMonths.indexOf(currentMonth) + 1)))
 
@@ -27,7 +28,7 @@ export let getTotalDHMOrders = async (all: boolean = false) => {
 }
 
 export let availableDHMVolume = async () => {
-    let volume = (await (await getLastStockEntry())?.dhmVolume || 0) - (await getTotalDHMOrders() || 0)
+    let volume = (await getLastStockEntry())?.dhmVolume || 0 - (await getTotalDHMOrders() || 0)
     return volume
 }
 
@@ -424,13 +425,16 @@ export let generalPatientLevelReport = async (patients: any[]) => {
     let report: any[] = [];
     for (let p of patients) {
         let patient = await (await FhirApi({ url: `/Patient/${p}` })).data
+        let currentWeightAndRateChange = await weightAndRateChange(p)
         report.push({
             dob: patient.birthDate,
             gestation: await getPatientGestation(p),
             ipNumber: p,
             id: p,
             birthWeight: await getBirthWeight(p),
-            babyNames: (patient.name[0].family + " " + patient.name[0].given[0])
+            babyNames: (patient.name[0].family + " " + patient.name[0].given[0]),
+            weightRateChange: currentWeightAndRateChange.rate,
+            currentWeight: currentWeightAndRateChange.weight,
         })
     }
     return report
@@ -470,7 +474,6 @@ export let lactationSupportReport = async (patients: any[]) => {
 }
 
 
-
 export let lowBirthWeight = async () => {
     // below 2500g
     let observations = await generateReport("lowBirthweight")
@@ -487,8 +490,15 @@ export let expressionFrequency = async (patientId: string) => {
     return gestation?.entry ? ((gestation.entry[0].resource.valueQuantity.value < 2500) ? "Low" : (gestation.entry[0].resource.valueQuantity.value < 1500) ? "Very Low" : (gestation.entry[0].resource.valueQuantity.value < 1500) ? "Extermely Low" : "Normal") : "-"
 }
 
-export let weightRateChange = async (patientId: string) => {
-    return
+export let weightAndRateChange = async (patientId: string) => {
+    let weightValues = await (await FhirApi({ url: `/Observation?code=3141-9&patient=${patientId}&_count=2` })).data?.entry || null
+    if (!weightValues) {
+        return { weight: 0, rate: 0 }
+    }
+    let lastWeight = weightValues[1].resource.valueQuantity.value
+    let currentWeight = weightValues[0].resource.valueQuantity.value
+    let rate = (currentWeight - lastWeight) / lastWeight * 100
+    return { weight: currentWeight, rate }
 }
 
 export let getPatientGestation = async (patientId: string) => {

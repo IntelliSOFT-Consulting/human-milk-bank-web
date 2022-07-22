@@ -39,7 +39,7 @@ router.post("/", [requireJWT], async (req: Request, res: Response) => {
 
 
 // Get all active orders
-router.get("/orders", async (req: Request, res: Response) => {
+router.get("/orders", [requireJWT], async (req: Request, res: Response) => {
     try {
         let activeOrders = (await FhirApi({ "url": "/NutritionOrder?status=active" })).data
         let results = []
