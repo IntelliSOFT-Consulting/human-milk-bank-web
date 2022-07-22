@@ -17,6 +17,9 @@ export default function GeneralPatientLevel({ results }) {
         { field: 'dob', headerName: 'Date of birth', width: 200, editable: true },
         { field: 'gestation', headerName: 'Term/Preterm', width: 150 },
         { field: 'birthWeight', headerName: 'Birth weight', width: 150 },
+        { field: 'currentWeight', headerName: 'Current weight', width: 150 },
+        { field: 'weightRateChange', headerName: 'Weight Rate Change', width: 150 },
+
     ];
 
     let isMobile = useMediaQuery('(max-width:600px)');

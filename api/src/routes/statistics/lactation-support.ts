@@ -1,12 +1,13 @@
 import express, { Router, Request, Response } from 'express';
 import { generateReport } from '../../lib/fhir';
+import { requireJWTMiddleware } from '../../lib/jwt';
 import { babiesReceivingFeeds, calculateMortalityRate, getGestation, mothersInitiatingLactation } from '../../lib/reports';
 
 const router = Router();
 
 router.use(express.json())
 
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', [requireJWTMiddleware], async (req: Request, res: Response) => {
 
     res.json(
         {
@@ -19,7 +20,7 @@ router.get('/', async (req: Request, res: Response) => {
     return
 });
 
-router.get('/patient-level', async (req: Request, res: Response) => {
+router.get('/patient-level', [requireJWTMiddleware], async (req: Request, res: Response) => {
 
     res.json(
         {
