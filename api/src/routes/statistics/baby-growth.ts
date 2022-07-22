@@ -1,5 +1,5 @@
 import express, { Router, Request, Response } from 'express';
-import { infantsExposedToFormula, infantsFullyFedOnMothersMilk, infantsReceivingExclusiveHumanMilkDiets } from '../../lib/reports';
+import { infantsExposedToFormula, infantsFullyFedOnMothersMilk, infantsReceivingExclusiveHumanMilkDiets, percentageFeeds } from '../../lib/reports';
 
 const router = Router();
 
@@ -12,7 +12,8 @@ router.get('/', async (req: Request, res: Response) => {
             report: {
                 infantsExposedToFormula: await infantsExposedToFormula(),
                 infantsFullyFedOnMothersMilk: await infantsFullyFedOnMothersMilk(),
-                infantsReceivingExclusiveHumanMilkDiets: await infantsReceivingExclusiveHumanMilkDiets()
+                infantsReceivingExclusiveHumanMilkDiets: await infantsReceivingExclusiveHumanMilkDiets(),
+                percentageFeeds: await percentageFeeds()
             }
         });
     return
