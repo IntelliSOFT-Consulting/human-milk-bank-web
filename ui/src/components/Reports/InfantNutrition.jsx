@@ -10,8 +10,9 @@ export default function LactationSupport({ results }) {
     let [open, setOpen] = useState(false)
     let [message, setMessage] = useState(false)
     let descriptions = {
-        infantsExposedToFormula: "Infants Exposed To Formula",
-        babiesReceivingFeeds: "Receiving Feeds within 1 hour"
+        infantsExposedToFormula: "Number of Infants Exposed To Formula",
+        infantsFullyFedOnMothersMilk: "Infants fully fed on mother's own milk",
+        infantsReceivingExclusiveHumanMilkDiets: "Infants receiving exclusive human milk diets"
     }
 
     let isMobile = useMediaQuery('(max-width:600px)');

@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from 'express';
 import { generateReport } from '../../lib/fhir';
-import db from '../../lib/prisma'
+import { availableDHMVolume, countPatients } from '../../lib/reports';
 const router = Router();
 
 router.use(express.json())
@@ -10,31 +10,18 @@ let days = [
     "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
 ]
 
-let getTotalDHMVolume = async () => {
-    
-    let totalVolume = await db.order.aggregate({
-        _sum:{
-            dhmVolume:true
-        }
-    })
-    return totalVolume._sum.dhmVolume
-}
 
-let getWeekl
 
 // DHM Statistics 
 router.get('/', async (req: Request, res: Response) => {
     // let selectFields = []
-
-    let dhmInfants = await generateReport("noOfInfantsOnDHM") || 0
-    let dhmVolume = await getTotalDHMVolume() || 0
+    let dhmVolume = await availableDHMVolume()
+    let dhmInfants = await generateReport("infantsOnDHM") || 0
     let fullyReceiving = Math.floor(dhmInfants * Math.random())
-
-    let dhmLength = ''
 
     res.json(
         {
-            "dhmInfants": dhmInfants,
+            "dhmInfants": countPatients(dhmInfants) || 0,
             "dhmVolume": dhmVolume,
             "dhmAverage": dhmVolume / dhmInfants,
             "fullyReceiving": fullyReceiving,

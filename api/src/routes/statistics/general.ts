@@ -27,13 +27,13 @@ router.get('/', [requireJWTMiddleware], async (req: Request, res: Response) => {
 
 
 router.get('/patient-level', async (req: Request, res: Response) => {
+    // patient type - babies
     let { limit } = req.query
     let patients = []
     let p = await FhirApi({ url: `/Patient?address=Pumwani&_count=${limit || 10}` })
     for (let i of p.data.entry) {
         patients.push(i.resource.id)
     }
-    // patient type - babies
     res.json(
         {
             status: "success",
