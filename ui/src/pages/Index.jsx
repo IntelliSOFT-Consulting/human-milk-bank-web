@@ -50,8 +50,34 @@ export default function Index() {
                 Plotly.newPlot('mortalityRates', [{
                     name: "Mortality Rates", automargin: true,
                     y: (statistics.mortalityRate.data).map((x) => { return (x.value) }),
-                    x: (statistics.mortalityRate.data).map((x) => { return (x.month) })
-                }], { ...layout, title: "Mortality Rates" });
+                    x: (statistics.mortalityRate.data).map((x) => { return (x.month) }),
+                    mode: "lines+markers",
+                }], { title: "Mortality Rates" });
+            }
+            if (document.getElementById("expressingTimes")) {
+                let yValues = (statistics.expressingTime).map((x) => { return (x.month) })
+                // let total = (Object.keys(statistics.mortalityRate.data).map((x) => { return statistics.firstFeeding[x] })).reduce((a, b) => a + b, 0)
+                Plotly.newPlot('expressingTimes', [{
+                    automargin: true,
+                    x: yValues,
+                    y: (statistics.expressingTime).map((x) => { return (x.underFive) }),
+                    mode: "lines+markers",
+                    name: "Under Five"
+                },
+                {
+                    automargin: true,
+                    x: yValues,
+                    y: (statistics.expressingTime).map((x) => { return (x.underSeven) }),
+                    mode: "lines+markers",
+                    name: "Under Seven"
+                },
+                {
+                    automargin: true,
+                    x: yValues,
+                    y: (statistics.expressingTime).map((x) => { return (x.aboveSeven) }),
+                    mode: "lines+markers",
+                    name: "Above Seven"
+                }], { title: "Mortality Rates" });
             }
             return
         }
@@ -153,11 +179,11 @@ export default function Index() {
                         <>
                             <br />
                             <Grid container gap={2} >
-                                <Grid item xs={12} md={12} lg={5} sx={{ border: "1px solid grey", borderRadius: "10px" }}>
+                                <Grid item xs={12} md={12} lg={10} sx={{ border: "1px solid grey", borderRadius: "10px" }}>
                                     <div id="mortalityRates" ></div>
                                 </Grid>
-                                <Grid item xs={12} md={12} lg={5} sx={{ border: "1px solid grey", borderRadius: "10px" }}>
-                                    <div id="percentageFeeds"></div>
+                                <Grid item xs={12} md={12} lg={10} sx={{ border: "1px solid grey", borderRadius: "10px" }}>
+                                    <div id="expressingTimes"></div>
                                 </Grid>
                             </Grid>
                         </>
