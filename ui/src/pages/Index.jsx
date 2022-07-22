@@ -6,6 +6,7 @@ import Layout from '../components/Layout';
 import { getCookie } from '../lib/cookie';
 import InfoCard from '../components/InfoCard';
 import * as Plotly from 'plotly.js-dist'
+import { apiHost } from '../lib/api';
 
 
 export default function Index() {
@@ -16,13 +17,35 @@ export default function Index() {
     let [statistics, setStatistics] = useState({})
 
     let getUser = async () => {
-        let data = (await (await fetch("/auth/me",
+        let data = (await (await fetch(`${apiHost}/auth/me`,
             {
                 method: "GET",
                 headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getCookie("token")}` }
             })).json())
         setUser(data.data)
         return
+    }
+
+    let getStatistics = async () => {
+        let data = (await (await fetch(`${apiHost}/statistics`,
+            {
+                method: "GET",
+                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getCookie("token")}` }
+            })).json())
+        console.log(data)
+        if (data.status === "success") {
+            delete data.status
+            setStatistics(data)
+            setMessage("Statistics fetched successfully")
+            setOpen(true)
+            setTimeout(() => { setOpen(false) }, 1500)
+            return
+        }
+        setMessage("Failed to fetch statistics")
+        setOpen(true)
+        setTimeout(() => { setOpen(false) }, 1500)
+        return
+
     }
 
     useEffect(() => {
@@ -83,27 +106,7 @@ export default function Index() {
         }
     }, [statistics])
 
-    let getStatistics = async () => {
-        let data = (await (await fetch("/statistics",
-            {
-                method: "GET",
-                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getCookie("token")}` }
-            })).json())
-        console.log(data)
-        if (data.status === "success") {
-            delete data.status
-            setStatistics(data)
-            setMessage("Statistics fetched successfully")
-            setOpen(true)
-            setTimeout(() => { setOpen(false) }, 1500)
-            return
-        }
-        setMessage("Failed to fetch statistics")
-        setOpen(true)
-        setTimeout(() => { setOpen(false) }, 1500)
-        return
-
-    }
+    
 
     useEffect(() => {
         if (getCookie("token")) {
