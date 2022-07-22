@@ -19,6 +19,19 @@ router.get('/', async (req: Request, res: Response) => {
     return
 });
 
+router.get('/patient-level', async (req: Request, res: Response) => {
+
+    res.json(
+        {
+            status: "success",
+            report: {
+                mothersInitiatingLactation: await mothersInitiatingLactation(),
+                babiesReceivingFeeds: await babiesReceivingFeeds()
+            }
+        });
+    return
+});
+
 export default router;
 
 

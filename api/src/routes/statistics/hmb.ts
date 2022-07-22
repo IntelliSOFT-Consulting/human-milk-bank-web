@@ -1,19 +1,23 @@
 import express, { Router, Request, Response } from 'express';
-
+import { generateReport } from '../../lib/fhir';
+import { availableDHMVolume, countPatients } from '../../lib/reports';
 const router = Router();
 
 router.use(express.json())
 
+
 router.get('/', async (req: Request, res: Response) => {
+    let infantsOnDHM = countPatients(await generateReport("infantsOnDHM")) || 0
+    let totalVolumeOfDHM = await availableDHMVolume() || 0
     res.json(
         {
             status: "success",
             report: {
-                infantsOnDHM: 0,
+                infantsOnDHM,
                 averageLengthOfDHMUse: 0,
                 totalDHMAvailable: 0,
                 infantsFullyReceivingDHM: 0,
-                totalVolumeOfDHM: 0,
+                totalVolumeOfDHM,
                 averageVolumeOfDHMUsePerDay: 0,
                 infantsPartiallyReceivingDHM: 0,
             }

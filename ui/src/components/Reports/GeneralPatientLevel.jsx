@@ -6,12 +6,8 @@ import { DataGrid } from '@mui/x-data-grid';
 
 
 export default function GeneralPatientLevel({ results }) {
-    let navigate = useNavigate()
     let [open, setOpen] = useState(false)
     let [message, setMessage] = useState(false)
-    let [loading, setLoading] = useState(false)
-    let [name, setName] = useState('')
-
 
     const [selectionModel, setSelectionModel] = useState([]);
 
@@ -21,13 +17,10 @@ export default function GeneralPatientLevel({ results }) {
         { field: 'dob', headerName: 'Date of birth', width: 200, editable: true },
         { field: 'gestation', headerName: 'Term/Preterm', width: 150 },
         { field: 'birthWeight', headerName: 'Birth weight', width: 150 },
-        // { field: 'role', headerName: 'Patient on DHM?', width: 150 }
     ];
 
     let isMobile = useMediaQuery('(max-width:600px)');
 
-
-    let args = qs.parse(window.location.search);
 
     return (
         <>
@@ -43,7 +36,7 @@ export default function GeneralPatientLevel({ results }) {
 
             <br />
             <Container maxWidth="lg">
-                <br/>
+                <br />
                 {results.length > 0 && <DataGrid
                     loading={!results}
                     rows={results ? results : []}

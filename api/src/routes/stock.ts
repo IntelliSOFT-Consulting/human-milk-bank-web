@@ -1,8 +1,6 @@
 import express, { Request, Response } from "express";
 import { requireJWTMiddleware as requireJWT, encodeSession, decodeSession } from "../lib/jwt";
 import db from '../lib/prisma'
-import * as bcrypt from 'bcrypt'
-import { sendPasswordResetEmail, sendWelcomeEmail, validateEmail } from "../lib/email";
 import { FhirApi } from "../lib/fhir";
 
 const router = express.Router()
@@ -139,7 +137,7 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
 
             let resp = await (await FhirApi({ "url": `/NutritionOrder/${orderId}`, method: "PUT", data: JSON.stringify(resource) })).data
             // console.log(resp)
-            res.json({ status: "success", message: "Order processed created successfully", id: order.id })
+            res.json({ status: "success", message: "Order processed successfully", id: order.id })
             return
         }
     } catch (error) {

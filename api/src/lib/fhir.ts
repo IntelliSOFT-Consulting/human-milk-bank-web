@@ -1,13 +1,13 @@
-import {reports} from './allReports.json'
+import { reports } from './allReports.json'
 import fetch from 'cross-fetch'
 
 export let apiHost = "http://localhost:8080/fhir"
 
-export let FhirApi = async (params:any) => {
+export let FhirApi = async (params: any) => {
     let _defaultHeaders = {
         "Content-Type": 'application/json'
     }
-    if(!params.method){
+    if (!params.method) {
         params.method = 'GET'
     }
     try {
@@ -18,9 +18,9 @@ export let FhirApi = async (params:any) => {
         })
         let responseJSON = await response.json()
         let res = {
-                status: "success",
-                statusText: response.statusText,
-                data: responseJSON
+            status: "success",
+            statusText: response.statusText,
+            data: responseJSON
         }
         return res
     } catch (error) {
@@ -39,11 +39,11 @@ export let generateReport = async (name: any) => {
     const reportName = name as keyof typeof reports
     let report = reports[reportName]
     // console.log(report)
-    let data = await FhirApi({url: report.q})
-    if (data.status === 'success'){
+    let data = await FhirApi({ url: report.q })
+    if (data.status === 'success') {
         // console.log(data.data[report.query])
-        if(report.query !== "entry"){
-        return parseFloat(((data.data[report.query]) || 0).toString())
+        if (report.query !== "entry") {
+            return parseFloat(((data.data[report.query]) || 0).toString())
         }
         else {
             return (data.data[report.query] || [])

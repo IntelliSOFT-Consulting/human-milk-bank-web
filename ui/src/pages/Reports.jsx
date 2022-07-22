@@ -11,10 +11,10 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import GeneralReport from '../components/Reports/GeneralReport';
 import LactationSupport from '../components/Reports/LactationSupport';
-// import Feeding from '../components/Reports/Feeding';
 import HMB from '../components/Reports/HMB';
 import InfantNutrition from '../components/Reports/InfantNutrition';
 import GeneralPatientLevel from '../components/Reports/GeneralPatientLevel';
+import Feeding from '../components/Reports/Feeding';
 // import LactationSupport from '../components/Reports/LactationSupport';
 
 
@@ -35,8 +35,9 @@ export default function Reports() {
     {
         "General": { url: "/statistics/general" },
         "General - Patient level": { url: "/statistics/general/patient-level" },
-        // "Feeding/BreastFeeding": { url: "/statistics/feeding" },
+        "Feeding/BreastFeeding": { url: "/statistics/feeding/patient-level" },
         "Lactation Support": { url: "/statistics/lactation-support" },
+        "Lactation Support - Patient level": { url: "/statistics/lactation-support/patient-level" },
         "Infant Nutrition/Growth": { url: "/statistics/growth" },
         "Human Milk Bank": { url: "/statistics/hmb" },
     }
@@ -129,14 +130,14 @@ export default function Reports() {
                                 <Grid item xs={12} md={12} lg={3}>
                                     {!isMobile ? <DesktopDatePicker
                                         label="From Date"
-                                        // inputFormat="yyyy-MM-dd"
+                                        inputFormat="dd/MM/yyyy"
                                         value={data.fromDate ? data.fromDate : (new Date().setFullYear(2000)).toISOString()}
                                         onChange={e => { console.log(e); setData({ ...data, fromDate: new Date(e).toISOString() }) }}
                                         renderInput={(params) => <TextField {...params} size="small" fullWidth />}
                                     /> :
                                         <MobileDatePicker
                                             label="From Date"
-                                            // inputFormat="yyyy-MM-dd"
+                                            inputFormat="dd/MM/yyyy"
                                             value={data.fromDate ? data.fromDate : (new Date().setFullYear(2000)).toISOString()}
 
                                             onChange={e => { console.log(e); setData({ ...data, fromDate: new Date(e).toISOString() }) }}
@@ -146,14 +147,14 @@ export default function Reports() {
                                 <Grid item xs={12} md={12} lg={3}>
                                     {!isMobile ? <DesktopDatePicker
                                         label="To Date"
-                                        inputFormat="yyyy-MM-dd"
+                                        inputFormat="dd/MM/yyyy"
                                         value={data.toDate ? data.toDate : (new Date().setHours(23)).toISOString()}
                                         onChange={e => { console.log(e); setData({ ...data, toDate: new Date(e).toISOString() }) }}
                                         renderInput={(params) => <TextField {...params} size="small" fullWidth />}
                                     /> :
                                         <MobileDatePicker
                                             label="To Date"
-                                            inputFormat="yyyy-MM-dd"
+                                            inputFormat="dd/MM/yyyy"
                                             value={data.toDate ? data.toDate : (new Date().setHours(23)).toISOString()}
                                             onChange={e => { console.log(e); setData({ ...data, toDate: new Date(e).toISOString() }) }}
                                             renderInput={(params) => <TextField {...params} size="small" fullWidth />}
@@ -183,6 +184,7 @@ export default function Reports() {
                         <Grid container spacing={1} padding=".5em" >
 
                             {(report === "General") && <GeneralReport results={results || null} />}
+                            {(report === "Feeding/BreastFeeding") && <Feeding results={results || null} />}
                             {(report === "General - Patient level") && <GeneralPatientLevel results={results || null} />}
                             {(report === "Infant Nutrition/Growth") && <InfantNutrition results={results || null} />}
                             {(report === "Lactation Support") && <LactationSupport results={results || null} />}
