@@ -4,6 +4,7 @@ import db from './prisma'
 
 const _allMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 let currentMonth = (new Date()).toLocaleString('default', { month: 'short' })
+
 let _months = _allMonths.slice(_allMonths.indexOf(currentMonth) + 1).concat()
 _months = _months.concat(_allMonths.slice(0, (_allMonths.indexOf(currentMonth) + 1)))
 
@@ -430,7 +431,8 @@ export let generalPatientLevelReport = async (patients: any[]) => {
             ipNumber: p,
             id: p,
             birthWeight: await getBirthWeight(p),
-            babyNames: (patient.name[0].family + " " + patient.name[0].given[0])
+            babyNames: (patient.name[0].family + " " + patient.name[0].given[0]),
+            weightRateChange: await weightRateChange(p)
         })
     }
     return report
@@ -488,7 +490,10 @@ export let expressionFrequency = async (patientId: string) => {
 }
 
 export let weightRateChange = async (patientId: string) => {
-    return
+    let birthWeight = 0
+    let currentWeight = 0
+    let rate = (currentWeight - birthWeight) / birthWeight * 100
+    return rate
 }
 
 export let getPatientGestation = async (patientId: string) => {
