@@ -26,21 +26,32 @@ export default function Index() {
     }
 
     useEffect(() => {
-        var data = [{
-            values: [19, 26, 55],
-            labels: ['Residential', 'Non-Residential', 'Utility'],
-            type: 'pie'
-        }];
+        if (Object.keys(statistics).length > 0) {
 
-        var layout = {
-            height: 400,
-            width: 500
-        };
-        if (document.getElementById("firstFeeds")) {
-            Plotly.newPlot('firstFeeds', data, layout);
+            var layout = {
+                height: 350,
+                width: 350
+            };
+            if (document.getElementById("firstFeeds")) {
+                let total = (Object.keys(statistics.firstFeeding).map((x) => { return statistics.firstFeeding[x] })).reduce((a, b) => a + b, 0)
+                Plotly.newPlot('firstFeeds', [{
+                    type: 'pie',
+                    labels: Object.keys(statistics.firstFeeding).map((x) => { return (x) }),
+                    values: Object.keys(statistics.firstFeeding).map((x) => { return (statistics.firstFeeding[x] / total * 100) })
+                }], { ...layout, title: "Time all babies were given first feeds" });
+            }
+            if (document.getElementById("percentageFeeds")) {
+                let total = (Object.keys(statistics.percentageFeeds).map((x) => { return statistics.percentageFeeds[x] })).reduce((a, b) => a + b, 0)
+                Plotly.newPlot('percentageFeeds', [{
+                    type: 'pie',
+                    labels: Object.keys(statistics.percentageFeeds).map((x) => { return (x) }),
+                    values: Object.keys(statistics.percentageFeeds).map((x) => { return statistics.percentageFeeds[x] / total * 100 })
+                }], { ...layout, title: "Percentage feeds infants are feeding on" });
+
+            }
             return
         }
-    }, [statistics, document.getElementById("firstFeeds")])
+    }, [statistics])
 
     let getStatistics = async () => {
         let data = (await (await fetch("/statistics",
@@ -121,12 +132,13 @@ export default function Index() {
                     {
                         (Object.keys(statistics).length > 1) &&
                         <>
-                            <Grid container spacing={1} padding=".5em" >
-                                <Grid item xs={12} md={12} lg={6}>
-                                    <div id="firstFeeds" style={{ width: "100%", height: "400px" }}></div>
+                            <br />
+                            <Grid container gap={2} >
+                                <Grid item xs={12} md={12} lg={5} sx={{ border: "1px solid grey", borderRadius: "10px" }}>
+                                    <div id="firstFeeds" ></div>
                                 </Grid>
-                                <Grid item xs={12} md={12} lg={6}>
-                                    <div id="percentageFeeds" style={{ width: "100%", height: "400px" }}></div>
+                                <Grid item xs={12} md={12} lg={5} sx={{ border: "1px solid grey", borderRadius: "10px" }}>
+                                    <div id="percentageFeeds"></div>
                                 </Grid>
                             </Grid>
                         </>
