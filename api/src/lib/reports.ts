@@ -10,13 +10,15 @@ _months = _months.concat(_allMonths.slice(0, (_allMonths.indexOf(currentMonth) +
 const allMonths = _months;
 
 export let getTotalDHMOrders = async (all: boolean = false) => {
-
+    let lastStockEntryTime = await (await getLastStockEntry())?.createdAt || null
     let totalVolume = await db.order.aggregate({
         _sum: { dhmVolume: true },
         where: {
             ...(!all) && {
-                createdAt: {
-                    gte: await (await getLastStockEntry()).createdAt
+                ...(lastStockEntryTime) && {
+                    createdAt: {
+                        gte: lastStockEntryTime
+                    }
                 }
             }
         }
@@ -25,7 +27,7 @@ export let getTotalDHMOrders = async (all: boolean = false) => {
 }
 
 export let availableDHMVolume = async () => {
-    let volume = await (await getLastStockEntry()).dhmVolume - (await getTotalDHMOrders() || 0)
+    let volume = (await (await getLastStockEntry())?.dhmVolume || 0) - (await getTotalDHMOrders() || 0)
     return volume
 }
 
@@ -347,11 +349,28 @@ export let patientsOnBreastMilk = async () => {
 
 }
 
+export let avgDaysToReceivingMothersOwnMilk = async () => {
+    return 2
+}
+
 export let countPatients = (observations: any) => {
+    // console.log(observations)
     let babies = [];
     for (let observation of observations) {
         if (babies.indexOf(observation.resource.subject.reference) < 0) {
             babies.push(observation.resource.subject.reference)
+        }
+    }
+    let unique = [...new Set(babies)]
+    return unique.length
+}
+
+export let countPatientsFromNutritionOrders = (orders: any) => {
+    // console.log(orders)
+    let babies = [];
+    for (let order of orders) {
+        if (babies.indexOf(order.resource.patient.reference) < 0) {
+            babies.push(order.resource.patient.reference)
         }
     }
     let unique = [...new Set(babies)]
