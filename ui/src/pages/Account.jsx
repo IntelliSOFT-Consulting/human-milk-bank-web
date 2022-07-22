@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Header from '../components/Header'
 import {
     Card, Typography, LinearProgress, Divider,
     CardContent,
 } from '@mui/material'
 import { getCookie } from '../lib/cookie'
 import Layout from '../components/Layout'
+import { apiHost } from '../lib/api'
 
 
 export default function Account() {
@@ -14,7 +14,7 @@ export default function Account() {
     let navigate = useNavigate()
     let [profile, setProfile] = useState(null)
     let getProfile = async () => {
-        let data = (await (await fetch("/auth/me",
+        let data = (await (await fetch(`${apiHost}/auth/me`,
             {
                 method: "GET",
                 headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getCookie("token")}` }
