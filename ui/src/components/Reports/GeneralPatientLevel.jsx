@@ -13,12 +13,12 @@ export default function GeneralPatientLevel({ results }) {
 
     const columns = [
         { field: 'ipNumber', headerName: 'IP Number', width: 100, editable: true },
-        { field: 'babyNames', headerName: "Baby's names", width: 200, editable: true },
-        { field: 'dob', headerName: 'Date of birth', width: 200, editable: true },
-        { field: 'gestation', headerName: 'Term/Preterm', width: 150 },
-        { field: 'birthWeight', headerName: 'Birth weight', width: 150 },
-        { field: 'currentWeight', headerName: 'Current weight', width: 150 },
-        { field: 'weightRateChange', headerName: 'Weight Rate Change', width: 150 },
+        { field: 'babyNames', headerName: "Baby's names", width: 150, editable: true },
+        { field: 'dob', headerName: 'Date of birth', width: 110, editable: true },
+        { field: 'gestation', headerName: 'Term/Preterm', width: 110 },
+        { field: 'birthWeight', headerName: 'Birth weight', width: 110 },
+        { field: 'currentWeight', headerName: 'Current weight', width: 120 },
+        { field: 'weightRateChange', headerName: 'Weight change rate', width: 150 },
 
     ];
 
@@ -46,20 +46,9 @@ export default function GeneralPatientLevel({ results }) {
                     columns={columns}
                     pageSize={10}
                     rowsPerPageOptions={[10]}
-                    checkboxSelection
                     autoHeight
-                    disableSelectionOnClick
+                    disableSelectionOnClick={true}
                     onCellEditStop={e => { console.log(e) }}
-                    onSelectionModelChange={(selection) => {
-                        if (selection.length > 1) {
-                            const selectionSet = new Set(selectionModel);
-                            const result = selection.filter((s) => !selectionSet.has(s));
-
-                            setSelectionModel(result);
-                        } else {
-                            setSelectionModel(selection);
-                        }
-                    }}
                 />}
             </Container>
         </>
