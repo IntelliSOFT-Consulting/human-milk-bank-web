@@ -50,9 +50,13 @@ export default function GeneralReport({ results }) {
                         }) :
                             ((results.length > 0) && <Typography sx={{ textAlign: "center" }}>No reports defined</Typography>)
                         }
+                        {(Object.keys(results).length > 0) && (Object.keys(results).indexOf('mortalityRates') > -1) &&
+                            <Grid item xs={12} md={12} lg={6}>
+                                <Table rows={results.mortalityRates} title="Mortality Rates by Month" />
+                            </Grid>}
+
                     </Grid>}
 
-                {(Object.keys(results).length > 0) && (Object.keys(results).indexOf('mortalityRates') > -1) && <Table rows={results.mortalityRates} title="Mortality Rates by Month" />}
             </Container>
 
         </>

@@ -357,7 +357,7 @@ export let avgDaysToReceivingMothersOwnMilk = async () => {
     return 2
 }
 
-export let countPatients = (observations: any) => {
+export let countPatients = (observations: any[]) => {
     // console.log(observations)
     let babies = [];
     for (let observation of observations) {
@@ -428,15 +428,17 @@ export let generalPatientLevelReport = async (patients: any[]) => {
     let report: any[] = [];
     for (let p of patients) {
         let patient = await (await FhirApi({ url: `/Patient/${p}` })).data
+        let mother = await (await FhirApi({ url: `/Patient?link=${p}` })).data
+        mother = mother.entry[0]
         let currentWeightAndRateChange = await weightAndRateChange(p)
         report.push({
             dob: patient.birthDate,
             gestation: await getPatientGestation(p),
-            ipNumber: p,
+            ipNumber: mother.resource.id,
             id: p,
             birthWeight: await getBirthWeight(p),
             babyNames: (patient.name[0].family + " " + patient.name[0].given[0]),
-            weightRateChange: currentWeightAndRateChange.rate,
+            weightRateChange: (currentWeightAndRateChange.rate).toFixed(2),
             currentWeight: currentWeightAndRateChange.weight,
         })
     }
