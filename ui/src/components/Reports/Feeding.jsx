@@ -18,7 +18,7 @@ export default function Feeding({ results }) {
         { field: 'dob', headerName: 'Date of birth', width: 200, editable: true },
         { field: 'volumeReceived', headerName: 'Volume received', width: 150 },
         { field: 'volumeOfMilkExpressed', headerName: 'Milk volume received', width: 150 },
-        // { field: 'role', headerName: 'Patient on DHM?', width: 150 }
+        // { field: 'role', headerName: 'Date of Admission', width: 150 }
     ];
 
     let isMobile = useMediaQuery('(max-width:600px)');
