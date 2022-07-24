@@ -27,7 +27,6 @@ export default function Reports() {
     let [report, selectReport] = useState()
     let [status, setStatus] = useState(null)
     let [results, setResults] = useState({})
-    let [reports, setReports] = useState([])
     let [open, setOpen] = useState(false)
     let [message, setMessage] = useState(false)
     let [reportLevel, setReportLevel] = useState(false)
