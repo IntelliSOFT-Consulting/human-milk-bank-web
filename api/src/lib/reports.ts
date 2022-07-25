@@ -287,9 +287,7 @@ export let calculateMortalityRate = async () => {
     return { rate: Math.round((totalDeceased / count) * 100) / 100, data: await mortalityRateByMonth() }
 }
 
-export let patientLevelReport = async (report: string) => {
 
-}
 
 export let babiesReceivingFeeds = async () => {
     let observations = await generateReport("firstFeeding")
@@ -394,13 +392,17 @@ export let generateFeedingReport = async (patients: any[]) => {
     let results: any[] = [];
     for (let p of patients) {
         let patient = await (await FhirApi({ url: `/Patient/${p}` })).data
+        let mother = await (await FhirApi({ url: `/Patient?link=${p}` })).data
+        mother = mother.entry[0]
         results.push({
             volumeOfMilkExpressed: await getObservationsTotal(p, "62578-0"),
             volumeReceived: await getObservationsTotal(p, "Total-Taken"),
             dob: patient.birthDate,
-            ipNumber: p,
+            ipNumber: mother.resource.id,
             id: p,
-            patientNames: (patient.name[0].family + " " + patient.name[0].given[0])
+            patientNames: (patient.name[0].family + " " + patient.name[0].given[0]),
+            milkExpression: await averageMilkExpressionFrequency(p)
+
         })
     }
     return results
@@ -498,10 +500,32 @@ export let getBirthWeight = async (patientId: string) => {
     return gestation?.entry ? ((gestation.entry[0].resource.valueQuantity.value < 2500) ? "Low" : (gestation.entry[0].resource.valueQuantity.value < 1500) ? "Very Low" : (gestation.entry[0].resource.valueQuantity.value < 1500) ? "Extermely Low" : "Normal") : "-"
 }
 
-export let expressionFrequency = async (patientId: string) => {
-    let gestation = await (await FhirApi({ url: `/Observation?code=8339-4&patient=${patientId}` })).data
-    return gestation?.entry ? ((gestation.entry[0].resource.valueQuantity.value < 2500) ? "Low" : (gestation.entry[0].resource.valueQuantity.value < 1500) ? "Very Low" : (gestation.entry[0].resource.valueQuantity.value < 1500) ? "Extermely Low" : "Normal") : "-"
+export let getExpressionFrequency = async (patientId: string) => {
+    let observations = await (await FhirApi({ url: `/Observation?code=62578-0&patient=${patientId}` })).data
+    observations = observations.entry
+    let expressions: { [index: string]: number } = {}
+    for (let o of observations) {
+        let date = new Date(o.resource.meta.lastUpdated).toLocaleDateString()
+        if (Object.keys(expressions).indexOf(date) < 0) {
+            expressions[date] = 0
+        } else {
+            expressions[date]++
+        }
+    }
+    return expressions
+
 }
+
+
+export let averageMilkExpressionFrequency = async (patientId: string) => {
+    let all = await getExpressionFrequency(patientId)
+    let total = 0
+    Object.keys(all).map((i) => {
+        total += all[i]
+    })
+    return Math.round(total / Object.keys(all).length) || 0
+}
+// expressionFrequency("c3e65dee-b99a-43d6-8ad7-2892bb663e82")
 
 export let weightAndRateChange = async (patientId: string) => {
     let weightValues = await (await FhirApi({ url: `/Observation?code=3141-9&patient=${patientId}&_count=2` })).data?.entry || null
@@ -529,5 +553,10 @@ export let getPatientGestation = async (patientId: string) => {
 }
 
 export let receivingExclusiveHumanMilk = async () => {
+
+}
+
+
+export let getFeedDistributionData = async (patientId: string) => {
 
 }

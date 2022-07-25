@@ -1,5 +1,6 @@
 import { Paper, FormControl, Select, MenuItem, InputLabel, Grid, Container, Snackbar, CircularProgress, useMediaQuery, TextField, Typography, CardContent, Card, Alert, Button } from '@mui/material'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, } from 'react'
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useNavigate } from 'react-router-dom'
 import * as qs from 'query-string';
 import Layout from '../components/Layout';
@@ -25,6 +26,7 @@ export default function Reports() {
     let [data, setData] = useState({ fromDate: new Date().toISOString(), toDate: new Date().toISOString() })
     let navigate = useNavigate()
     let [report, selectReport] = useState()
+    let [exporting, setExporting] = useState(false)
     let [status, setStatus] = useState(null)
     let [results, setResults] = useState({})
     let [open, setOpen] = useState(false)
@@ -43,6 +45,7 @@ export default function Reports() {
     }
 
     let exportReport = async () => {
+        setExporting(true)
         const element = printRef.current;
         const canvas = await html2canvas(element);
         const data = canvas.toDataURL('image/png');
@@ -55,6 +58,7 @@ export default function Reports() {
 
         pdf.addImage(data, 'PNG', 0, 0, pdfWidth, pdfHeight);
         pdf.save(`${report}.pdf`);
+        setExporting(false)
         return
     }
 
@@ -123,7 +127,7 @@ export default function Reports() {
                         key={"loginAlert"}
                     />
                     <br />
-                    {(Object.keys(results).length > 0) && <Button variant="contained" sx={{ backgroundColor: "#37379b", float: "right" }} onClick={exportReport}>Export Report</Button>}
+                    {(Object.keys(results).length > 0) && <LoadingButton loading={exporting} loadingIndicator="Exporting..." variant="contained" sx={{ backgroundColor: "#A8001E", float: "right" }} onClick={exportReport}>Export Report</LoadingButton>}
                     <div ref={printRef}>
                         <Grid container spacing={1} padding=".5em" >
                             <Grid item xs={12} md={12} lg={6}>
@@ -189,7 +193,7 @@ export default function Reports() {
                             {(report && (results.length < 1)) ?
                                 <>
                                     <br />
-                                    <Paper sx={{ backgroundColor: "whitesmoke" }}>
+                                    <Paper sx={{ backgroundColor: "white" }}>
                                         <br />
                                         <Typography variant="h5" sx={{ textAlign: "center" }}>Generating report...</Typography>
                                         <br />
