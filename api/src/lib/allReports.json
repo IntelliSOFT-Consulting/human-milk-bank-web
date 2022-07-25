@@ -185,12 +185,6 @@
             "query": "entry",
             "type": "all"
         },
-        "expressingTime": {
-            "q": "/Observation?code=Time-Expressed",
-            "description": "Expressing time",
-            "query": "total",
-            "type": "query"
-        },
         "expressingTimes": {
             "q": "/Observation?code=Time-Expressed",
             "description": "Expressing time",

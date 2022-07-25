@@ -7,15 +7,14 @@ const router = Router();
 
 router.use(express.json())
 
-router.get('/patient-level',[requireJWTMiddleware], async (req: Request, res: Response) => {
+router.get('/patient-level', [requireJWTMiddleware], async (req: Request, res: Response) => {
     let { limit } = req.query
     let patients = []
-    let p = await FhirApi({ url: `/Patient?&_count=${limit || 10}` })
+    let p = await FhirApi({ url: `/Patient?address=Pumwani&_count=${limit || 100}` })
+    // console.log(p)
     for (let i of p.data.entry) {
-        if (Object.keys(i.resource).indexOf("link") > -1) {
-            console.log("D",i.resource.id)
-            patients.push(i.resource.id)
-        }
+        // console.log("D",i.resource.id)
+        patients.push(i.resource.id)
     }
 
     res.json(
