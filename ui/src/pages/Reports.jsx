@@ -1,5 +1,6 @@
-import { Paper, FormControl, Select, MenuItem, InputLabel, Grid, Container, Snackbar, CircularProgress, useMediaQuery, TextField, Typography, CardContent, Card, Alert } from '@mui/material'
-import { useState, useEffect } from 'react'
+import { Paper, FormControl, Select, MenuItem, InputLabel, Grid, Container, Snackbar, CircularProgress, useMediaQuery, TextField, Typography, CardContent, Card, Alert, Button } from '@mui/material'
+import { useState, useEffect, useRef, } from 'react'
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useNavigate } from 'react-router-dom'
 import * as qs from 'query-string';
 import Layout from '../components/Layout';
@@ -16,17 +17,18 @@ import InfantNutrition from '../components/Reports/InfantNutrition';
 import GeneralPatientLevel from '../components/Reports/GeneralPatientLevel';
 import Feeding from '../components/Reports/Feeding';
 // import LactationSupport from '../components/Reports/LactationSupport';
-
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 
 
 export default function Reports() {
-    let [patients, setPatients] = useState()
+    let printRef = useRef()
     let [data, setData] = useState({ fromDate: new Date().toISOString(), toDate: new Date().toISOString() })
     let navigate = useNavigate()
     let [report, selectReport] = useState()
+    let [exporting, setExporting] = useState(false)
     let [status, setStatus] = useState(null)
-    let [results, setResults] = useState([])
-    let [reports, setReports] = useState([])
+    let [results, setResults] = useState({})
     let [open, setOpen] = useState(false)
     let [message, setMessage] = useState(false)
     let [reportLevel, setReportLevel] = useState(false)
@@ -41,6 +43,25 @@ export default function Reports() {
         "Infant Nutrition/Growth": { url: "/statistics/growth" },
         "Human Milk Bank": { url: "/statistics/hmb" },
     }
+
+    let exportReport = async () => {
+        setExporting(true)
+        const element = printRef.current;
+        const canvas = await html2canvas(element);
+        const data = canvas.toDataURL('image/png');
+
+        const pdf = new jsPDF();
+        const imgProperties = pdf.getImageProperties(data);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight =
+            (imgProperties.height * pdfWidth) / imgProperties.width;
+
+        pdf.addImage(data, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save(`${report}.pdf`);
+        setExporting(false)
+        return
+    }
+
 
     let getReport = async (dates = null) => {
         if (!dates) {
@@ -106,92 +127,95 @@ export default function Reports() {
                         key={"loginAlert"}
                     />
                     <br />
-                    <Grid container spacing={1} padding=".5em" >
-                        <Grid item xs={12} md={12} lg={6}>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">Select Report</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    label="Select Report"
-                                    onChange={e => { selectReport(e.target.value); console.log(e.target.value) }}
-                                    size="small"
-                                >
-                                    {availableReports && Object.keys(availableReports).map((k) => {
-                                        return <MenuItem value={k}>{k}</MenuItem>
+                    {(Object.keys(results).length > 0) && <LoadingButton loading={exporting} loadingIndicator="Exporting..." variant="contained" sx={{ backgroundColor: "#A8001E", float: "right" }} onClick={exportReport}>Export Report</LoadingButton>}
+                    <div ref={printRef}>
+                        <Grid container spacing={1} padding=".5em" >
+                            <Grid item xs={12} md={12} lg={6}>
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label">Select Report</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        label="Select Report"
+                                        onChange={e => { selectReport(e.target.value); console.log(e.target.value) }}
+                                        size="small"
+                                    >
+                                        {availableReports && Object.keys(availableReports).map((k) => {
+                                            return <MenuItem value={k}>{k}</MenuItem>
 
-                                    })}
-                                </Select>
-                            </FormControl>
-                        </Grid>
+                                        })}
+                                    </Select>
+                                </FormControl>
+                            </Grid>
 
-                        {(report && results) &&
-                            <>
-                                <Grid item xs={12} md={12} lg={3}>
-                                    {!isMobile ? <DesktopDatePicker
-                                        label="From Date"
-                                        inputFormat="dd/MM/yyyy"
-                                        value={data.fromDate ? data.fromDate : (new Date().setFullYear(2000)).toISOString()}
-                                        onChange={e => { console.log(e); setData({ ...data, fromDate: new Date(e).toISOString() }) }}
-                                        renderInput={(params) => <TextField {...params} size="small" fullWidth />}
-                                    /> :
-                                        <MobileDatePicker
+                            {(report && results) &&
+                                <>
+                                    <Grid item xs={12} md={12} lg={3}>
+                                        {!isMobile ? <DesktopDatePicker
                                             label="From Date"
                                             inputFormat="dd/MM/yyyy"
                                             value={data.fromDate ? data.fromDate : (new Date().setFullYear(2000)).toISOString()}
-
                                             onChange={e => { console.log(e); setData({ ...data, fromDate: new Date(e).toISOString() }) }}
                                             renderInput={(params) => <TextField {...params} size="small" fullWidth />}
-                                        />}
-                                </Grid>
-                                <Grid item xs={12} md={12} lg={3}>
-                                    {!isMobile ? <DesktopDatePicker
-                                        label="To Date"
-                                        inputFormat="dd/MM/yyyy"
-                                        value={data.toDate ? data.toDate : (new Date().setHours(23)).toISOString()}
-                                        onChange={e => { console.log(e); setData({ ...data, toDate: new Date(e).toISOString() }) }}
-                                        renderInput={(params) => <TextField {...params} size="small" fullWidth />}
-                                    /> :
-                                        <MobileDatePicker
+                                        /> :
+                                            <MobileDatePicker
+                                                label="From Date"
+                                                inputFormat="dd/MM/yyyy"
+                                                value={data.fromDate ? data.fromDate : (new Date().setFullYear(2000)).toISOString()}
+
+                                                onChange={e => { console.log(e); setData({ ...data, fromDate: new Date(e).toISOString() }) }}
+                                                renderInput={(params) => <TextField {...params} size="small" fullWidth />}
+                                            />}
+                                    </Grid>
+                                    <Grid item xs={12} md={12} lg={3}>
+                                        {!isMobile ? <DesktopDatePicker
                                             label="To Date"
                                             inputFormat="dd/MM/yyyy"
                                             value={data.toDate ? data.toDate : (new Date().setHours(23)).toISOString()}
                                             onChange={e => { console.log(e); setData({ ...data, toDate: new Date(e).toISOString() }) }}
                                             renderInput={(params) => <TextField {...params} size="small" fullWidth />}
-                                        />}
-                                </Grid>
-                            </>
-                        }
-                    </Grid>
-
-                    <Container maxWidth="lg">
-                        <p></p>
-                        {report && <Typography variant="h5" sx={{ textAlign: "center" }}>{report}</Typography>}
-                        {(report && (results.length < 1)) ?
-                            <>
-                                <br />
-                                <Paper sx={{ backgroundColor: "whitesmoke" }}>
-                                    <br />
-                                    <Typography variant="h5" sx={{ textAlign: "center" }}>Generating report...</Typography>
-                                    <br />
-                                    <CircularProgress sx={{ marginLeft: "47%" }} />
-                                    <br /><br />
-                                </Paper>
-                            </>
-                            :
-                            (!report && <Alert severity="info" sx={{ textAlign: "center", maxWidth: "50%" }} >No Report Selected: Select one from the list</Alert>)}
-
-                        <Grid container spacing={1} padding=".5em" >
-
-                            {(report === "General") && <GeneralReport results={results || null} />}
-                            {(report === "Feeding/BreastFeeding") && <Feeding results={results || null} />}
-                            {(report === "General - Patient level") && <GeneralPatientLevel results={results || null} />}
-                            {(report === "Infant Nutrition/Growth") && <InfantNutrition results={results || null} />}
-                            {(report === "Lactation Support") && <LactationSupport results={results || null} />}
-                            {(report === "Human Milk Bank") && <HMB results={results || null} />}
-
+                                        /> :
+                                            <MobileDatePicker
+                                                label="To Date"
+                                                inputFormat="dd/MM/yyyy"
+                                                value={data.toDate ? data.toDate : (new Date().setHours(23)).toISOString()}
+                                                onChange={e => { console.log(e); setData({ ...data, toDate: new Date(e).toISOString() }) }}
+                                                renderInput={(params) => <TextField {...params} size="small" fullWidth />}
+                                            />}
+                                    </Grid>
+                                </>
+                            }
                         </Grid>
-                    </Container>
+
+                        <Container maxWidth="lg">
+                            <p></p>
+                            {report && <Typography variant="h5" sx={{ textAlign: "center" }}>{report}</Typography>}
+                            {(report && (results.length < 1)) ?
+                                <>
+                                    <br />
+                                    <Paper sx={{ backgroundColor: "white" }}>
+                                        <br />
+                                        <Typography variant="h5" sx={{ textAlign: "center" }}>Generating report...</Typography>
+                                        <br />
+                                        <CircularProgress sx={{ marginLeft: "47%" }} />
+                                        <br /><br />
+                                    </Paper>
+                                </>
+                                :
+                                (!report && <Alert severity="info" sx={{ textAlign: "center", maxWidth: "50%" }} >No Report Selected: Select one from the list</Alert>)}
+
+                            <Grid container spacing={1} padding=".5em" >
+
+                                {(report === "General") && <GeneralReport results={results || null} />}
+                                {(report === "Feeding/BreastFeeding") && <Feeding results={results || null} />}
+                                {(report === "General - Patient level") && <GeneralPatientLevel results={results || null} />}
+                                {(report === "Infant Nutrition/Growth") && <InfantNutrition results={results || null} />}
+                                {(report === "Lactation Support") && <LactationSupport results={results || null} />}
+                                {(report === "Human Milk Bank") && <HMB results={results || null} />}
+
+                            </Grid>
+                        </Container>
+                    </div>
                 </Layout>
             </LocalizationProvider>
         </>

@@ -1,4 +1,4 @@
-import { Stack, TextField, Button, Container, useMediaQuery, Snackbar } from '@mui/material'
+import { Stack, TextField, Button, Container, useMediaQuery, Snackbar, Alert } from '@mui/material'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as qs from 'query-string';
@@ -14,11 +14,11 @@ export default function Feeding({ results }) {
 
     const columns = [
         { field: 'ipNumber', headerName: 'IP Number', width: 100, editable: true },
-        { field: 'patientNames', headerName: "Patient names", width: 200, editable: true },
-        { field: 'dob', headerName: 'Date of birth', width: 200, editable: true },
+        { field: 'patientNames', headerName: "Patient names", width: 150, editable: true },
+        { field: 'dob', headerName: 'Date of birth', width: 120, editable: true },
         { field: 'volumeReceived', headerName: 'Volume received', width: 150 },
-        { field: 'volumeOfMilkExpressed', headerName: 'Milk volume received', width: 150 },
-        // { field: 'role', headerName: 'Patient on DHM?', width: 150 }
+        { field: 'volumeOfMilkExpressed', headerName: 'Volume expressed', width: 150 },
+        { field: 'milkExpression', headerName: 'Expression frequency', width: 150 }
     ];
 
     let isMobile = useMediaQuery('(max-width:600px)');
@@ -40,6 +40,8 @@ export default function Feeding({ results }) {
             <br />
             <Container maxWidth="lg">
                 <br />
+                <Alert severity="error">Select a patient from the list to view their Feed Distribution Chart</Alert>
+                <p></p>
                 {results.length > 0 && <DataGrid
                     loading={!results}
                     rows={results ? results : []}
