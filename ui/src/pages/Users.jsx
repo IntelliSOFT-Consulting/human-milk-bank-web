@@ -8,6 +8,7 @@ import { getCookie } from './../lib/cookie'
 import { useNavigate } from 'react-router'
 import { DataGrid } from '@mui/x-data-grid'
 import { apiHost } from '../lib/api'
+import { Add, DeleteSweep, LockReset } from '@mui/icons-material'
 
 export default function Users() {
 
@@ -147,14 +148,14 @@ export default function Users() {
                 />
 
                 <Stack direction="row" spacing={2} alignContent="right" >
-                    {(!isMobile) && <Typography sx={{ minWidth: (selected.length > 0) ? '50%' : '80%' }}></Typography>}
+                    {(!isMobile) && <Typography sx={{ minWidth: (selected.length > 0) ? '45%' : '80%' }}></Typography>}
                     {(selected.length > 0) &&
                         <>
-                            <Button variant="contained" onClick={e => { deleteUsers() }} disableElevation sx={{ backgroundColor: 'red' }}>Delete User{(selected.length > 1) && `s`}</Button>
-                            <Button variant="contained" onClick={e => { resetPassword() }} disableElevation sx={{ backgroundColor: 'gray' }}>Reset Password</Button>
+                            <Button startIcon={<DeleteSweep />} variant="contained" onClick={e => { deleteUsers() }} disableElevation sx={{ backgroundColor: '#B00020' }}>Delete User{(selected.length > 1) && `s`}</Button>
+                            <Button startIcon={<LockReset />} variant="contained" onClick={e => { resetPassword() }} disableElevation sx={{ backgroundColor: '#37379b' }}>Reset Password</Button>
                         </>
                     }
-                    <Button variant="contained" disableElevation sx={{ backgroundColor: "#B00020" }} onClick={handleOpen}>Create New User</Button>
+                    <Button startIcon={<Add />} variant="contained" disableElevation sx={{ backgroundColor: "#B00020" }} onClick={handleOpen}>Create New User</Button>
                 </Stack>
                 <p></p>
 
