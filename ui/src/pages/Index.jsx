@@ -155,7 +155,7 @@ export default function Index() {
                         <Grid container spacing={1} padding=".5em" >
                             {(Object.keys(statistics).length > 0) ? Object.keys(statistics).map((report) => {
                                 if (Object.keys(descriptions).indexOf(report) > -1) {
-                                    return <Grid item xs={12} md={12} lg={3}>
+                                    return <Grid item xs={12} key={report} md={12} lg={3}>
                                         <InfoCard value={statistics[report]} title={descriptions[report]} />
                                     </Grid>
                                 }

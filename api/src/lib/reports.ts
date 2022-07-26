@@ -45,6 +45,8 @@ let getLastStockEntry = async () => {
     return time[0]
 }
 
+
+
 export let percentageFeeds = async (patient: string | null = null) => {
 
     let careplans = await generateReport("prescribedFeeds")
@@ -242,8 +244,8 @@ export let mortalityRateByMonth = async () => {
 
     let lastYear = now.setFullYear(now.getFullYear() - 1)
     for (let i of observations) {
-        let date = (new Date(i.resource.meta.lastUpdated)).getTime()
-        let month = new Date(i.resource.meta.lastUpdated).toLocaleString('default', { month: 'short' })
+        let date = (new Date(i.resource.issued)).getTime()
+        let month = new Date(i.resource.issued).toLocaleString('default', { month: 'short' })
 
         if (date >= lastYear) {
             months[month].died++
@@ -505,7 +507,7 @@ export let getExpressionFrequency = async (patientId: string) => {
     observations = observations.entry
     let expressions: { [index: string]: number } = {}
     for (let o of observations) {
-        let date = new Date(o.resource.meta.lastUpdated).toLocaleDateString()
+        let date = new Date(o.resource.issued).toLocaleDateString()
         if (Object.keys(expressions).indexOf(date) < 0) {
             expressions[date] = 0
         } else {
@@ -519,7 +521,7 @@ export let getExpressionFrequency = async (patientId: string) => {
 
 export let averageMilkExpressionFrequency = async (patientId: string) => {
     let all = await getExpressionFrequency(patientId)
-    let total = 0
+    let total = 0;
     Object.keys(all).map((i) => {
         total += all[i]
     })
@@ -555,8 +557,56 @@ export let getPatientGestation = async (patientId: string) => {
 export let receivingExclusiveHumanMilk = async () => {
 
 }
+export let totalDailyFeeds = async (patientId: string) => {
+    let oneDayAgo = new Date(new Date().getTime() - (24 * 60 * 60 * 1000)).toISOString();
 
-
-export let getFeedDistributionData = async (patientId: string) => {
 
 }
+
+export let getFeedDistribution = async (patientId: string) => {
+    let oneDayAgo = new Date(new Date().getTime() - (24 * 60 * 60 * 1000)).toISOString();
+
+
+    let observations = await (await FhirApi({ url: `/Encounter?reason-code=Feeding%20and%20Monitoring&_revinclude=Observation:encounter&_lastUpdated=gt${oneDayAgo}&patient=${patientId}` })).data
+    console.log(observations)
+    let feedTypes: any = {
+        iv: "IV-Volume",
+        dhm: "DHM-Volume",
+        ebm: "EBM-Volume",
+        formula: "Formula-Volume"
+    }
+    let totalDailyFeeds = 0
+    let today = new Date().toLocaleTimeString()
+    let feeds: { [index: string]: number } = { iv: 0, ebm: 0, dhm: 0, formula: 0 }
+    let feedingTimes: { [index: string]: any } = {}
+    observations = observations?.entry || []
+    for (let o of observations) {
+        if (o.resource.resourceType === "Observation") {
+            Object.keys(feedTypes).map((feed) => {
+                if (o.resource.code.coding[0].code === feedTypes[feed]) {
+                    feeds[feed]++
+                    totalDailyFeeds += o.resource.valueQuantity.value
+                    let dt = new Date(o.resource.issued).toLocaleTimeString()
+                    feedingTimes[dt] = feeds
+                    //reset counter
+                    feeds = { iv: 0, ebm: 0, dhm: 0, formula: 0 }
+                }
+            })
+        }
+    }
+    // get patient info
+    let patient = await (await FhirApi({ url: `/Patient/${patientId}` })).data
+    let mother = await (await FhirApi({ url: `/Patient?link=${patientId}` })).data
+    mother = mother.entry[0]
+    patient = {
+        dob: patient.birthDate,
+        ipNumber: mother.resource.id,
+        id: patientId,
+        babyNames: (patient.name[0].family + " " + patient.name[0].given[0])
+    }
+    let res = { feedingTimes, patient, expressions: (await getExpressionFrequency(patientId))[today] || 0, totalDailyFeeds }
+    console.log(res)
+    return res
+}
+
+// getFeedDistribution("c3e65dee-b99a-43d6-8ad7-2892bb663e82")
