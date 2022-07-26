@@ -59,7 +59,7 @@ router.get("/orders", [requireJWT], async (req: Request, res: Response) => {
                 dhmReason: "",
                 dhmVolume: ""
             }
-            let encounterObservations = (await FhirApi({ "url": "/" + resource.encounter.reference + "/$everything" })).data.entry
+            let encounterObservations = (await FhirApi({ "url": "/" + resource.encounter.reference + "/$everything" })).data?.entry || [];
             // console.log(encounterObservations)
             let observationCodes: any = {
                 dhmType: "DHM-Type",
