@@ -100,7 +100,7 @@ export let percentageFeeds = async (patient: string | null = null) => {
     }
 
     for (let i of Object.keys(response)) {
-        response[i] = Math.round((response[i] / total) * 100 * 100) / 100
+        response[i] = Math.round((response[i] / total) * 100 * 100) / 100 || 0;
     }
     response.oral = response.iv
     return response
@@ -609,4 +609,3 @@ export let getFeedDistribution = async (patientId: string) => {
     return res
 }
 
-// getFeedDistribution("c3e65dee-b99a-43d6-8ad7-2892bb663e82")
