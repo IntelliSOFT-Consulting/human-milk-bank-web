@@ -41,9 +41,9 @@ router.post("/", [requireJWT], async (req: Request, res: Response) => {
 // Get all active orders
 router.get("/orders", [requireJWT], async (req: Request, res: Response) => {
     try {
-        let activeOrders = (await FhirApi({ "url": "/NutritionOrder?status=active" })).data
+        let activeOrders = (await FhirApi({ "url": "/NutritionOrder?status=active" })).data?.entry || [];
         let results = []
-        for (let order of activeOrders.entry) {
+        for (let order of activeOrders) {
             let resource = order.resource
             let patient = (await FhirApi({ "url": "/" + resource.patient.reference })).data
             let mother = (await FhirApi({ "url": "/" + "Patient" + `?link=${patient.id}` })).data.entry[0].resource
