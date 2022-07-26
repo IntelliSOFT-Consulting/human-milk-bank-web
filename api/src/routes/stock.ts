@@ -82,7 +82,7 @@ router.get("/orders", [requireJWT], async (req: Request, res: Response) => {
     } catch (error) {
         console.log(error)
         res.statusCode = 401
-        res.json({ error, status: "error" });
+        res.json({ error: JSON.stringify(error), status: "error" });
         return
     }
 });
