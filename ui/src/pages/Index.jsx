@@ -106,7 +106,7 @@ export default function Index() {
         }
     }, [statistics])
 
-    
+
 
     useEffect(() => {
         if (getCookie("token")) {
@@ -128,7 +128,7 @@ export default function Index() {
         preterm: "Total Number of Preterm babies",
         totalBabies: "Total number of babies",
         // lowBirthWeight: "Low birth weight",
-        averageDays: "Average days to receiving mothers own milk"
+        averageDays: "Avg. days to receiving mothers milk"
     }
 
 
@@ -148,14 +148,14 @@ export default function Index() {
                     <br /><br />
                     {(Object.keys(statistics) < 1) ?
                         <>
-                            <Typography>Loading...</Typography>
-                            <CircularProgress />
+                            <Typography sx={{ textAlign: "center" }}>Loading...</Typography>
+                            <CircularProgress sx={{ marginLeft: '47%' }} />
                         </>
                         :
                         <Grid container spacing={1} padding=".5em" >
                             {(Object.keys(statistics).length > 0) ? Object.keys(statistics).map((report) => {
                                 if (Object.keys(descriptions).indexOf(report) > -1) {
-                                    return <Grid item xs={12} md={12} lg={3}>
+                                    return <Grid item xs={12} key={report} md={12} lg={3}>
                                         <InfoCard value={statistics[report]} title={descriptions[report]} />
                                     </Grid>
                                 }
@@ -167,8 +167,8 @@ export default function Index() {
                         (Object.keys(statistics).length > 1) &&
                         <>
                             <br />
-                            <Grid container gap={2} >
-                                <Grid item xs={12} md={12} lg={5} sx={{ border: "1px solid grey", borderRadius: "10px" }}>
+                            <Grid container gap={5} >
+                                <Grid item xs={12} md={12} lg={6} sx={{ border: "1px solid grey", borderRadius: "10px" }}>
                                     <div id="firstFeeds" ></div>
                                 </Grid>
                                 <Grid item xs={12} md={12} lg={5} sx={{ border: "1px solid grey", borderRadius: "10px" }}>

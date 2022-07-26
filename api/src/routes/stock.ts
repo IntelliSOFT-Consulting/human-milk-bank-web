@@ -82,7 +82,7 @@ router.get("/orders", [requireJWT], async (req: Request, res: Response) => {
     } catch (error) {
         console.log(error)
         res.statusCode = 401
-        res.json({ error: "incorrect email or password" });
+        res.json({ error, status: "error" });
         return
     }
 });

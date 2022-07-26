@@ -19,6 +19,7 @@ import Feeding from '../components/Reports/Feeding';
 // import LactationSupport from '../components/Reports/LactationSupport';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
+import { PrintRounded } from '@mui/icons-material';
 
 
 export default function Reports() {
@@ -114,7 +115,6 @@ export default function Reports() {
 
     let isMobile = useMediaQuery('(max-width:600px)');
 
-
     return (
         <>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -127,7 +127,7 @@ export default function Reports() {
                         key={"loginAlert"}
                     />
                     <br />
-                    {(Object.keys(results).length > 0) && <LoadingButton loading={exporting} loadingIndicator="Exporting..." variant="contained" sx={{ backgroundColor: "#A8001E", float: "right" }} onClick={exportReport}>Export Report</LoadingButton>}
+                    {(Object.keys(results).length > 0) && <LoadingButton startIcon={<PrintRounded />} loading={exporting} loadingIndicator="Exporting.." variant="contained" sx={{ backgroundColor: "#A8001E", float: "right" }} onClick={exportReport}>Export</LoadingButton>}
                     <div ref={printRef}>
                         <Grid container spacing={1} padding=".5em" >
                             <Grid item xs={12} md={12} lg={6}>
