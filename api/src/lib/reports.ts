@@ -50,7 +50,7 @@ let getLastStockEntry = async () => {
 export let percentageFeeds = async (patient: string | null = null) => {
 
     let careplans = await generateReport("prescribedFeeds")
-    let response: { [index: string]: number } = { dhm: 0, formula: 0, ebm: 0, iv: 0, oral: 0 }
+    let response: { [index: string]: number } = { dhm: 0, formula: 0, ebm: 0, iv: 0 }
 
     if (patient) {
         for (let plan of careplans) {
@@ -94,6 +94,7 @@ export let percentageFeeds = async (patient: string | null = null) => {
 
         }
     }
+    console.log(response)
     let total = 0.0
     for (let i of Object.keys(response)) {
         total += response[i]
@@ -102,7 +103,6 @@ export let percentageFeeds = async (patient: string | null = null) => {
     for (let i of Object.keys(response)) {
         response[i] = Math.round((response[i] / total) * 100 * 100) / 100 || 0;
     }
-    response.oral = response.iv
     return response
 }
 
