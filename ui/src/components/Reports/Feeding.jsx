@@ -5,15 +5,18 @@ import * as qs from 'query-string';
 import { DataGrid } from '@mui/x-data-grid';
 import { getCookie } from '../../lib/cookie';
 import { apiHost } from '../../lib/api'
+import * as Plotly from 'plotly.js-dist'
 
 export default function Feeding({ results }) {
     let navigate = useNavigate()
+    let [traces, setTraces] = useState([])
     let [open, setOpen] = useState(false)
     let [openModal, setOpenModal] = useState(false)
     let [message, setMessage] = useState(false)
     let [selected, setSelected] = useState(null)
     let [loading, setLoading] = useState(false)
     let [data, setData] = useState(null)
+    let [loadChart, setLoadChart] = useState(false)
 
 
     let getFeedDistributionData = async (patientId) => {
@@ -23,7 +26,6 @@ export default function Feeding({ results }) {
             headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getCookie("token")}` },
             arg: JSON.stringify()
         })).json()
-        console.log(res)
         if (res.status === "success") {
             setData(res.report)
         }
@@ -34,7 +36,24 @@ export default function Feeding({ results }) {
 
     let getFeedDistribution = async (patientId) => {
         setOpenModal(true)
-        let data = await getFeedDistributionData(patientId)
+        let report = await getFeedDistributionData(patientId)
+        let _traces = []
+        if (report.status === "success") {
+            Object.keys(report.report.feedingTimes).map((period) => {
+                _traces.push({
+                    x: Object.keys(report.report.feedingTimes[period]).map(x => { return x }),
+                    y: Object.keys(report.report.feedingTimes[period]).map(x => { return report.report.feedingTimes[period][x] }),
+                    name: period,
+                    type: "bar"
+                })
+            })
+        }
+        let layout = { barmode: 'group' };
+        if (_traces.length > 0) {
+            console.log(_traces)
+            Plotly.newPlot('feedDistribution', _traces, layout)
+            return
+        }
         return
     }
 
@@ -55,7 +74,6 @@ export default function Feeding({ results }) {
         setSelected(null)
         return
     }
-
 
     const columns = [
         { field: 'ipNumber', headerName: 'IP Number', width: 100, editable: true },
@@ -131,6 +149,12 @@ export default function Feeding({ results }) {
 
                                     <LinearProgress />
                                 </>}
+                                {data &&
+                                    <Grid container justifyContent={"center"}>
+                                        <Grid item xs={12} md={12} lg={10} sx={{ border: "1px solid grey", borderRadius: "10px" }}>
+                                            <div id="feedDistribution"></div>
+                                        </Grid>
+                                    </Grid>}
 
                             </Grid>
                         </Grid>
