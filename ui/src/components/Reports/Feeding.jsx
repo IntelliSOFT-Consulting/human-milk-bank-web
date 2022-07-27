@@ -1,32 +1,59 @@
-import { Modal, Box, Grid, Container, Typography, useMediaQuery, Snackbar, Alert } from '@mui/material'
+import { Modal, Box, Grid, Container, Typography, useMediaQuery, Snackbar, Alert, LinearProgress } from '@mui/material'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as qs from 'query-string';
 import { DataGrid } from '@mui/x-data-grid';
 import { getCookie } from '../../lib/cookie';
 import { apiHost } from '../../lib/api'
+import * as Plotly from 'plotly.js-dist'
 
 export default function Feeding({ results }) {
     let navigate = useNavigate()
+    let [traces, setTraces] = useState([])
     let [open, setOpen] = useState(false)
     let [openModal, setOpenModal] = useState(false)
     let [message, setMessage] = useState(false)
     let [selected, setSelected] = useState(null)
+    let [loading, setLoading] = useState(false)
+    let [data, setData] = useState(null)
+    let [loadChart, setLoadChart] = useState(false)
 
 
     let getFeedDistributionData = async (patientId) => {
-        let res = await fetch(`${apiHost}/feeding/feed-distribution/${patientId}`, {
+        setLoading(true)
+        let res = await (await fetch(`${apiHost}/statistics/feeding/feed-distribution/${patientId}`, {
             method: 'GET',
             headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getCookie("token")}` },
             arg: JSON.stringify()
-        })
-        console.log(res)
+        })).json()
+        if (res.status === "success") {
+            setData(res.report)
+        }
+        setLoading(false)
+        return res
     }
 
 
     let getFeedDistribution = async (patientId) => {
         setOpenModal(true)
-        getFeedDistributionData(patientId)
+        let report = await getFeedDistributionData(patientId)
+        let _traces = []
+        if (report.status === "success") {
+            Object.keys(report.report.feedingTimes).map((period) => {
+                _traces.push({
+                    x: Object.keys(report.report.feedingTimes[period]).map(x => { return x }),
+                    y: Object.keys(report.report.feedingTimes[period]).map(x => { return report.report.feedingTimes[period][x] }),
+                    name: period,
+                    type: "bar"
+                })
+            })
+        }
+        let layout = { barmode: 'group' };
+        if (_traces.length > 0) {
+            console.log(_traces)
+            Plotly.newPlot('feedDistribution', _traces, layout)
+            return
+        }
         return
     }
 
@@ -43,8 +70,10 @@ export default function Feeding({ results }) {
     };
     let handleClose = async () => {
         setOpenModal(false)
+        setData(null)
+        setSelected(null)
+        return
     }
-
 
     const columns = [
         { field: 'ipNumber', headerName: 'IP Number', width: 100, editable: true },
@@ -72,7 +101,7 @@ export default function Feeding({ results }) {
             <Snackbar
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                 open={open}
-                onClose={""}
+                onClose={e => { console.log(e) }}
                 message={message}
                 key={"loginAlert"}
             />
@@ -108,14 +137,24 @@ export default function Feeding({ results }) {
                         >
                             <Grid item xs={12} lg={12} md={12}>
 
-                                <Typography variant="h6" sx={{ textDecoration: "underline" }}>Patient Details</Typography>
-                                <Typography variant="p">IP Number</Typography><br />
-                                <Typography variant="p">Baby Name</Typography><br />
-                                <Typography variant="p">Date of birth</Typography>
+                                {data && <><Typography variant="h6" sx={{ textDecoration: "underline" }}>Patient Details</Typography>
+                                    <Typography variant="p">IP Number: <b>{data && data.patient.ipNumber}</b></Typography><br />
+                                    <Typography variant="p">Baby Name: <b>{data && data.patient.babyNames}</b></Typography><br />
+                                    <Typography variant="p">Date of birth: <b>{data && data.patient.dob}</b></Typography></>}
 
 
                                 <Typography sx={{ textAlign: "center" }} variant="h5">Feed distribution within 24 hours</Typography>
+                                {!data && <>
+                                    <br />
 
+                                    <LinearProgress />
+                                </>}
+                                {data &&
+                                    <Grid container justifyContent={"center"}>
+                                        <Grid item xs={12} md={12} lg={10} sx={{ border: "1px solid grey", borderRadius: "10px" }}>
+                                            <div id="feedDistribution"></div>
+                                        </Grid>
+                                    </Grid>}
 
                             </Grid>
                         </Grid>
