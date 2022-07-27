@@ -94,7 +94,7 @@ export let percentageFeeds = async (patient: string | null = null) => {
 
         }
     }
-    console.log(response)
+    // console.log(response)
     let total = 0.0
     for (let i of Object.keys(response)) {
         total += response[i]
@@ -324,7 +324,8 @@ export let infantsFullyFedOnMothersMilk = async () => {
         babies.push(i.resource.id)
     }
     let withCarePlans = await (await FhirApi({ url: "/CarePlan" })).data
-    for (let c of withCarePlans.entry) {
+    withCarePlans = withCarePlans?.entry || []
+    for (let c of withCarePlans) {
         babies = babies.filter((p: any) => p !== c.resource.subject.reference.split("/")[1])
     }
     let unique = [...new Set(babies)]
@@ -457,6 +458,30 @@ export let generalPatientLevelReport = async (patients: any[]) => {
     return report
 }
 
+export let mothersInitiatedLactationAt = async (patientId: string) => {
+    let observations = await (await FhirApi({ url: `/Observation?code=62578-0&patient=${patientId}` })).data
+    observations = observations?.entry || []
+    if (observations.length < 1) {
+        return "-"
+    }
+    return observations[0].resource.issued
+}
+
+export let lactationSupportPatientLevelReport = async (patients: any[]) => {
+    let report: any[] = [];
+    for (let p of patients) {
+        let patient = await (await FhirApi({ url: `/Patient/${p}` })).data
+        let child = await (await FhirApi({ url: `/Patient/${(patient.link[0].other.reference).split("/")[1]}` })).data
+        report.push({
+            dob: child.birthDate,
+            ipNumber: patient.id,
+            id: p,
+            babyNames: (patient.name[0].family + " " + patient.name[0].given[0]),
+            lactationInitiatedAt: await mothersInitiatedLactationAt(patient.id)
+        })
+    }
+    return report
+}
 
 export let infantNutritionReport = async (patients: any[]) => {
     let report: any[] = [];
@@ -504,7 +529,8 @@ export let getBirthWeight = async (patientId: string) => {
 
 export let getExpressionFrequency = async (patientId: string) => {
     let observations = await (await FhirApi({ url: `/Observation?code=62578-0&patient=${patientId}` })).data
-    observations = observations.entry
+    // console.log(observations)
+    observations = observations?.entry || [];
     let expressions: { [index: string]: number } = {}
     for (let o of observations) {
         let date = new Date(o.resource.issued).toLocaleDateString()
@@ -566,9 +592,8 @@ export let totalDailyFeeds = async (patientId: string) => {
 export let getFeedDistribution = async (patientId: string) => {
     let oneDayAgo = new Date(new Date().getTime() - (24 * 60 * 60 * 1000)).toISOString();
 
-
     let observations = await (await FhirApi({ url: `/Encounter?reason-code=Feeding%20and%20Monitoring&_revinclude=Observation:encounter&_lastUpdated=gt${oneDayAgo}&patient=${patientId}` })).data
-    console.log(observations)
+    // console.log(observations)
     let feedTypes: any = {
         iv: "IV-Volume",
         dhm: "DHM-Volume",
@@ -605,7 +630,6 @@ export let getFeedDistribution = async (patientId: string) => {
         babyNames: (patient.name[0].family + " " + patient.name[0].given[0])
     }
     let res = { feedingTimes, patient, expressions: (await getExpressionFrequency(patientId))[today] || 0, totalDailyFeeds }
-    console.log(res)
     return res
 }
 
