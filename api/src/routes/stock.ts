@@ -39,7 +39,9 @@ router.post("/", [requireJWT], async (req: Request, res: Response) => {
 
 
 // Get all active orders
-router.get("/orders", [requireJWT], async (req: Request, res: Response) => {
+router.get("/orders", async (req: Request, res: Response) => {
+
+// router.get("/orders", [requireJWT], async (req: Request, res: Response) => {
     try {
         let activeOrders = (await FhirApi({ "url": "/NutritionOrder?status=active" })).data?.entry || [];
         let results = []
@@ -59,7 +61,7 @@ router.get("/orders", [requireJWT], async (req: Request, res: Response) => {
                 dhmReason: "",
                 dhmVolume: ""
             }
-            let encounterObservations = (await FhirApi({ "url": "/" + resource.encounter.reference + "/$everything" })).data?.entry || [];
+            let encounterObservations = (await FhirApi({ "url": "/" + resource.encounter.reference + "/$everything?_count=10000" })).data?.entry || [];
             // console.log(encounterObservations)
             let observationCodes: any = {
                 dhmType: "DHM-Type",
