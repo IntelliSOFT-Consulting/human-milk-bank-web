@@ -2,7 +2,6 @@ import { Paper, FormControl, Select, MenuItem, InputLabel, Grid, Container, Snac
 import { useState, useEffect, useRef, } from 'react'
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useNavigate } from 'react-router-dom'
-import * as qs from 'query-string';
 import Layout from '../components/Layout';
 import { getCookie } from '../lib/cookie';
 import { apiHost, FhirApi } from './../lib/api'

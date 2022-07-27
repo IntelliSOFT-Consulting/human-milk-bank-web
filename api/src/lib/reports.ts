@@ -476,7 +476,8 @@ export let lactationSupportPatientLevelReport = async (patients: any[]) => {
             dob: child.birthDate,
             ipNumber: patient.id,
             id: p,
-            babyNames: (patient.name[0].family + " " + patient.name[0].given[0]),
+            patientNames: (patient.name[0].family + " " + patient.name[0].given[0]),
+            babyNames: (child.name[0].family + " " + child.name[0].given[0]),
             lactationInitiatedAt: await mothersInitiatedLactationAt(patient.id)
         })
     }

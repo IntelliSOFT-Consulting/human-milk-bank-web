@@ -5,7 +5,7 @@ import * as qs from 'query-string';
 import { DataGrid } from '@mui/x-data-grid';
 
 
-export default function GeneralPatientLevel({ results }) {
+export default function LactationSupportPatientLevel({ results }) {
     let [open, setOpen] = useState(false)
     let [message, setMessage] = useState(false)
 
@@ -13,8 +13,9 @@ export default function GeneralPatientLevel({ results }) {
 
     const columns = [
         { field: 'ipNumber', headerName: 'IP Number', width: 120, editable: true },
+        { field: 'patientNames', headerName: "Mother's Name", width: 200, editable: true },
         { field: 'babyNames', headerName: "Baby receiving feeds", width: 200, editable: true },
-        { field: 'dob', headerName: 'Date of birth', width: 200, editable: true },
+        { field: 'dob', headerName: 'Date of birth', width: 150, editable: true },
         { field: 'lactationInitiatedAt', headerName: 'Time they inititate lactation', width: 200 },
     ];
 
