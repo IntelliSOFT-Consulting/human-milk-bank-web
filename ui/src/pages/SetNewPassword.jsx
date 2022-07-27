@@ -26,8 +26,8 @@ export default function SetNewPassword() {
         let data = (await (await fetch(`${apiHost}/auth/new-password`,
             {
                 method: 'POST',
-                headers: { "Content-Type": "application/json", "Authorization":`Bearer ${args.token}`},
-                body: JSON.stringify({ id: args.id, password: password})
+                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${args.token}` },
+                body: JSON.stringify({ id: args.id, password: password })
             }
         )).json())
         console.log(data)
@@ -73,7 +73,6 @@ export default function SetNewPassword() {
                                     placeholder="Password"
                                     size="small"
                                     onChange={e => { setPassword(e.target.value) }}
-
                                 />
                                 <br /><br />
                                 <TextField
@@ -82,10 +81,8 @@ export default function SetNewPassword() {
                                     placeholder="Confirm Password"
                                     size="small"
                                     onChange={e => { setConfirmPassword(e.target.value) }}
-
                                 />
-                                <br />
-                                <br />
+                                <br /><br />
                                 <Button variant="contained"
                                     disableElevation onClick={e => { setNewPassword() }}
                                     sx={{ width: "50%", marginLeft: "25%", backgroundColor: "#37379b" }}

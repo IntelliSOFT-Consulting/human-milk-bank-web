@@ -12,20 +12,17 @@ export default function GeneralPatientLevel({ results }) {
     const [selectionModel, setSelectionModel] = useState([]);
 
     const columns = [
-        { field: 'ipNumber', headerName: 'IP Number', width: 100, editable: true },
-        { field: 'babyNames', headerName: "Baby's names", width: 150, editable: true },
-        { field: 'dob', headerName: 'Date of birth', width: 110, editable: true },
-        { field: 'gestation', headerName: 'Term/Preterm', width: 110 },
-        { field: 'birthWeight', headerName: 'Birth weight', width: 110 },
-        { field: 'currentWeight', headerName: 'Current weight', width: 120 },
-        { field: 'weightRateChange', headerName: 'Weight change rate', width: 150 },
-
+        { field: 'ipNumber', headerName: 'IP Number', width: 120, editable: true },
+        { field: 'babyNames', headerName: "Baby receiving feeds", width: 200, editable: true },
+        { field: 'dob', headerName: 'Date of birth', width: 200, editable: true },
+        { field: 'lactationInitiatedAt', headerName: 'Time they inititate lactation', width: 200 },
     ];
 
     let isMobile = useMediaQuery('(max-width:600px)');
+
+
     return (
         <>
-
             <br />
             <Snackbar
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
@@ -51,9 +48,4 @@ export default function GeneralPatientLevel({ results }) {
             </Container>
         </>
     )
-
 }
-
-
-
-
