@@ -16,7 +16,7 @@ import HMB from '../components/Reports/HMB';
 import InfantNutrition from '../components/Reports/InfantNutrition';
 import GeneralPatientLevel from '../components/Reports/GeneralPatientLevel';
 import Feeding from '../components/Reports/Feeding';
-// import LactationSupport from '../components/Reports/LactationSupport';
+import LactationSupportPatientLevel from '../components/Reports/LactationSupportPatientLevel';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import { PrintRounded } from '@mui/icons-material';
@@ -209,6 +209,7 @@ export default function Reports() {
                                 {(report === "General") && <GeneralReport results={results || null} />}
                                 {(report === "Feeding/BreastFeeding") && <Feeding results={results || null} />}
                                 {(report === "General - Patient level") && <GeneralPatientLevel results={results || null} />}
+                                {(report === "Lactation Support - Patient level") && <LactationSupportPatientLevel results={results || null} />}
                                 {(report === "Infant Nutrition/Growth") && <InfantNutrition results={results || null} />}
                                 {(report === "Lactation Support") && <LactationSupport results={results || null} />}
                                 {(report === "Human Milk Bank") && <HMB results={results || null} />}
