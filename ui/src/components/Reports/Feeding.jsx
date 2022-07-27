@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as qs from 'query-string';
 import { DataGrid } from '@mui/x-data-grid';
-
+import { getCookie } from '../../lib/cookie';
+import { apiHost } from '../../lib/api'
 
 export default function Feeding({ results }) {
     let navigate = useNavigate()
@@ -13,8 +14,19 @@ export default function Feeding({ results }) {
     let [selected, setSelected] = useState(null)
 
 
+    let getFeedDistributionData = async (patientId) => {
+        let res = await fetch(`${apiHost}/feeding/feed-distribution/${patientId}`, {
+            method: 'GET',
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getCookie("token")}` },
+            arg: JSON.stringify()
+        })
+        console.log(res)
+    }
+
+
     let getFeedDistribution = async (patientId) => {
         setOpenModal(true)
+        getFeedDistributionData(patientId)
         return
     }
 
@@ -89,14 +101,14 @@ export default function Feeding({ results }) {
                     aria-labelledby="parent-modal-title"
                     aria-describedby="parent-modal-description"
                 >
-                    <Box sx={{ ...modalStyle, width: "80%", borderRadius:"10px" }}>
+                    <Box sx={{ ...modalStyle, width: "80%", borderRadius: "10px" }}>
                         <Grid container
                             justifyContent="center"
                             alignItems="center"
                         >
                             <Grid item xs={12} lg={12} md={12}>
 
-                                <Typography variant="h6" sx={{textDecoration:"underline"}}>Patient Details</Typography>
+                                <Typography variant="h6" sx={{ textDecoration: "underline" }}>Patient Details</Typography>
                                 <Typography variant="p">IP Number</Typography><br />
                                 <Typography variant="p">Baby Name</Typography><br />
                                 <Typography variant="p">Date of birth</Typography>
