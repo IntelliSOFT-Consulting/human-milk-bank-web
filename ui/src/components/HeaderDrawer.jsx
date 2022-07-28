@@ -129,7 +129,7 @@ export default function HeaderDrawer({ children }) {
                   </MenuItem>
                 ))}
               </Menu>
-            </Box> : <Button variant="outlined" onClick={e => { navigate('/login') }} sx={{ color: "white" }}>LOGIN</Button>}
+            </Box> : <Button variant="outlined" onClick={e => { navigate('/login') }} sx={{ color: "white", backgroundColor:"#B00020" }}>LOGIN</Button>}
           </Toolbar>
         </Container>
       </AppBar>

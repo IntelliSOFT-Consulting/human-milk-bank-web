@@ -148,7 +148,7 @@ export default function Users() {
                 />
 
                 <Stack direction="row" spacing={2} alignContent="right" >
-                    {(!isMobile) && <Typography sx={{ minWidth: (selected.length > 0) ? '45%' : '80%' }}></Typography>}
+                    {(!isMobile) && <Typography sx={{ minWidth: (selected.length > 0) ? '42%' : '80%' }}></Typography>}
                     {(selected.length > 0) &&
                         <>
                             <Button startIcon={<DeleteSweep />} variant="contained" onClick={e => { deleteUsers() }} disableElevation sx={{ backgroundColor: '#B00020' }}>Delete User{(selected.length > 1) && `s`}</Button>

@@ -91,7 +91,7 @@ export default function DataExport({ id }) {
                                                 Export patients' clinical data as a FHIR JSON Bundle containing the following resources; Patients, Encounters, Observations, Orders and any other related FHIR Resources.
                                             </Alert>
                                             <br/>
-                                            <Button sx={{ backgroundColor: "#37379b" }} variant="contained" onClick={e => { exportPatientData() }}>Export Patient Data</Button>
+                                            <Button sx={{ backgroundColor: "#B00020" }} variant="contained" onClick={e => { exportPatientData() }}>Export Patient Data</Button>
                                         </Grid>
                                     </Grid>
                                     <p></p>
