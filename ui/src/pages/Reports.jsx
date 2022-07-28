@@ -35,8 +35,7 @@ export default function Reports() {
 
     let availableReports =
     {
-        "General": { url: "/statistics/general" },
-        "General - Patient level": { url: "/statistics/general/patient-level" },
+        "General Report": { url: "/statistics/general/patient-level" },
         "Feeding/BreastFeeding": { url: "/statistics/feeding/patient-level" },
         "Lactation Support": { url: "/statistics/lactation-support" },
         "Lactation Support - Patient level": { url: "/statistics/lactation-support/patient-level" },
@@ -205,9 +204,8 @@ export default function Reports() {
 
                             <Grid container spacing={1} padding=".5em" >
 
-                                {(report === "General") && <GeneralReport results={results || null} />}
                                 {(report === "Feeding/BreastFeeding") && <Feeding results={results || null} />}
-                                {(report === "General - Patient level") && <GeneralPatientLevel results={results || null} />}
+                                {(report === "General Report") && <GeneralPatientLevel results={results || null} />}
                                 {(report === "Lactation Support - Patient level") && <LactationSupportPatientLevel results={results || null} />}
                                 {(report === "Infant Nutrition/Growth") && <InfantNutrition results={results || null} />}
                                 {(report === "Lactation Support") && <LactationSupport results={results || null} />}
