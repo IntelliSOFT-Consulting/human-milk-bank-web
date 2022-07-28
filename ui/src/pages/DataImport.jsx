@@ -104,7 +104,7 @@ export default function DataImport() {
                                             <Grid item xs={12} md={12} lg={8}>
                                                 <label htmlFor="contained-button-file">
                                                     <Input accept="application/JSON" id="import-file" type="file" placeholder={"FHIR Bundle (.json file)"} onChange={e => { setFile(e.target.files[0]) }} />
-                                                    <Button sx={{backgroundColor:"#37379b"}} variant="contained" onClick={e => { importData() }} component="span">
+                                                    <Button sx={{backgroundColor:"#B00020"}} variant="contained" onClick={e => { importData() }} component="span">
                                                         Import Data
                                                     </Button>
                                                 </label>
