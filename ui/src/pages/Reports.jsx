@@ -1,5 +1,5 @@
 import { Paper, FormControl, Select, MenuItem, InputLabel, Grid, Container, Snackbar, CircularProgress, useMediaQuery, TextField, Typography, CardContent, Card, Alert, Button } from '@mui/material'
-import { useState, useEffect, useRef, } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout';
@@ -9,7 +9,6 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import GeneralReport from '../components/Reports/GeneralReport';
 import LactationSupport from '../components/Reports/LactationSupport';
 import HMB from '../components/Reports/HMB';
 import InfantNutrition from '../components/Reports/InfantNutrition';
@@ -35,8 +34,7 @@ export default function Reports() {
 
     let availableReports =
     {
-        "General": { url: "/statistics/general" },
-        "General - Patient level": { url: "/statistics/general/patient-level" },
+        "General Report": { url: "/statistics/general/patient-level" },
         "Feeding/BreastFeeding": { url: "/statistics/feeding/patient-level" },
         "Lactation Support": { url: "/statistics/lactation-support" },
         "Lactation Support - Patient level": { url: "/statistics/lactation-support/patient-level" },
@@ -205,9 +203,8 @@ export default function Reports() {
 
                             <Grid container spacing={1} padding=".5em" >
 
-                                {(report === "General") && <GeneralReport results={results || null} />}
                                 {(report === "Feeding/BreastFeeding") && <Feeding results={results || null} />}
-                                {(report === "General - Patient level") && <GeneralPatientLevel results={results || null} />}
+                                {(report === "General Report") && <GeneralPatientLevel results={results || null} />}
                                 {(report === "Lactation Support - Patient level") && <LactationSupportPatientLevel results={results || null} />}
                                 {(report === "Infant Nutrition/Growth") && <InfantNutrition results={results || null} />}
                                 {(report === "Lactation Support") && <LactationSupport results={results || null} />}
@@ -222,7 +219,3 @@ export default function Reports() {
     )
 
 }
-
-
-
-

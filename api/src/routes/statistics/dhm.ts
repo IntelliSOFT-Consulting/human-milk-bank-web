@@ -24,7 +24,7 @@ router.get('/', [requireJWTMiddleware], async (req: Request, res: Response) => {
         {
             "dhmInfants": countPatientsFromNutritionOrders(dhmInfants) || 0,
             "dhmVolume": dhmVolume,
-            "dhmAverage": (dhmVolume / dhmInfants) || 0,
+            "dhmAverage": ((dhmVolume.parsteurized + dhmVolume.unParsteurized) / dhmInfants) || 0,
             "fullyReceiving": await avgDaysToReceivingMothersOwnMilk(),
             "dhmLength": "3 days",
             "data": days.map((day) => {

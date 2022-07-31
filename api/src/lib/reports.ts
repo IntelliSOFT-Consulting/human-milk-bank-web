@@ -13,7 +13,7 @@ const allMonths = _months;
 export let getTotalDHMOrders = async (all: boolean = false) => {
     let lastStockEntryTime = await (await getLastStockEntry())?.createdAt || null
     let totalVolume = await db.order.aggregate({
-        _sum: { dhmVolume: true },
+        _sum: { pasteurized: true, unPasteurized: true },
         where: {
             ...(!all) && {
                 ...(lastStockEntryTime) && {
@@ -24,15 +24,15 @@ export let getTotalDHMOrders = async (all: boolean = false) => {
             }
         }
     })
-    return totalVolume._sum.dhmVolume
+    return { pasteurized: totalVolume._sum.pasteurized, unPasteurized: totalVolume._sum.unPasteurized }
 }
 
 export let availableDHMVolume = async () => {
-    let volume = (await getLastStockEntry())?.dhmVolume || 0 - (await getTotalDHMOrders() || 0)
-    if (volume < 0) {
-        return 0
-    }
-    return volume
+    let parsteurized = (await getLastStockEntry())?.pasteurized || 0 - (await (await getTotalDHMOrders()).pasteurized || 0)
+    let unParsteurized = (await getLastStockEntry())?.pasteurized || 0 - (await (await getTotalDHMOrders()).pasteurized || 0)
+    if (parsteurized < 0) { parsteurized = 0 }
+    if (unParsteurized < 0) { unParsteurized = 0 }
+    return { unParsteurized, parsteurized }
 }
 
 let getLastStockEntry = async () => {
