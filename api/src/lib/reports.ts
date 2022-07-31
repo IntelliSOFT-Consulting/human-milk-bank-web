@@ -358,11 +358,12 @@ export let avgDaysToReceivingMothersOwnMilk = async () => {
 }
 
 export let countPatients = (observations: any[]) => {
-    // console.log(observations)
     let babies = [];
     for (let observation of observations) {
-        if (babies.indexOf(observation.resource.subject.reference) < 0) {
-            babies.push(observation.resource.subject.reference)
+        if (observation.resource.resourceType === "Observation") {
+            if (babies.indexOf(observation.resource.subject.reference) < 0) {
+                babies.push(observation.resource.subject.reference)
+            }
         }
     }
     let unique = [...new Set(babies)]
