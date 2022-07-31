@@ -22,7 +22,7 @@ router.get('/', [requireJWTMiddleware], async (req: Request, res: Response) => {
 
     res.json(
         {
-            "dhmInfants": countPatientsFromNutritionOrders(dhmInfants) || 0,
+            "dhmInfants": dhmInfants || 0,
             "dhmVolume": dhmVolume,
             "dhmAverage": ((dhmVolume.parsteurized + dhmVolume.unParsteurized) / dhmInfants) || 0,
             "fullyReceiving": await avgDaysToReceivingMothersOwnMilk(),
