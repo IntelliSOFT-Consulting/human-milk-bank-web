@@ -54,14 +54,12 @@ export default function PatientList() {
             console.log(r.name)
             return {
                 id: r.id, lastName: r.name[0].family || " ", firstName: r.name[0].given[0] || " ",
-                age: `${(Math.floor((new Date() - new Date(r.birthDate).getTime()) / 3.15576e+10))} years`
+                age: (r.birthDate) ? `${(Math.floor((new Date().getTime() - new Date(r.birthDate).getTime()) / 8.64e+7))} days` : "-"
             }
         })
         setPatients(p)
         setLoading(false)
         return
-
-
     }
 
     useEffect(() => {
