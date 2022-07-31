@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import { requireJWTMiddleware as requireJWT, encodeSession, decodeSession } from "../lib/jwt";
 import db from '../lib/prisma'
 import { FhirApi } from "../lib/fhir";
+import { unpack } from "@prisma/client/runtime";
 
 const router = express.Router()
 router.use(express.json())
@@ -22,8 +23,7 @@ router.post("/", [requireJWT], async (req: Request, res: Response) => {
             let entry = await db.stockEntry.create({
                 data: {
                     pasteurized: parseFloat(pasteurized), unPasteurized: parseFloat(unPasteurized),
-                    dhmType, dhmVolume: (pasteurized + unPasteurized),
-                    userId: userId
+                    dhmType, userId: userId
                 }
             })
             res.json({ status: "success", message: "Stock Entry created successfully", id: entry.id })
@@ -37,11 +37,10 @@ router.post("/", [requireJWT], async (req: Request, res: Response) => {
     }
 });
 
-
 // Get all active orders
 router.get("/orders", async (req: Request, res: Response) => {
 
-// router.get("/orders", [requireJWT], async (req: Request, res: Response) => {
+    // router.get("/orders", [requireJWT], async (req: Request, res: Response) => {
     try {
         let activeOrders = (await FhirApi({ "url": "/NutritionOrder?status=active" })).data?.entry || [];
         let results = []
@@ -97,14 +96,16 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
         let decodedSession = decodeSession(process.env['SECRET_KEY'] as string, token.split(' ')[1])
         if (decodedSession.type == 'valid') {
             let userId = decodedSession.session.userId
-            let { dhmType, dhmVolume, remarks, orderId } = req.body;
-            dhmVolume = parseFloat(dhmVolume)
+            let { dhmType, remarks, orderId, pasteurized, unPasteurized } = req.body;
 
             // total volume dispensed after last closing stock...
 
             let lastClosingStock = await db.stockEntry.findMany({
-                select: { updatedAt: true, dhmVolume: true },
-                where: { dhmType: dhmType },
+                select: {
+                    updatedAt: true,
+                    pasteurized: (pasteurized ? true : false),
+                    unPasteurized: (unPasteurized ? true : false)
+                },
                 orderBy: { updatedAt: 'desc' },
                 take: 1,
             })
@@ -112,7 +113,8 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
 
             let totalVolumeDispensed = await db.order.aggregate({
                 _sum: {
-                    dhmVolume: true
+                    pasteurized: true,
+                    unPasteurized: true
                 },
                 where: {
                     status: "Dispensed",
@@ -122,14 +124,15 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
                 }
             })
 
-            if (lastClosingStock[0].dhmVolume <= (totalVolumeDispensed._sum.dhmVolume || 0 + dhmVolume)) {
+            if (lastClosingStock[0][pasteurized ? "pasteurized" : "unPasteurized"] <=
+                ((totalVolumeDispensed._sum[pasteurized ? "pasteurized" : "unPasteurized"] || 0) + (pasteurized || unPasteurized))) {
                 res.json({ error: "No DHM in stock available to dispense", status: "false" });
                 return
             }
 
             let order = await db.order.create({
                 data: {
-                    dhmType, dhmVolume: dhmVolume, remarks, status: "Dispensed",
+                    dhmType, pasteurized: pasteurized || 0, unPasteurized: unPasteurized || 0, remarks, status: "Dispensed",
                     userId: userId, nutritionOrder: orderId
                 }
             })
