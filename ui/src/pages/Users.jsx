@@ -158,7 +158,8 @@ export default function Users() {
                     <Button startIcon={<Add />} variant="contained" disableElevation sx={{ backgroundColor: "#B00020" }} onClick={handleOpen}>Create New User</Button>
                 </Stack>
                 <p></p>
-
+                <Alert severity="error">Select a user from the list to Reset Password or Delete Account</Alert>
+                <p></p>
                 <DataGrid
                     loading={users ? false : true}
                     rows={users ? users : []}
