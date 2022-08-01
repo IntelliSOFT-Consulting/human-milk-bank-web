@@ -96,8 +96,17 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
         let decodedSession = decodeSession(process.env['SECRET_KEY'] as string, token.split(' ')[1])
         if (decodedSession.type == 'valid') {
             let userId = decodedSession.session.userId
-            let { dhmType, remarks, orderId, pasteurized, unPasteurized } = req.body;
-
+            let { dhmType, remarks, orderId, dhmVolume, category } = req.body;
+            if (category !== "UnPasteurized" && category !== "Pasteurized") {
+                res.statusCode = 400
+                res.json({ error: "Invalid category provided", status: "false" });
+                return
+            }
+            if (!(parseFloat(dhmVolume))) {
+                res.statusCode = 400
+                res.json({ error: "Invalid value for volume provided", status: "false" });
+                return
+            }
             // find nutrition order
             let resource = await (await FhirApi({ "url": `/NutritionOrder/${orderId}` })).data
             resource.status = "completed"
@@ -107,8 +116,8 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
             let lastClosingStock = await db.stockEntry.findMany({
                 select: {
                     updatedAt: true,
-                    pasteurized: (pasteurized ? true : false),
-                    unPasteurized: (unPasteurized ? true : false)
+                    pasteurized: (category === "Pasteurized"),
+                    unPasteurized: (category === "UnPasteurized")
                 },
                 orderBy: { updatedAt: 'desc' },
                 take: 1,
@@ -128,20 +137,21 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
                 }
             })
 
-            if (lastClosingStock[0][pasteurized ? "pasteurized" : "unPasteurized"] <=
-                ((totalVolumeDispensed._sum[pasteurized ? "pasteurized" : "unPasteurized"] || 0) + (pasteurized || unPasteurized))) {
+            if (lastClosingStock[0][((category === "pasteurized") ? "pasteurized" : "unPasteurized")] <=
+                ((totalVolumeDispensed._sum[((category === "pasteurized") ? "pasteurized" : "unPasteurized")]) + (dhmVolume))) {
                 res.json({ error: "No DHM in stock available to dispense", status: "false" });
                 return
             }
 
             let order = await db.order.create({
                 data: {
-                    dhmType, pasteurized: parseFloat(pasteurized) || 0, unPasteurized: parseFloat(unPasteurized) || 0, remarks, status: "Dispensed",
+                    dhmType, pasteurized: parseFloat(((category === "pasteurized") ? dhmVolume : "0")),
+                    unPasteurized: parseFloat(((category === "unPasteurized") ? dhmVolume : "0")), remarks, status: "Dispensed",
                     user: { connect: { id: userId } }, nutritionOrder: orderId
                 }
             })
             // update fhir resource
-            
+
 
             let resp = await (await FhirApi({ "url": `/NutritionOrder/${orderId}`, method: "PUT", data: JSON.stringify(resource) })).data
             // console.log(resp)
@@ -155,9 +165,6 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
         return
     }
 });
-
-
-
 
 
 export default router
