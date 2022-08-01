@@ -2,7 +2,6 @@ import express, { Request, Response } from "express";
 import { requireJWTMiddleware as requireJWT, encodeSession, decodeSession } from "../lib/jwt";
 import db from '../lib/prisma'
 import { FhirApi } from "../lib/fhir";
-import { unpack } from "@prisma/client/runtime";
 
 const router = express.Router()
 router.use(express.json())
