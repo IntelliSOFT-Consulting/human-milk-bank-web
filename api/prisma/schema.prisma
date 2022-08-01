@@ -55,8 +55,8 @@ model Order {
   dhmType        DhmType
   user           User             @relation(fields: [userId], references: [id])
   userId         String
-  pasteurized     Float            @default(0.0)
-  unPasteurized   Float            @default(0.0)
+  pasteurized    Float            @default(0.0)
+  unPasteurized  Float            @default(0.0)
   remarks        String
   nutritionOrder String
   status         DispensingStatus
