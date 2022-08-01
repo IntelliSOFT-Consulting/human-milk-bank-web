@@ -23,10 +23,10 @@ router.post("/", [requireJWT], async (req: Request, res: Response) => {
             let entry = await db.stockEntry.create({
                 data: {
                     pasteurized: parseFloat(pasteurized), unPasteurized: parseFloat(unPasteurized),
-                    dhmType, userId: userId
+                    dhmType, user: { connect: { id: userId } }
                 }
             })
-            res.json({ status: "success", message: "Stock Entry created successfully", id: entry.id })
+            res.json({ status: "success", message: "Stock entry created successfully", id: entry.id })
             return
         }
     } catch (error) {
@@ -98,6 +98,10 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
             let userId = decodedSession.session.userId
             let { dhmType, remarks, orderId, pasteurized, unPasteurized } = req.body;
 
+            // find nutrition order
+            let resource = await (await FhirApi({ "url": `/NutritionOrder/${orderId}` })).data
+            resource.status = "completed"
+
             // total volume dispensed after last closing stock...
 
             let lastClosingStock = await db.stockEntry.findMany({
@@ -109,7 +113,7 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
                 orderBy: { updatedAt: 'desc' },
                 take: 1,
             })
-            console.log(lastClosingStock)
+            console.log(userId)
 
             let totalVolumeDispensed = await db.order.aggregate({
                 _sum: {
@@ -132,13 +136,12 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
 
             let order = await db.order.create({
                 data: {
-                    dhmType, pasteurized: pasteurized || 0, unPasteurized: unPasteurized || 0, remarks, status: "Dispensed",
-                    userId: userId, nutritionOrder: orderId
+                    dhmType, pasteurized: parseFloat(pasteurized) || 0, unPasteurized: parseFloat(unPasteurized) || 0, remarks, status: "Dispensed",
+                    user: { connect: { id: userId } }, nutritionOrder: orderId
                 }
             })
             // update fhir resource
-            let resource = await (await FhirApi({ "url": `/NutritionOrder/${orderId}` })).data
-            resource.status = "completed"
+            
 
             let resp = await (await FhirApi({ "url": `/NutritionOrder/${orderId}`, method: "PUT", data: JSON.stringify(resource) })).data
             // console.log(resp)
