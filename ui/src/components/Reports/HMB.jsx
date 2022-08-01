@@ -9,13 +9,12 @@ export default function LactationSupport({ results }) {
 
     let [open, setOpen] = useState(false)
     let [message, setMessage] = useState(false)
-    
+
     let descriptions = {
         infantsOnDHM: "Infants on DHM",
         averageLengthOfDHMUse: "Average DHM use",
         totalDHMAvailable: "Total DHM available",
         infantsFullyReceivingDHM: "Infants fully receiving DHM",
-        totalVolumeOfDHM: "Total volume of DHM",
         averageVolumeOfDHMUsePerDay: "Average volume of DHM use per day",
         infantsPartiallyReceivingDHM: "Infants partially receiving DHM",
     }
@@ -40,14 +39,26 @@ export default function LactationSupport({ results }) {
                     </>
                     :
                     <Grid container spacing={1} padding=".5em" >
+                        
                         {(Object.keys(results).length > 0) ? Object.keys(results).map((report) => {
                             if (Object.keys(descriptions).indexOf(report) > -1) {
                                 return <Grid item xs={12} md={12} lg={4}>
                                     <InfoCard value={results[report]} title={descriptions[report]} />
                                 </Grid>
                             }
+
                         }) :
                             ((results.length > 0) && <Typography sx={{ textAlign: "center" }}>No reports defined</Typography>)
+                        }
+                        {(Object.keys(results).length > 0) &&
+                            <>
+                                <Grid item xs={12} md={12} lg={4}>
+                                    <InfoCard value={results.totalVolumeOfDHM.parsteurized} title={"Parsteurized DHM Volume"} />
+                                </Grid>
+                                <Grid item xs={12} md={12} lg={4}>
+                                    <InfoCard value={results.totalVolumeOfDHM.unParsteurized} title={"UnParsteurized DHM Volume"} />
+                                </Grid>
+                            </>
                         }
                     </Grid>}
             </Container>
