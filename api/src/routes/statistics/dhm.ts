@@ -25,7 +25,7 @@ router.get('/', [requireJWTMiddleware], async (req: Request, res: Response) => {
             "dhmInfants": dhmInfants || 0,
             "dhmVolume": dhmVolume,
             "dhmAverage": ((dhmVolume.parsteurized + dhmVolume.unParsteurized) / dhmInfants) || 0,
-            "fullyReceiving": await avgDaysToReceivingMothersOwnMilk(),
+            "fullyReceiving": dhmInfants,
             "dhmLength": "3 days",
             "data": days.map((day) => {
                 let totalBabies = (Math.floor(Math.random() * 50))
