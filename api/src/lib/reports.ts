@@ -364,8 +364,10 @@ export let countPatients = (observations: any[]) => {
     // console.log(observations)
     let babies = [];
     for (let observation of observations) {
-        if (babies.indexOf(observation.resource.subject.reference) < 0) {
-            babies.push(observation.resource.subject.reference)
+        if (observation.resource.resourceType === "Observation") {
+            if (babies.indexOf(observation.resource.subject.reference) < 0) {
+                babies.push(observation.resource.subject.reference)
+            }
         }
     }
     let unique = [...new Set(babies)]
@@ -439,6 +441,31 @@ export let daysToReceivingMothersOwnMilk = async (patientId: string) => {
         return "-"
     }
     let resource = targetDate.entry[0].resource
+}
+
+export let growthPatientLevel = async (patients: any[]) => {
+    let report: any[] = [];
+    for (let p of patients) {
+        let patient = await (await FhirApi({ url: `/Patient/${p}` })).data
+        let mother = await (await FhirApi({ url: `/Patient?link=${p}` })).data
+        mother = mother.entry[0]
+        let currentWeightAndRateChange = await weightAndRateChange(p)
+        let weightLoss: any = (currentWeightAndRateChange.weight - await getBirthWeightValue(p))
+        if (weightLoss < 0) {
+            weightLoss = ((weightLoss / currentWeightAndRateChange.weight) * 100).toFixed(2)
+        } else {
+            weightLoss = 0
+        }
+        let durationOfStay = Math.floor((new Date().getTime() - new Date(patient.meta.lastUpdated).getTime()) / (8.64e+7))
+        report.push({
+            ipNumber: mother.resource.id,
+            id: p,
+            durationOfStay,
+            babyNames: (patient.name[0].family + " " + patient.name[0].given[0]),
+            weightLoss
+        })
+    }
+    return report
 }
 
 export let generalPatientLevelReport = async (patients: any[]) => {
@@ -530,6 +557,11 @@ export let lowBirthWeight = async () => {
 export let getBirthWeight = async (patientId: string) => {
     let gestation = await (await FhirApi({ url: `/Observation?code=8339-4&patient=${patientId}` })).data
     return gestation?.entry ? ((gestation.entry[0].resource.valueQuantity.value < 2500) ? "Low" : (gestation.entry[0].resource.valueQuantity.value < 1500) ? "Very Low" : (gestation.entry[0].resource.valueQuantity.value < 1500) ? "Extermely Low" : "Normal") : "-"
+}
+
+export let getBirthWeightValue = async (patientId: string) => {
+    let gestation = await (await FhirApi({ url: `/Observation?code=8339-4&patient=${patientId}` })).data
+    return ((gestation?.entry) ? gestation.entry[0].resource.valueQuantity.value : 0)
 }
 
 export let getExpressionFrequency = async (patientId: string) => {

@@ -16,8 +16,8 @@ router.get('/', [requireJWTMiddleware], async (req: Request, res: Response) => {
             report: {
                 infantsOnDHM,
                 averageLengthOfDHMUse: 0,
-                totalDHMAvailable: 0,
-                infantsFullyReceivingDHM: 0,
+                totalDHMAvailable: await availableDHMVolume(),
+                infantsFullyReceivingDHM: infantsOnDHM,
                 totalVolumeOfDHM,
                 averageVolumeOfDHMUsePerDay: 0,
                 infantsPartiallyReceivingDHM: 0,
