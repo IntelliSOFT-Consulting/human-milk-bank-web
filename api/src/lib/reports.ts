@@ -201,8 +201,8 @@ export let expressingTime = async () => {
     for (let i of observations) {
         let date = (new Date(i.resource.valueDateTime)).getTime()
         let month = new Date(i.resource.valueDateTime).toLocaleString('default', { month: 'short' })
-        console.log(months)
-        months[month] = { [i.resource.subject.reference]: months[month][i.resource.subject.reference] || 0 }
+        // console.log(months)
+        months[month] = { ...months[month], [i.resource.subject.reference]: months[month][i.resource.subject.reference] || 0 }
 
         if (date >= lastYear) {
             months[month][i.resource.subject.reference]++
@@ -213,8 +213,9 @@ export let expressingTime = async () => {
     let underSeven = 0;
     let aboveSeven = 0;
     // do the counts
+    console.log(months)
     for (let i of Object.keys(months)) {
-        // console.log(i)
+        console.log(i)
         for (let x of Object.keys(months[i])) {
             if (months[i][x] < 5) {
                 underFive++
@@ -230,6 +231,8 @@ export let expressingTime = async () => {
     return results
 
 }
+
+// expressingTime()
 
 
 export let mortalityRateByMonth = async () => {
