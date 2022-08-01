@@ -15,6 +15,7 @@ import InfantNutrition from '../components/Reports/InfantNutrition';
 import GeneralPatientLevel from '../components/Reports/GeneralPatientLevel';
 import Feeding from '../components/Reports/Feeding';
 import LactationSupportPatientLevel from '../components/Reports/LactationSupportPatientLevel';
+import GrowthPatientLevel from '../components/Reports/GrowthPatientLevel';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import { PrintRounded } from '@mui/icons-material';
@@ -40,7 +41,7 @@ export default function Reports() {
         "Lactation Support - Patient level": { url: "/statistics/lactation-support/patient-level" },
         "Infant Nutrition/Growth": { url: "/statistics/growth" },
         "Human Milk Bank": { url: "/statistics/hmb" },
-    }
+        "Infant Nutrition/Growth - Patient Level": { url: "/statistics/growth/patient-level" },    }
 
     let exportReport = async () => {
         setExporting(true)
@@ -207,6 +208,7 @@ export default function Reports() {
                                 {(report === "General Report") && <GeneralPatientLevel results={results || null} />}
                                 {(report === "Lactation Support - Patient level") && <LactationSupportPatientLevel results={results || null} />}
                                 {(report === "Infant Nutrition/Growth") && <InfantNutrition results={results || null} />}
+                                {(report === "Infant Nutrition/Growth - Patient Level") && <GrowthPatientLevel results={results || null} />}
                                 {(report === "Lactation Support") && <LactationSupport results={results || null} />}
                                 {(report === "Human Milk Bank") && <HMB results={results || null} />}
 

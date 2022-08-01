@@ -53,10 +53,10 @@ export default function LactationSupport({ results }) {
                         {(Object.keys(results).length > 0) &&
                             <>
                                 <Grid item xs={12} md={12} lg={4}>
-                                    <InfoCard value={results.totalVolumeOfDHM.parsteurized} title={"Parsteurized DHM Volume"} />
+                                    <InfoCard value={results.totalVolumeOfDHM.parsteurized} title={"Pasteurized DHM Volume"} />
                                 </Grid>
                                 <Grid item xs={12} md={12} lg={4}>
-                                    <InfoCard value={results.totalVolumeOfDHM.unParsteurized} title={"UnParsteurized DHM Volume"} />
+                                    <InfoCard value={results.totalVolumeOfDHM.unParsteurized} title={"UnPasteurized DHM Volume"} />
                                 </Grid>
                             </>
                         }

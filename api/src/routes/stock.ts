@@ -101,6 +101,11 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
                 res.json({ error: "Invalid category provided", status: "false" });
                 return
             }
+            if(!remarks || !orderId || !dhmType || !dhmVolume){
+                res.statusCode = 400
+                res.json({ error: "provide all required fields: (dhmType, remarks, orderId, dhmVolume, category)", status: "false" });
+                return
+            }
             if (!(parseFloat(dhmVolume))) {
                 res.statusCode = 400
                 res.json({ error: "Invalid value for volume provided", status: "false" });
