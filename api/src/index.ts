@@ -20,6 +20,7 @@ import HMB from './routes/statistics/hmb'
 import General from './routes/statistics/general'
 import LactationSupport from './routes/statistics/lactation-support'
 import Feeding from './routes/statistics/feeding'
+import Import from './routes/import'
 
 
 
@@ -37,6 +38,7 @@ app.use('/statistics', Statistics)
 app.use('/baby-growth', BabyGrowth)
 app.use('/hourly-feed', HourlyFeed)
 app.use('/milk-expression', MilkExpression)
+app.use('/import', Import)
 app.use('/dhm', DHM)
 app.use('/stock', Stock)
 
