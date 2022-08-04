@@ -1,19 +1,25 @@
 // Import only what we need from express
-import { Router, Request, Response } from 'express';
+import express,{ Router, Request, Response } from 'express';
+import { FhirApi } from '../lib/fhir';
+import { requireJWTMiddleware } from '../lib/jwt';
 
-// Assign router to the express.Router() instance
 const router: Router = Router();
+router.use(express.json({limit:"100mb"}))
 
-// The / here corresponds to the route that the WelcomeController
-// is mounted on in the server.ts file.
-// In this case it's /welcome
 
-router.get('/:id', async (req: Request, res: Response) => {
-    let { id } = req.params;
 
-    // Greet the given name
-    // res.send(`Hello, ${name}`);
+router.post('/', [requireJWTMiddleware], async (req: Request, res: Response) => {
+    try {
+        // console.log(req.body)
+        let response = await FhirApi({ url: "/", method: 'POST', data: JSON.stringify(req.body) })
+        console.log(response.data)
+        return
+    } catch (error) {
+        console.log(error)
+        res.statusCode = 400
+        res.json({ error, status: "error" });
+        return
+    }
 });
 
-// Export the express.Router() instance to be used by server.ts
 export default router;
