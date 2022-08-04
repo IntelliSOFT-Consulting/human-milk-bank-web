@@ -13,7 +13,7 @@ export default function LactationSupport({ results }) {
     let descriptions = {
         infantsOnDHM: "Infants on DHM",
         averageLengthOfDHMUse: "Average DHM use",
-        totalDHMAvailable: "Total DHM available",
+        // totalDHMAvailable: "Total DHM available",
         infantsFullyReceivingDHM: "Infants fully receiving DHM",
         averageVolumeOfDHMUsePerDay: "Average volume of DHM use per day",
         infantsPartiallyReceivingDHM: "Infants partially receiving DHM",

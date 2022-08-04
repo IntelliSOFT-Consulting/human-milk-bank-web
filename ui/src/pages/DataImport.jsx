@@ -11,7 +11,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-import { FhirApi } from '../lib/api'
+import { apiHost, FhirApi } from '../lib/api'
 import { SignalCellularNullSharp } from '@mui/icons-material'
 
 export default function DataImport() {
@@ -43,8 +43,14 @@ export default function DataImport() {
         let d;
         d = await selectedFile.text()
         console.log(JSON.parse(d))
-        // let response = await FhirApi({url:"https://hapi.fhir.org/baseR4", method:"POST", data:d})
-        let response = await FhirApi({url:"/api/fhir", method:"POST", data:d})
+        let response = await fetch(`${apiHost}/import`, {
+            method: "POST",
+            body: JSON.stringify(JSON.parse(d)),
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${getCookie('token')}`
+            }
+        })
 
         // setMessage("PayloadTooLargeError: request entity too large")
         console.log(response)
@@ -54,7 +60,7 @@ export default function DataImport() {
             setOpen(false)
         }, [1500])
         return
-        
+
     }
 
 
@@ -104,7 +110,7 @@ export default function DataImport() {
                                             <Grid item xs={12} md={12} lg={8}>
                                                 <label htmlFor="contained-button-file">
                                                     <Input accept="application/JSON" id="import-file" type="file" placeholder={"FHIR Bundle (.json file)"} onChange={e => { setFile(e.target.files[0]) }} />
-                                                    <Button sx={{backgroundColor:"#B00020"}} variant="contained" onClick={e => { importData() }} component="span">
+                                                    <Button sx={{ backgroundColor: "#B00020" }} variant="contained" onClick={e => { importData() }} component="span">
                                                         Import Data
                                                     </Button>
                                                 </label>
@@ -119,7 +125,7 @@ export default function DataImport() {
 
                                     </Grid>
                                     <p></p>
-                                    
+
                                     <p></p>
                                 </TabPanel>
 

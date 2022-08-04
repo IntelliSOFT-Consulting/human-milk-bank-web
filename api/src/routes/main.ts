@@ -1,13 +1,15 @@
-import express from "express";
-import SwaggerUI from 'swagger-ui-express'
+import express, { Request, Response } from "express";
 
-import swaggerDoc from '../swagger.json'
-// https://levelup.gitconnected.com/how-to-add-swagger-ui-to-existing-node-js-and-express-js-project-2c8bad9364ce
 
 const router = express.Router()
 router.use(express.json())
 
+router.get("/", async (req: Request, res: Response) => {
+    res.statusCode = 200
+    res.json({
+        "status": "ok"
+    })
+    return
+})
 
-router.use('/', SwaggerUI.serve)
-router.get('/', SwaggerUI.setup(swaggerDoc))
 export default router
