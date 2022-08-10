@@ -25,7 +25,7 @@ router.get('/', [requireJWTMiddleware], async (req: Request, res: Response) => {
         {
             "dhmInfants": dhmInfants || 0,
             "dhmVolume": dhmVolume,
-            "dhmAverage": ((dhmVolume.parsteurized + dhmVolume.unParsteurized) / dhmInfants) || 0,
+            "dhmAverage": ((dhmVolume.parsteurized + dhmVolume.unParsteurized) / dhmInfants || 0) || 0,
             "fullyReceiving": dhmInfants,
             "dhmLength": "3 days",
             "data": days.map((day) => {
