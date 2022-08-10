@@ -17,7 +17,8 @@ let days = [
 router.get('/', [requireJWTMiddleware], async (req: Request, res: Response) => {
     // let selectFields = []
     let dhmVolume = await availableDHMVolume()
-    let dhmInfants = await generateReport("infantsOnDHM") || 0
+    let dhmInfants = countPatients(await generateReport("infantsOnDHM")) || 0
+
     let fullyReceiving = Math.floor(dhmInfants * Math.random())
 
     res.json(

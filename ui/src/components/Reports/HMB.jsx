@@ -13,7 +13,6 @@ export default function LactationSupport({ results }) {
     let descriptions = {
         infantsOnDHM: "Infants on DHM",
         averageLengthOfDHMUse: "Average DHM use",
-        // totalDHMAvailable: "Total DHM available",
         infantsFullyReceivingDHM: "Infants fully receiving DHM",
         averageVolumeOfDHMUsePerDay: "Average volume of DHM use per day",
         infantsPartiallyReceivingDHM: "Infants partially receiving DHM",
@@ -39,7 +38,7 @@ export default function LactationSupport({ results }) {
                     </>
                     :
                     <Grid container spacing={1} padding=".5em" >
-                        
+
                         {(Object.keys(results).length > 0) ? Object.keys(results).map((report) => {
                             if (Object.keys(descriptions).indexOf(report) > -1) {
                                 return <Grid item xs={12} md={12} lg={4}>
@@ -53,10 +52,10 @@ export default function LactationSupport({ results }) {
                         {(Object.keys(results).length > 0) &&
                             <>
                                 <Grid item xs={12} md={12} lg={4}>
-                                    <InfoCard value={results.totalVolumeOfDHM.parsteurized} title={"Pasteurized DHM Volume"} />
+                                    <InfoCard value={results.totalVolumeOfDHM ? results.totalVolumeOfDHM.parsteurized : ''} title={"Pasteurized DHM Volume"} />
                                 </Grid>
                                 <Grid item xs={12} md={12} lg={4}>
-                                    <InfoCard value={results.totalVolumeOfDHM.unParsteurized} title={"UnPasteurized DHM Volume"} />
+                                    <InfoCard value={results.totalVolumeOfDHM ? results.totalVolumeOfDHM.unParsteurized : ''} title={"UnPasteurized DHM Volume"} />
                                 </Grid>
                             </>
                         }

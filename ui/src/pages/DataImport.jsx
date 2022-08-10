@@ -42,10 +42,10 @@ export default function DataImport() {
         }
         let d;
         d = await selectedFile.text()
-        console.log(JSON.parse(d))
+        // console.log(d)
         let response = await fetch(`${apiHost}/import`, {
             method: "POST",
-            body: JSON.stringify(JSON.parse(d)),
+            body: JSON.stringify({ contents: String(d) }),
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${getCookie('token')}`
@@ -109,7 +109,7 @@ export default function DataImport() {
                                         <Grid container spacing={1} padding=".5em" >
                                             <Grid item xs={12} md={12} lg={8}>
                                                 <label htmlFor="contained-button-file">
-                                                    <Input accept="application/JSON" id="import-file" type="file" placeholder={"FHIR Bundle (.json file)"} onChange={e => { setFile(e.target.files[0]) }} />
+                                                    <Input id="import-file" type="file" placeholder={"FHIR Bundle (.json file)"} onChange={e => { setFile(e.target.files[0]) }} />
                                                     <Button sx={{ backgroundColor: "#B00020" }} variant="contained" onClick={e => { importData() }} component="span">
                                                         Import Data
                                                     </Button>
