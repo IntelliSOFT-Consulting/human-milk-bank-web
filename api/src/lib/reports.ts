@@ -597,8 +597,8 @@ export let weightAndRateChange = async (patientId: string) => {
     if (!weightValues) {
         return { weight: 0, rate: 0 }
     }
-    let lastWeight = weightValues[1].resource.valueQuantity.value ?? 0
-    let currentWeight = weightValues[0].resource.valueQuantity.value ?? 0
+    let lastWeight = weightValues[1] ? weightValues[1].resource.valueQuantity.value : 0
+    let currentWeight = weightValues[0] ? weightValues[0].resource.valueQuantity.value : 0
     let rate = (currentWeight - lastWeight) / lastWeight * 100
     return { weight: currentWeight, rate }
 }
