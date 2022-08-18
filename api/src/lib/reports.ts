@@ -10,33 +10,33 @@ _months = _months.concat(_allMonths.slice(0, (_allMonths.indexOf(currentMonth) +
 
 const allMonths = _months;
 
-export let getTotalDHMOrders = async (all: boolean = false) => {
-    let lastStockEntryTime = await (await getLastStockEntry())?.createdAt || null
+export let getTotalDHMOrders = async (dhmType: string = "Preterm") => {
+    let lastStockEntryTime = (await getLastStockEntry(dhmType))?.createdAt
     let totalVolume = await db.order.aggregate({
         _sum: { pasteurized: true, unPasteurized: true },
         where: {
-            ...(!all) && {
-                ...(lastStockEntryTime) && {
-                    createdAt: {
-                        gte: lastStockEntryTime
-                    }
-                }
+            dhmType: (dhmType === "Term") ? "Term" : "Preterm",
+            createdAt: {
+                gte: lastStockEntryTime
             }
         }
     })
-    return { pasteurized: totalVolume._sum.pasteurized, unPasteurized: totalVolume._sum.unPasteurized }
+    return { pasteurized: totalVolume._sum.pasteurized ?? 0, unPasteurized: totalVolume._sum.unPasteurized ?? 0 }
 }
 
-export let availableDHMVolume = async () => {
-    let parsteurized = (await getLastStockEntry())?.pasteurized || 0 - (await (await getTotalDHMOrders()).pasteurized || 0)
-    let unParsteurized = (await getLastStockEntry())?.pasteurized || 0 - (await (await getTotalDHMOrders()).pasteurized || 0)
-    if (parsteurized < 0) { parsteurized = 0 }
-    if (unParsteurized < 0) { unParsteurized = 0 }
-    return { unParsteurized, parsteurized }
+export let availableDHMVolume = async (dhmType: string = "Preterm") => {
+    let pasteurized = (await getLastStockEntry(dhmType)).pasteurized - (await getTotalDHMOrders(dhmType)).pasteurized
+    let unPasteurized = (await getLastStockEntry(dhmType)).unPasteurized - (await getTotalDHMOrders(dhmType)).unPasteurized
+    if (pasteurized < 0) { pasteurized = 0 }
+    if (unPasteurized < 0) { unPasteurized = 0 }
+    return { unPasteurized, pasteurized }
 }
 
-let getLastStockEntry = async () => {
+let getLastStockEntry = async (dhmType: string = "Preterm") => {
     let time = await db.stockEntry.findMany({
+        where: {
+            dhmType: (dhmType === "Term") ? "Term" : "Preterm"
+        },
         orderBy: {
             updatedAt: 'desc'
         },

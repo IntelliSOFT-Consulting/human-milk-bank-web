@@ -16,16 +16,32 @@ router.post("/", [requireJWT], async (req: Request, res: Response) => {
         let decodedSession = decodeSession(process.env['SECRET_KEY'] as string, token.split(' ')[1])
         if (decodedSession.type == 'valid') {
             let userId = decodedSession.session.userId
-            let { unPasteurized, pasteurized, dhmType } = req.body;
-            unPasteurized = parseFloat(unPasteurized)
-            pasteurized = parseFloat(pasteurized)
-            let entry = await db.stockEntry.create({
-                data: {
-                    pasteurized: parseFloat(pasteurized), unPasteurized: parseFloat(unPasteurized),
-                    dhmType, user: { connect: { id: userId } }
-                }
-            })
-            res.json({ status: "success", message: "Stock entry created successfully", id: entry.id })
+            let { preterm, term } = req.body;
+            if (Object.keys(preterm).indexOf("pasteurized") < 0 || Object.keys(preterm).indexOf("unPasteurized") < 0) {
+                res.json({ status: "error", message: "pasteurized and unPasteurized required in field *term*" })
+                return
+            }
+            if (Object.keys(term).indexOf("pasteurized") < 0 || Object.keys(term).indexOf("unPasteurized") < 0) {
+                res.json({ status: "error", message: "pasteurized and unPasteurized required in field *term*" })
+                return
+            }
+            if (preterm) {
+                let pretermEntry = await db.stockEntry.create({
+                    data: {
+                        pasteurized: parseFloat(preterm.pasteurized), unPasteurized: parseFloat(preterm.unPasteurized),
+                        dhmType: "Preterm", user: { connect: { id: userId } }
+                    }
+                })
+            }
+            if (term) {
+                let termEntry = await db.stockEntry.create({
+                    data: {
+                        pasteurized: parseFloat(preterm.pasteurized), unPasteurized: parseFloat(preterm.unPasteurized),
+                        dhmType: "Term", user: { connect: { id: userId } }
+                    }
+                })
+            }
+            res.json({ status: "success", message: "Stock entry created successfully" })
             return
         }
     } catch (error) {
@@ -101,7 +117,7 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
                 res.json({ error: "Invalid category provided", status: "false" });
                 return
             }
-            if(!remarks || !orderId || !dhmType || !dhmVolume){
+            if (!remarks || !orderId || !dhmType || !dhmVolume) {
                 res.statusCode = 400
                 res.json({ error: "provide all required fields: (dhmType, remarks, orderId, dhmVolume, category)", status: "false" });
                 return
