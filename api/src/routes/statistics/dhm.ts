@@ -12,20 +12,23 @@ let days = [
 ]
 
 
-
 // DHM Statistics 
 router.get('/', [requireJWTMiddleware], async (req: Request, res: Response) => {
     // let selectFields = []
-    let dhmVolume = await availableDHMVolume()
+    let pretermDhmVolume = await availableDHMVolume("Preterm")
+    let termDhmVolume = await availableDHMVolume("Term")
     let dhmInfants = countPatients(await generateReport("infantsOnDHM")) || 0
+
+    let dhmTotal = (pretermDhmVolume.pasteurized + pretermDhmVolume.unPasteurized + termDhmVolume.pasteurized + termDhmVolume.unPasteurized)
+
 
     let fullyReceiving = Math.floor(dhmInfants * Math.random())
 
     res.json(
         {
             "dhmInfants": dhmInfants ?? 0,
-            "dhmVolume": dhmVolume,
-            "dhmAverage": ((dhmVolume.parsteurized + dhmVolume.unParsteurized) / dhmInfants ? dhmInfants : 0) || 0,
+            "dhmVolume": { term: termDhmVolume, preterm: pretermDhmVolume },
+            "dhmAverage": (dhmTotal / dhmInfants),
             "fullyReceiving": dhmInfants,
             "dhmLength": "3 days",
             "data": days.map((day) => {
