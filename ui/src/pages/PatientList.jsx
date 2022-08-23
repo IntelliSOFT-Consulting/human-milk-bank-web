@@ -47,14 +47,15 @@ export default function PatientList() {
 
     let getPatients = async () => {
         setLoading(true)
-        let data = await FhirApi({ url: '/fhir/Patient?_count=100', method: 'GET' })
+        let data = await FhirApi({ url: '/fhir/Patient?_count=99999', method: 'GET' })
         // console.log(data)
         let p = data.data.entry.map((i) => {
             let r = i.resource
             console.log(r.name)
             return {
                 id: r.id, lastName: r.name[0].family || " ", firstName: r.name[0].given[0] || " ",
-                age: (r.birthDate) ? `${(Math.floor((new Date().getTime() - new Date(r.birthDate).getTime()) / 8.64e+7))} days` : "-"
+                age: (r.birthDate) ? `${(Math.floor((new Date().getTime() - new Date(r.birthDate).getTime()) / 8.64e+7))} days` : "-",
+                discharge:(r.active)? "Discharge": "Admitted"
             }
         })
         setPatients(p)
@@ -84,7 +85,7 @@ export default function PatientList() {
         { field: 'lastName', headerName: 'Last Name', width: 250, editable: true },
         { field: 'firstName', headerName: 'First Name', width: 250, editable: true },
         { field: 'age', headerName: 'Age', width: 150 },
-        // { field: 'role', headerName: 'Patient on DHM?', width: 150 }
+        { field: 'discharged', headerName: 'Discharged?', width: 150 }
     ];
 
     let isMobile = useMediaQuery('(max-width:600px)');
