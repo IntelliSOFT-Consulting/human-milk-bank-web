@@ -55,7 +55,7 @@ export default function PatientList() {
             return {
                 id: r.id, lastName: r.name[0].family || " ", firstName: r.name[0].given[0] || " ",
                 age: (r.birthDate) ? `${(Math.floor((new Date().getTime() - new Date(r.birthDate).getTime()) / 8.64e+7))} days` : "-",
-                discharged:(r.active)? "Discharge": "Admitted"
+                discharged:(r.active)? "Discharged": "Admitted"
             }
         })
         setPatients(p)
