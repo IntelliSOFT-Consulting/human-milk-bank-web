@@ -12,8 +12,8 @@ let currentMonth = (new Date()).toLocaleString('default', { month: 'short' })
 let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
 let _today = days[(new Date().getDay())]
-let _days = days.slice(days.indexOf(_today) + 1).concat()
-_days = _days.concat(days.slice(0, (days.indexOf(_today) + 1)))
+let _days = days.slice(days.indexOf(_today)).concat()
+_days = _days.concat(days.slice(0, (days.indexOf(_today))))
 console.log(_days)
 
 
@@ -22,10 +22,13 @@ console.log(_days)
 //     return
 // }
 
-let _months = _allMonths.slice(_allMonths.indexOf(currentMonth) + 1).concat()
-_months = _months.concat(_allMonths.slice(0, (_allMonths.indexOf(currentMonth) + 1)))
+let _months = _allMonths.slice(_allMonths.indexOf(currentMonth)).concat()
+_months = _months.concat(_allMonths.slice(0, (_allMonths.indexOf(currentMonth))))
 
+
+console.log(_months)
 const allMonths = _months;
+
 
 export let getTotalDHMOrders = async (dhmType: string = "Preterm") => {
     let lastStockEntryTime = (await getLastStockEntry(dhmType))?.createdAt
