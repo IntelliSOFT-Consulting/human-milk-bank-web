@@ -5,6 +5,23 @@ import db from './prisma'
 const _allMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 let currentMonth = (new Date()).toLocaleString('default', { month: 'short' })
 
+
+
+
+
+let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
+let _today = days[(new Date().getDay())]
+let _days = days.slice(days.indexOf(_today) + 1).concat()
+_days = _days.concat(days.slice(0, (days.indexOf(_today) + 1)))
+console.log(_days)
+
+
+// let totalDHMOrders = async (days: number = 7)  => {
+//     let orders = 
+//     return
+// }
+
 let _months = _allMonths.slice(_allMonths.indexOf(currentMonth) + 1).concat()
 _months = _months.concat(_allMonths.slice(0, (_allMonths.indexOf(currentMonth) + 1)))
 
@@ -183,6 +200,49 @@ export let firstFeeding = async () => {
         }
     }
     return categories
+}
+
+export let dhmConsumed = async () => {
+    let week: { [index: string]: any } = {};
+    for (let day of _days) {
+        week[day] = { preterm: { pasteurized: 0, unPasteurized: 0, total: 0 }, term: { pasteurized: 0, unPasteurized: 0, total: 0 } }
+    }
+
+    try {
+        let now = new Date()
+        let lastWeek = new Date(now.setDate(now.getDate() - 7))
+        lastWeek = new Date(lastWeek.setHours(0, 0, 0, 0))
+        let orders = await db.order.findMany({
+            where: {
+                updatedAt: {
+                    gte: lastWeek
+                },
+                status: "Dispensed"
+            }
+        })
+        orders.map((order) => {
+
+            let _day = days[(new Date(order.updatedAt).getDay())]
+            week[_day][(order.dhmType).toLowerCase()].pasteurized += order.pasteurized
+            week[_day][(order.dhmType).toLowerCase()].unPasteurized += order.unPasteurized
+            week[_day][(order.dhmType).toLowerCase()].total += (order.pasteurized + order.unPasteurized)
+
+        })
+
+    } catch (e) {
+        console.log(e)
+    }
+    // console.log(week)
+    let res: any = []
+    Object.keys(week).map((day) => {
+        res.push({
+            day: day,
+            preterm: week.preterm,
+            term: week.term
+        })
+    })
+    return res
+
 }
 
 

@@ -1,12 +1,11 @@
 import express, { Request, Response } from "express";
-import { requireJWTMiddleware as requireJWT, encodeSession, decodeSession } from "../lib/jwt";
+import { requireJWTMiddleware as requireJWT, decodeSession } from "../lib/jwt";
 import db from '../lib/prisma'
 import { FhirApi } from "../lib/fhir";
 
 const router = express.Router()
 router.use(express.json())
 
-// role based access?? which users
 
 
 //create a stock entry
@@ -77,6 +76,7 @@ router.get("/orders", async (req: Request, res: Response) => {
             }
             let encounterObservations = (await FhirApi({ "url": "/" + resource.encounter.reference + "/$everything?_count=10000" })).data?.entry || [];
             // console.log(encounterObservations)
+            // change this //
             let observationCodes: any = {
                 dhmType: "DHM-Type",
                 dhmReason: "DHM-Reason",
@@ -171,8 +171,6 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
                 }
             })
             // update fhir resource
-
-
             let resp = await (await FhirApi({ "url": `/NutritionOrder/${orderId}`, method: "PUT", data: JSON.stringify(resource) })).data
             // console.log(resp)
             res.json({ status: "success", message: "Order processed successfully", id: order.id })
