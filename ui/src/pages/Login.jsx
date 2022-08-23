@@ -58,7 +58,7 @@ export default function Login() {
         <>
             <Paper sx={{ backgroundColor: "#37379b", color: 'white', minWidth: '100%' }}>
                 <br />
-                <Typography variant="h5" sx={{ textAlign: "center", fontWeight: 'bold' }}>Neonatal Nutrition Digital Adaptation Kit</Typography>
+                <Typography variant="h5" sx={{ textAlign: "center", fontWeight: 'bold' }}>Newborn Nutrition Digital Adaptation Kit</Typography>
                 <br />
             </Paper>
             {/* <br/> */}
