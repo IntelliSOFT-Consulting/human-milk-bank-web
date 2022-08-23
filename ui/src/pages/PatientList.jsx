@@ -55,7 +55,7 @@ export default function PatientList() {
             return {
                 id: r.id, lastName: r.name[0].family || " ", firstName: r.name[0].given[0] || " ",
                 age: (r.birthDate) ? `${(Math.floor((new Date().getTime() - new Date(r.birthDate).getTime()) / 8.64e+7))} days` : "-",
-                discharge:(r.active)? "Discharge": "Admitted"
+                discharged:(r.active)? "Discharge": "Admitted"
             }
         })
         setPatients(p)
@@ -84,7 +84,7 @@ export default function PatientList() {
         { field: 'id', headerName: 'Patient ID', width: 150, editable: true },
         { field: 'lastName', headerName: 'Last Name', width: 250, editable: true },
         { field: 'firstName', headerName: 'First Name', width: 250, editable: true },
-        { field: 'age', headerName: 'Age', width: 150 },
+        { field: 'age', headerName: 'Age', width: 100 },
         { field: 'discharged', headerName: 'Discharged?', width: 150 }
     ];
 
