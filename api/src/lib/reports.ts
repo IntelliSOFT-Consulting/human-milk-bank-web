@@ -222,6 +222,7 @@ export let dhmConsumed = async () => {
             }
         })
         orders.map((order: any) => {
+            console.log(order)
 
             let _day = days[(new Date(order.updatedAt).getDay())]
             week[_day][(order.dhmType).toLowerCase()]["pasteurized"] += order.pasteurized
@@ -236,10 +237,11 @@ export let dhmConsumed = async () => {
     // console.log(week)
     let res: any = []
     Object.keys(week).map((day) => {
+        console.log(week)
         res.push({
             day: day,
-            preterm: week.preterm,
-            term: week.term
+            preterm: week[day].preterm,
+            term: week[day].term
         })
     })
     console.log(res)
@@ -247,7 +249,7 @@ export let dhmConsumed = async () => {
 
 }
 
-dhmConsumed()
+// dhmConsumed()
 
 export let expressingTime = async () => {
     let months: { [index: string]: any } = {};
