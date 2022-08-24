@@ -12,9 +12,8 @@ let currentMonth = (new Date()).toLocaleString('default', { month: 'short' })
 let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
 let _today = days[(new Date().getDay())]
-let _days = days.slice(days.indexOf(_today)).concat()
-_days = _days.concat(days.slice(0, (days.indexOf(_today))))
-console.log(_days)
+let _days = days.slice(days.indexOf(_today) + 1).concat()
+_days = _days.concat(days.slice(0, (days.indexOf(_today) + 1)))
 
 
 // let totalDHMOrders = async (days: number = 7)  => {
@@ -22,11 +21,9 @@ console.log(_days)
 //     return
 // }
 
-let _months = _allMonths.slice(_allMonths.indexOf(currentMonth)).concat()
-_months = _months.concat(_allMonths.slice(0, (_allMonths.indexOf(currentMonth))))
+let _months = _allMonths.slice(_allMonths.indexOf(currentMonth) + 1).concat()
+_months = _months.concat(_allMonths.slice(0, (_allMonths.indexOf(currentMonth) + 1)))
 
-
-console.log(_months)
 const allMonths = _months;
 
 
@@ -210,6 +207,7 @@ export let dhmConsumed = async () => {
     for (let day of _days) {
         week[day] = { preterm: { pasteurized: 0, unPasteurized: 0, total: 0 }, term: { pasteurized: 0, unPasteurized: 0, total: 0 } }
     }
+    console.log(week)
 
     try {
         let now = new Date()
@@ -223,12 +221,12 @@ export let dhmConsumed = async () => {
                 status: "Dispensed"
             }
         })
-        orders.map((order) => {
+        orders.map((order: any) => {
 
             let _day = days[(new Date(order.updatedAt).getDay())]
-            week[_day][(order.dhmType).toLowerCase()].pasteurized += order.pasteurized
-            week[_day][(order.dhmType).toLowerCase()].unPasteurized += order.unPasteurized
-            week[_day][(order.dhmType).toLowerCase()].total += (order.pasteurized + order.unPasteurized)
+            week[_day][(order.dhmType).toLowerCase()]["pasteurized"] += order.pasteurized
+            week[_day][(order.dhmType).toLowerCase()]["unPasteurized"] += order.unPasteurized
+            week[_day][(order.dhmType).toLowerCase()]["total"] += (order.pasteurized + order.unPasteurized)
 
         })
 
@@ -244,10 +242,12 @@ export let dhmConsumed = async () => {
             term: week.term
         })
     })
+    console.log(res)
     return res
 
 }
 
+dhmConsumed()
 
 export let expressingTime = async () => {
     let months: { [index: string]: any } = {};
