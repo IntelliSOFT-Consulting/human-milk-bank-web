@@ -66,6 +66,12 @@
             "type": "all",
             "range": "dates",
             "query": "entry",
+            "q": "/Patient?active=false&deceased=true"
+        },
+        "inactivePatients": {
+            "type": "all",
+            "range": "dates",
+            "query": "entry",
             "q": "/Patient?active=false"
         },
         "lowBirthweight": {
