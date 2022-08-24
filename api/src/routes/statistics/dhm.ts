@@ -28,7 +28,7 @@ router.get('/', [requireJWTMiddleware], async (req: Request, res: Response) => {
         {
             "dhmInfants": dhmInfants ?? 0,
             "dhmVolume": { term: termDhmVolume, preterm: pretermDhmVolume },
-            "dhmAverage": (dhmTotal / dhmInfants),
+            "dhmAverage": (dhmTotal / dhmInfants) ?? 0,
             "fullyReceiving": dhmInfants,
             "dhmLength": "3 days",
             "data": await dhmConsumed()

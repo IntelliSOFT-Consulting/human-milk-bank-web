@@ -164,7 +164,7 @@ export let infantsOnBreastFeeding = async () => {
 }
 
 export let getGestation = async (type: string) => {
-    let deceasedInfants = await generateReport("deceasedInfants")
+    let deceasedInfants = await generateReport("inactivePatients")
     let ids: Array<string> = []
     deceasedInfants.map((i: any) => {
         ids.push("Patient/" + i.resource.id)
