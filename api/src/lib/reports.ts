@@ -42,8 +42,8 @@ export let getTotalDHMOrders = async (dhmType: string = "Preterm") => {
 }
 
 export let availableDHMVolume = async (dhmType: string = "Preterm") => {
-    let pasteurized = (await getLastStockEntry(dhmType)).pasteurized - (await getTotalDHMOrders(dhmType)).pasteurized
-    let unPasteurized = (await getLastStockEntry(dhmType)).unPasteurized - (await getTotalDHMOrders(dhmType)).unPasteurized
+    let pasteurized = (await getLastStockEntry(dhmType)).pasteurized ?? 0 - (await getTotalDHMOrders(dhmType)).pasteurized ?? 0
+    let unPasteurized = (await getLastStockEntry(dhmType)).unPasteurized ?? 0 - (await getTotalDHMOrders(dhmType)).unPasteurized ?? 0
     if (pasteurized < 0) { pasteurized = 0 }
     if (unPasteurized < 0) { unPasteurized = 0 }
     return { unPasteurized, pasteurized }
@@ -59,7 +59,7 @@ let getLastStockEntry = async (dhmType: string = "Preterm") => {
         },
         take: 1
     })
-    return time[0]
+    return time[0] ?? { pasteurized: 0, unPasteurized: 0 }
 }
 
 
