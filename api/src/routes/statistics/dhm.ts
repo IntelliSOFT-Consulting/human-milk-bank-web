@@ -7,14 +7,8 @@ const router = Router();
 router.use(express.json())
 
 
-let days = [
-    "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
-]
-
-
 // DHM Statistics 
 router.get('/', [requireJWTMiddleware], async (req: Request, res: Response) => {
-    // let selectFields = []
     let pretermDhmVolume = await availableDHMVolume("Preterm")
     let termDhmVolume = await availableDHMVolume("Term")
     let dhmInfants = countPatients(await generateReport("infantsOnDHM")) || 0
