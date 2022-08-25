@@ -4,6 +4,12 @@ This is a web application created to
 1. Support the [Android reference application](https://github.com/IntelliSOFT-Consulting/human-milk-bank) for the WHO NNDAK to support linking Newborn Units and Human Milk Banks.
 2. Support Administration Functionality of the same application.
 
+
+### Application Architecture
+
+Refer to the application architecture overview:
+[Application Architecture](https://github.com/IntelliSOFT-Consulting/human-milk-bank-web/blob/master/Architecture.md)
+
 ### Installation
 
 ##### Pre-requisites
@@ -71,3 +77,9 @@ Simply run the `deploy.sh` script provided.
 chmod +x deploy.sh
 ./deploy.sh
 ```
+
+
+### Adding a custom domain and proxying with nginx.
+
+Refer to instruction on how to proxy connections with nginx below:
+[Instructions](https://github.com/IntelliSOFT-Consulting/human-milk-bank-web/blob/master/proxying-with-nginx.md)
