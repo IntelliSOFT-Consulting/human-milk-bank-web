@@ -4,31 +4,50 @@ This is a web application created to
 1. Support the [Android reference application](https://github.com/IntelliSOFT-Consulting/human-milk-bank) for the WHO NNDAK to support linking Newborn Units and Human Milk Banks.
 2. Support Administration Functionality of the same application.
 
+### Installation
+
+##### Pre-requisites
+
+- Git
+- Docker
+- Docker Compose
+
 #### Development Mode
+
+Clone project.
+
+`git clone https://github.com/IntelliSOFT-Consulting/human-milk-bank-web`
+
+To run the project in development mode.
 
 `yarn dev`
 
-Production
+### Deploying to a production environment.
 
 To run a production build
 
 ##### Prequisites
+- Git
 - Docker
 - Docker Compose
 
 
 #### Using Docker
 
-You are able to use Docker to build images for the entire project or for the respective repos.
+You are able to use Docker to build and deploy all the images for the entire project or for the respective repos.
 
 #### Build entire project
 
+NOTE: Ensure you provide a `.env` file for both the `api` and `ui` components based on their respective `.env.example` files provided.
+
 `docker-compose up -d --build`
 
-This should bring up the application.
-By default, the application will be exposed on port 8080
+This should bring up the following applications in your server.
+By default, 
 
-Visiting http://{YOUR-IP-HERE}:8080 should display the Swagger UI Docs for the application.
+1. Admin Web UI - port 8082
+2. Web API - port 8081
+3. HAPI FHIR server - port 8080
 
 
 #### Build the UI only

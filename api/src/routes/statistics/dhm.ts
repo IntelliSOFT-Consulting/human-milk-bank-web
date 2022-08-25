@@ -19,7 +19,7 @@ router.get('/', [requireJWTMiddleware], async (req: Request, res: Response) => {
     let termDhmVolume = await availableDHMVolume("Term")
     let dhmInfants = countPatients(await generateReport("infantsOnDHM")) || 0
 
-    let dhmTotal = (pretermDhmVolume.pasteurized + pretermDhmVolume.unPasteurized + termDhmVolume.pasteurized + termDhmVolume.unPasteurized)
+    let dhmTotal = (pretermDhmVolume.pasteurized + pretermDhmVolume.unPasteurized + termDhmVolume.pasteurized + termDhmVolume.unPasteurized) ?? 0
 
 
     let fullyReceiving = Math.floor(dhmInfants * Math.random())
