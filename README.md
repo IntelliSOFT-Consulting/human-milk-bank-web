@@ -49,6 +49,11 @@ By default,
 2. Web API - port 8081
 3. HAPI FHIR server - port 8080
 
+#### Applying Database Migrations
+
+Lastly, ensure to deploy the migrations to the database by running the following command:
+
+`./api/run-dev-migrations.sh`
 
 #### Build the UI only
 
@@ -57,3 +62,12 @@ By default,
 #### Build the API only
 
 `docker build -t ./api` or `yarn docker:build:api`
+
+### Quick Installation
+
+Simply run the `deploy.sh` script provided.
+
+```
+chmod +x deploy.sh
+./deploy.sh
+```
