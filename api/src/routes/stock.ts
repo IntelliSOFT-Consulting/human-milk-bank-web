@@ -137,7 +137,8 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
                 select: {
                     updatedAt: true,
                     pasteurized: (category === "Pasteurized"),
-                    unPasteurized: (category === "UnPasteurized")
+                    unPasteurized: (category === "UnPasteurized"),
+                    dhmType
                 },
                 orderBy: { updatedAt: 'desc' },
                 take: 1,
@@ -151,6 +152,7 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
                 },
                 where: {
                     status: "Dispensed",
+                    dhmType: dhmType,
                     updatedAt: {
                         gt: lastClosingStock[0].updatedAt
                     }

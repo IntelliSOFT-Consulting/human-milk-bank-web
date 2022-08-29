@@ -15,7 +15,7 @@ let _today = days[(new Date().getDay())]
 let _days = days.slice(days.indexOf(_today) + 1).concat()
 _days = _days.concat(days.slice(0, (days.indexOf(_today) + 1)))
 
-
+console.log(_days)
 // let totalDHMOrders = async (days: number = 7)  => {
 //     let orders = 
 //     return
@@ -38,12 +38,12 @@ export let getTotalDHMOrders = async (dhmType: string = "Preterm") => {
             }
         }
     })
-    return { pasteurized: totalVolume._sum.pasteurized ?? 0, unPasteurized: totalVolume._sum.unPasteurized ?? 0 }
+    return { pasteurized: totalVolume._sum.pasteurized || 0, unPasteurized: totalVolume._sum.unPasteurized || 0 }
 }
 
 export let availableDHMVolume = async (dhmType: string = "Preterm") => {
-    let pasteurized = (await getLastStockEntry(dhmType)).pasteurized ?? 0 - (await getTotalDHMOrders(dhmType)).pasteurized ?? 0
-    let unPasteurized = (await getLastStockEntry(dhmType)).unPasteurized ?? 0 - (await getTotalDHMOrders(dhmType)).unPasteurized ?? 0
+    let pasteurized = (await getLastStockEntry(dhmType)).pasteurized - (await getTotalDHMOrders(dhmType)).pasteurized
+    let unPasteurized = (await getLastStockEntry(dhmType)).unPasteurized - (await getTotalDHMOrders(dhmType)).unPasteurized
     if (pasteurized < 0) { pasteurized = 0 }
     if (unPasteurized < 0) { unPasteurized = 0 }
     return { unPasteurized, pasteurized }
@@ -221,6 +221,7 @@ export let dhmConsumed = async () => {
                 status: "Dispensed"
             }
         })
+        console.log(orders)
         orders.map((order: any) => {
             console.log(order)
 
