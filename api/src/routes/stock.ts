@@ -175,11 +175,16 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
                 return
             }
 
+            let balance = lastClosingStock[0][(category === "Pasteurized") ? "pasteurized" : "unPasteurized"] -
+                ((totalVolumeDispensed._sum[(category === "Pasteurized") ? "pasteurized" : "unPasteurized"] || 0) + (dhmVolume))
+
             let order = await db.order.create({
                 data: {
                     dhmType, pasteurized: parseFloat(((category === "Pasteurized") ? dhmVolume : "0")),
                     unPasteurized: parseFloat(((category === "UnPasteurized") ? dhmVolume : "0")), remarks, status: "Dispensed",
-                    user: { connect: { id: userId } }, nutritionOrder: orderId
+                    user: { connect: { id: userId } }, nutritionOrder: orderId,
+                    pasteurizedBal: (category === "Pasteurized") ? balance : 0,
+                    unPasteurizedBal: (category === "UnPasteurized") ? balance : 0
                 }
             })
             // update fhir resource
