@@ -202,43 +202,67 @@ export let firstFeeding = async () => {
     return categories
 }
 
+
 export let dhmAvailable = async () => {
     let week: { [index: string]: any } = {};
     for (let day of _days) {
         week[day] = { preterm: { pasteurized: 0, unPasteurized: 0, total: 0 }, term: { pasteurized: 0, unPasteurized: 0, total: 0 } }
     }
-    console.log(week)
 
     try {
-        let now = new Date()
-        let lastWeek = new Date(now.setDate(now.getDate() - 7))
-        lastWeek = new Date(lastWeek.setHours(0, 0, 0, 0))
-        let orders = await db.order.findMany({
-            where: {
-                updatedAt: {
-                    gte: lastWeek
+
+
+        for (let i in Object.keys(week)) {
+            console.log(i)
+            let _week: string[] = Object.keys(week).map((x) => {
+                return x
+            })
+
+            let preTermOrder = await db.order.findMany({
+                where: {
+                    createdAt: {
+                        gt: new Date(new Date(new Date().setDate(new Date().getDate() - (6 - parseInt(i)))).setHours(0, 0, 0, 0)),
+                        lt: new Date(new Date(new Date().setDate(new Date().getDate() - (6 - parseInt(i)))).setHours(25, 59, 59, 0))
+                    },
+                    dhmType: "Preterm"
                 },
-                status: "Dispensed"
+                select: {
+                    pasteurizedBal: true,
+                    unPasteurizedBal: true
+                }
+            })
+            let termOrder = await db.order.findMany({
+                where: {
+                    createdAt: {
+                        gt: new Date(new Date(new Date().setDate(new Date().getDate() - (6 - parseInt(i)))).setHours(0, 0, 0, 0)),
+                        lt: new Date(new Date(new Date().setDate(new Date().getDate() - (6 - parseInt(i)))).setHours(25, 59, 59, 0))
+                    },
+                    dhmType: "Term"
+                },
+                select: {
+                    pasteurizedBal: true,
+                    unPasteurizedBal: true
+                }
+            })
+
+            week[_week[parseInt(i)]]["preterm"] = {
+                pasteurized: preTermOrder[preTermOrder.length - 1]?.pasteurizedBal || 0,
+                unPasteurized: preTermOrder[preTermOrder.length - 1]?.unPasteurizedBal || 0,
+                total: (preTermOrder[preTermOrder.length - 1]?.unPasteurizedBal || 0 + preTermOrder[preTermOrder.length - 1]?.pasteurizedBal) || 0
             }
-        })
-        console.log(orders)
-        orders.map((order: any) => {
-            console.log(order)
-
-            let _day = days[(new Date(order.updatedAt).getDay())]
-            week[_day][(order.dhmType).toLowerCase()]["pasteurized"] += order.pasteurized
-            week[_day][(order.dhmType).toLowerCase()]["unPasteurized"] += order.unPasteurized
-            week[_day][(order.dhmType).toLowerCase()]["total"] += (order.pasteurized + order.unPasteurized)
-
-        })
-
+            week[_week[parseInt(i)]]["term"] = {
+                pasteurized: termOrder[termOrder.length - 1]?.pasteurizedBal || 0,
+                unPasteurized: termOrder[termOrder.length - 1]?.unPasteurizedBal || 0,
+                total: (termOrder[termOrder.length - 1]?.unPasteurizedBal || 0 + termOrder[termOrder.length - 1]?.pasteurizedBal) || 0
+            }
+        }
     } catch (e) {
         console.log(e)
     }
     // console.log(week)
     let res: any = []
     Object.keys(week).map((day) => {
-        console.log(week)
+        // console.log(week)
         res.push({
             day: day,
             preterm: week[day].preterm,
@@ -250,7 +274,7 @@ export let dhmAvailable = async () => {
 
 }
 
-// dhmConsumed()
+dhmAvailable()
 
 export let expressingTime = async () => {
     let months: { [index: string]: any } = {};

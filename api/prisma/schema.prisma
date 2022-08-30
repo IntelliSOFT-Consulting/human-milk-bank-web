@@ -51,17 +51,19 @@ model StockEntry {
 }
 
 model Order {
-  id             String           @id @default(uuid())
-  dhmType        DhmType
-  user           User             @relation(fields: [userId], references: [id])
-  userId         String
-  pasteurized    Float            @default(0.0)
-  unPasteurized  Float            @default(0.0)
-  remarks        String
-  nutritionOrder String
-  status         DispensingStatus
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
+  id               String           @id @default(uuid())
+  dhmType          DhmType
+  user             User             @relation(fields: [userId], references: [id])
+  userId           String
+  pasteurized      Float            @default(0.0)
+  unPasteurized    Float            @default(0.0)
+  remarks          String
+  nutritionOrder   String
+  status           DispensingStatus
+  pasteurizedBal   Float            @default(0.0)
+  unPasteurizedBal Float            @default(0.0)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
 }
 
 enum ROLE {
