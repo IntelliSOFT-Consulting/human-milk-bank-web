@@ -188,8 +188,8 @@ export let getGestation = async (type: string) => {
 export let firstFeeding = async () => {
 
     let observations = await generateReport("firstFeeding")
-    let categories: { [index: string]: number } = { withinOne: 0, afterOne: 0, afterTwo: 0, afterThree: 0 }
-    let _map: { [index: string]: string } = { withinOne: "Within 1 Hour", afterOne: "After 1 Hour", afterTwo: "After 2 Hours", afterThree: "After 3 Hours" }
+    let categories: { [index: string]: number } = { withinOne: 0, afterOne: 0, afterThree: 0, withinDay: 0, afterTwoDays: 0 }
+    let _map: { [index: string]: string } = { withinOne: "Within 1 Hour", afterOne: "After 1 Hour", afterThree: "After 3 Hours", withinDay: "Within 1 day", afterTwoDays: "After 2 days" }
     if (observations) {
         for (let o of observations) {
             for (let i of Object.keys(_map)) {
@@ -202,7 +202,7 @@ export let firstFeeding = async () => {
     return categories
 }
 
-export let dhmConsumed = async () => {
+export let dhmAvailable = async () => {
     let week: { [index: string]: any } = {};
     for (let day of _days) {
         week[day] = { preterm: { pasteurized: 0, unPasteurized: 0, total: 0 }, term: { pasteurized: 0, unPasteurized: 0, total: 0 } }

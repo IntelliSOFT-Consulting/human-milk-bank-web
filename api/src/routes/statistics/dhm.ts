@@ -1,7 +1,7 @@
 import express, { Router, Request, Response } from 'express';
 import { generateReport } from '../../lib/fhir';
 import { requireJWTMiddleware } from '../../lib/jwt';
-import { availableDHMVolume, avgDaysToReceivingMothersOwnMilk, countPatients, countPatientsFromNutritionOrders, dhmConsumed } from '../../lib/reports';
+import { availableDHMVolume, avgDaysToReceivingMothersOwnMilk, countPatients, countPatientsFromNutritionOrders, dhmAvailable } from '../../lib/reports';
 const router = Router();
 
 router.use(express.json())
@@ -25,7 +25,7 @@ router.get('/', [requireJWTMiddleware], async (req: Request, res: Response) => {
             "dhmAverage": (dhmTotal ?? 0 / dhmInfants ?? 0) ?? 0,
             "fullyReceiving": dhmInfants,
             "dhmLength": "3 days",
-            "data": await dhmConsumed()
+            "data": await dhmAvailable()
         }
     );
     return
