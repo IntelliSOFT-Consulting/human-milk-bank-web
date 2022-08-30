@@ -137,8 +137,8 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
             let lastClosingStock = await db.stockEntry.findMany({
                 select: {
                     updatedAt: true,
-                    pasteurized: (category === "Pasteurized"),
-                    unPasteurized: (category === "UnPasteurized"),
+                    pasteurized: true,
+                    unPasteurized: true,
                     dhmType
                 },
                 where: {
@@ -167,7 +167,14 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
                     }
                 }
             })
+            totalVolumeDispensed = {
+                ...totalVolumeDispensed, _sum: {
+                    pasteurized: totalVolumeDispensed._sum.pasteurized ?? 0,
+                    unPasteurized: totalVolumeDispensed._sum.unPasteurized ?? 0
+                }
+            }
             console.log(totalVolumeDispensed)
+            console.log(lastClosingStock)
 
             if (lastClosingStock[0][(category === "Pasteurized") ? "pasteurized" : "unPasteurized"] <
                 ((totalVolumeDispensed._sum[(category === "Pasteurized") ? "pasteurized" : "unPasteurized"] || 0) + (dhmVolume))) {
@@ -177,14 +184,21 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
 
             let balance = lastClosingStock[0][(category === "Pasteurized") ? "pasteurized" : "unPasteurized"] -
                 ((totalVolumeDispensed._sum[(category === "Pasteurized") ? "pasteurized" : "unPasteurized"] || 0) + (dhmVolume))
+            let _balance = lastClosingStock[0][(category !== "Pasteurized") ? "pasteurized" : "unPasteurized"] -
+                (totalVolumeDispensed._sum[(category !== "Pasteurized") ? "pasteurized" : "unPasteurized"] || 0)
+            console.log("Balance", _balance)
 
             let order = await db.order.create({
                 data: {
-                    dhmType, pasteurized: parseFloat(((category === "Pasteurized") ? dhmVolume : "0")),
-                    unPasteurized: parseFloat(((category === "UnPasteurized") ? dhmVolume : "0")), remarks, status: "Dispensed",
-                    user: { connect: { id: userId } }, nutritionOrder: orderId,
-                    pasteurizedBal: (category === "Pasteurized") ? balance : 0,
-                    unPasteurizedBal: (category === "UnPasteurized") ? balance : 0
+                    dhmType,
+                    pasteurized: parseFloat(((category === "Pasteurized") ? dhmVolume : "0")),
+                    unPasteurized: parseFloat(((category === "UnPasteurized") ? dhmVolume : "0")),
+                    remarks,
+                    status: "Dispensed",
+                    user: { connect: { id: userId } },
+                    nutritionOrder: orderId,
+                    pasteurizedBal: (category === "Pasteurized") ? balance : _balance,
+                    unPasteurizedBal: (category === "UnPasteurized") ? balance : _balance
                 }
             })
             // update fhir resource

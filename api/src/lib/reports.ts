@@ -1,3 +1,4 @@
+import { DhmType } from "@prisma/client"
 import { FhirApi, generateReport } from "./fhir"
 import db from './prisma'
 
@@ -210,53 +211,55 @@ export let dhmAvailable = async () => {
     }
 
     try {
-
-
-        for (let i in Object.keys(week)) {
-            console.log(i)
-            let _week: string[] = Object.keys(week).map((x) => {
-                return x
-            })
-
-            let preTermOrder = await db.order.findMany({
-                where: {
-                    createdAt: {
-                        gt: new Date(new Date(new Date().setDate(new Date().getDate() - (6 - parseInt(i)))).setHours(0, 0, 0, 0)),
-                        lt: new Date(new Date(new Date().setDate(new Date().getDate() - (6 - parseInt(i)))).setHours(25, 59, 59, 0))
+        let getAvailability = async (dhmType: string, from: Date | null = null, to: Date | null = null) => {
+            for (let i in Object.keys(week)) {
+                console.log(i)
+                let _week: string[] = Object.keys(week).map((x) => {
+                    return x
+                })
+                console.log(_week)
+                let order = await db.order.findMany({
+                    where: {
+                        createdAt: {
+                            gt: from ?? new Date(new Date(new Date().setDate(new Date().getDate() - (6 - parseInt(i)))).setHours(0, 0, 0, 0)),
+                            lt: to ?? new Date(new Date(new Date().setDate(new Date().getDate() - (6 - parseInt(i)))).setHours(25, 59, 59, 0))
+                        },
+                        dhmType: dhmType === "Term" ? "Term" : "Preterm"
                     },
-                    dhmType: "Preterm"
-                },
-                select: {
-                    pasteurizedBal: true,
-                    unPasteurizedBal: true
+                    select: {
+                        pasteurizedBal: true,
+                        unPasteurizedBal: true
+                    }
+                })
+                if (order.length < 1) {
+                    let _order = await db.stockEntry.findMany({
+                        select: {
+                            pasteurized: true, unPasteurized: true
+                        },
+                        where: {
+                            updatedAt: {
+                                gt: from ?? new Date(new Date(new Date().setDate(new Date().getDate() - (6 - parseInt(i)))).setHours(0, 0, 0, 0)),
+                                lt: to ?? new Date(new Date(new Date().setDate(new Date().getDate() - (6 - parseInt(i)))).setHours(25, 59, 59, 0))
+                            },
+                            dhmType: dhmType === "Term" ? "Term" : "Preterm"
+                        },
+                        orderBy: { createdAt: 'desc' },
+                        take: 1
+                    })
+                    week[_week[parseInt(i)]][dhmType.toLowerCase()] = {
+                        ..._order[0], pasteurized: _order[0]?.pasteurized || 0, unPasteurized: _order[0]?.unPasteurized || 0
+                    }
+                    console.log(dhmType, _order[0])
+                } else {
+                    week[_week[parseInt(i)]][dhmType.toLowerCase()] = { pasteurized: order[0].pasteurizedBal, unPasteurized: order[0].unPasteurizedBal }
                 }
-            })
-            let termOrder = await db.order.findMany({
-                where: {
-                    createdAt: {
-                        gt: new Date(new Date(new Date().setDate(new Date().getDate() - (6 - parseInt(i)))).setHours(0, 0, 0, 0)),
-                        lt: new Date(new Date(new Date().setDate(new Date().getDate() - (6 - parseInt(i)))).setHours(25, 59, 59, 0))
-                    },
-                    dhmType: "Term"
-                },
-                select: {
-                    pasteurizedBal: true,
-                    unPasteurizedBal: true
-                }
-            })
-
-            week[_week[parseInt(i)]]["preterm"] = {
-                pasteurized: preTermOrder[preTermOrder.length - 1]?.pasteurizedBal || 0,
-                unPasteurized: preTermOrder[preTermOrder.length - 1]?.unPasteurizedBal || 0,
-                total: (preTermOrder[preTermOrder.length - 1]?.unPasteurizedBal || 0 + preTermOrder[preTermOrder.length - 1]?.pasteurizedBal) || 0
             }
-            week[_week[parseInt(i)]]["term"] = {
-                pasteurized: termOrder[termOrder.length - 1]?.pasteurizedBal || 0,
-                unPasteurized: termOrder[termOrder.length - 1]?.unPasteurizedBal || 0,
-                total: (termOrder[termOrder.length - 1]?.unPasteurizedBal || 0 + termOrder[termOrder.length - 1]?.pasteurizedBal) || 0
-            }
+            console.log(week)
         }
-    } catch (e) {
+        let preTerm = await getAvailability("Preterm")
+        let term = await getAvailability("Term")
+    }
+    catch (e) {
         console.log(e)
     }
     // console.log(week)
