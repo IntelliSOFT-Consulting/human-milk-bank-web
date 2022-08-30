@@ -277,7 +277,7 @@ export let dhmAvailable = async () => {
 
 }
 
-dhmAvailable()
+// dhmAvailable()
 
 export let expressingTime = async () => {
     let months: { [index: string]: any } = {};
