@@ -127,6 +127,7 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
                 res.json({ error: "Invalid value for volume provided", status: "false" });
                 return
             }
+            dhmVolume = parseFloat(dhmVolume)
             // find nutrition order
             let resource = await (await FhirApi({ "url": `/NutritionOrder/${orderId}` })).data
             resource.status = "completed"
@@ -140,10 +141,18 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
                     unPasteurized: (category === "UnPasteurized"),
                     dhmType
                 },
+                where: {
+                    dhmType: dhmType
+                },
                 orderBy: { updatedAt: 'desc' },
                 take: 1,
             })
-            console.log(userId)
+            if (!lastClosingStock) {
+                res.json({ error: "Stock entry required before dispense", status: "false" });
+                return
+            }
+            // console.log(userId)
+            console.log(lastClosingStock, dhmType)
 
             let totalVolumeDispensed = await db.order.aggregate({
                 _sum: {
@@ -151,24 +160,25 @@ router.post("/order", [requireJWT], async (req: Request, res: Response) => {
                     unPasteurized: true
                 },
                 where: {
-                    status: "Dispensed",
                     dhmType: dhmType,
+                    status: "Dispensed",
                     updatedAt: {
                         gt: lastClosingStock[0].updatedAt
                     }
                 }
             })
+            console.log(totalVolumeDispensed)
 
-            if (lastClosingStock[0][((category === "pasteurized") ? "pasteurized" : "unPasteurized")] <=
-                ((totalVolumeDispensed._sum[((category === "pasteurized") ? "pasteurized" : "unPasteurized")]) + (dhmVolume))) {
+            if (lastClosingStock[0][(category === "Pasteurized") ? "pasteurized" : "unPasteurized"] <
+                ((totalVolumeDispensed._sum[(category === "Pasteurized") ? "pasteurized" : "unPasteurized"] || 0) + (dhmVolume))) {
                 res.json({ error: "No DHM in stock available to dispense", status: "false" });
                 return
             }
 
             let order = await db.order.create({
                 data: {
-                    dhmType, pasteurized: parseFloat(((category === "pasteurized") ? dhmVolume : "0")),
-                    unPasteurized: parseFloat(((category === "unPasteurized") ? dhmVolume : "0")), remarks, status: "Dispensed",
+                    dhmType, pasteurized: parseFloat(((category === "Pasteurized") ? dhmVolume : "0")),
+                    unPasteurized: parseFloat(((category === "UnPasteurized") ? dhmVolume : "0")), remarks, status: "Dispensed",
                     user: { connect: { id: userId } }, nutritionOrder: orderId
                 }
             })
