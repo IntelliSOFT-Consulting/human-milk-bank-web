@@ -35,7 +35,7 @@ router.post("/", [requireJWT], async (req: Request, res: Response) => {
             if (term) {
                 let termEntry = await db.stockEntry.create({
                     data: {
-                        pasteurized: parseFloat(preterm.pasteurized), unPasteurized: parseFloat(preterm.unPasteurized),
+                        pasteurized: parseFloat(term.pasteurized), unPasteurized: parseFloat(term.unPasteurized),
                         dhmType: "Term", user: { connect: { id: userId } }
                     }
                 })
