@@ -247,11 +247,11 @@ export let dhmAvailable = async () => {
                         take: 1
                     })
                     week[_week[parseInt(i)]][dhmType.toLowerCase()] = {
-                        ..._order[0], pasteurized: _order[0]?.pasteurized || 0, unPasteurized: _order[0]?.unPasteurized || 0, total: (_order[0]?.unPasteurized || 0 + _order[0]?.pasteurized || 0)
+                        ..._order[0], pasteurized: _order[0]?.pasteurized || 0, unPasteurized: _order[0]?.unPasteurized || 0, total: (_order[0]?.unPasteurized + _order[0]?.pasteurized) || 0
                     }
                     console.log(dhmType, _order[0])
                 } else {
-                    week[_week[parseInt(i)]][dhmType.toLowerCase()] = { pasteurized: order[0].pasteurizedBal, unPasteurized: order[0].unPasteurizedBal, total: (order[0].pasteurizedBal + order[0].unPasteurizedBal) }
+                    week[_week[parseInt(i)]][dhmType.toLowerCase()] = { pasteurized: order[0].pasteurizedBal, unPasteurized: order[0].unPasteurizedBal, total: (order[0].pasteurizedBal + order[0].unPasteurizedBal) || 0 }
                 }
             }
             console.log(week)
@@ -277,7 +277,7 @@ export let dhmAvailable = async () => {
 
 }
 
-// dhmAvailable()
+dhmAvailable()
 
 export let expressingTime = async () => {
     let months: { [index: string]: any } = {};
