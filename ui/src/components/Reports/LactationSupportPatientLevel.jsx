@@ -1,5 +1,6 @@
 import { Stack, TextField, Button, Container, useMediaQuery, Snackbar } from '@mui/material'
-import React, { useState, useEffect } from 'react'import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import * as qs from 'query-string';
 import { DataGrid } from '@mui/x-data-grid';
 
