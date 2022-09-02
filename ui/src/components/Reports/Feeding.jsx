@@ -1,6 +1,5 @@
 import { Modal, Box, Grid, Container, Typography, useMediaQuery, Snackbar, Alert, LinearProgress } from '@mui/material'
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'import { useNavigate } from 'react-router-dom'
 import * as qs from 'query-string';
 import { DataGrid } from '@mui/x-data-grid';
 import { getCookie } from '../../lib/cookie';

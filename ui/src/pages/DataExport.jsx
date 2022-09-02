@@ -1,5 +1,5 @@
 import { Container, Alert, AlertTitle, Button, Grid, Snackbar, Typography, Divider, useMediaQuery } from '@mui/material'
-import { useEffect, useState, } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout'
 import { getCookie } from '../lib/cookie'

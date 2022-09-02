@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Card, CardContent, Typography
 } from '@mui/material'
@@ -12,7 +12,7 @@ export default function InfoCard({ title, value }) {
         <>
             <Card>
                 <CardContent>
-                    <Typography variant='p' sx={{ fontSize:"12px"}}>{title}</Typography>
+                    <Typography variant='p' sx={{ fontSize: "12px" }}>{title}</Typography>
                     <Typography variant='h5' sx={{ fontWeight: "bold" }}>{value}</Typography>
                 </CardContent>
             </Card>

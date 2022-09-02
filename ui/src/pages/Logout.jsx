@@ -1,21 +1,21 @@
 import { Card, CardContent, CardHeader, Container, TextField, Button, Grid, Typography, Snackbar } from '@mui/material'
-import {useState, useEffect} from 'react'
-import {useNavigate} from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { eraseCookie } from '../lib/cookie'
 
 
 
-export default function Logout(){
+export default function Logout() {
 
     let navigate = useNavigate()
-    
 
-    useEffect(()=> {
+
+    useEffect(() => {
         eraseCookie("token")
         navigate('/login')
     })
-    
-    return(
+
+    return (
         <>
             <Container>
                 <Typography variant="h2">
