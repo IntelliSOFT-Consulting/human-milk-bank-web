@@ -207,6 +207,7 @@ export let firstFeeding = async () => {
 export let dhmAvailable = async () => {
     let week: { [index: string]: any } = {};
     for (let day of _days) {
+        console.log(day)
         week[day] = { preterm: { pasteurized: 0, unPasteurized: 0, total: 0 }, term: { pasteurized: 0, unPasteurized: 0, total: 0 } }
     }
 
