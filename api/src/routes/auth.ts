@@ -72,7 +72,7 @@ router.get("/me", [requireJWT], async (req: Request, res: Response) => {
 router.post("/login", async (req: Request, res: Response) => {
     try {
         let newUser = false
-        let { email, username, password } = req.body;
+        let { email, password } = req.body;
         if (!validateEmail(email)) {
             res.statusCode = 400
             res.json({ status: "error", message: "invalid email value provided" })
@@ -85,8 +85,7 @@ router.post("/login", async (req: Request, res: Response) => {
         }
         let user = await db.user.findFirst({
             where: {
-                ...(email) && { email },
-                ...(username) && { username }
+                ...(email) && { email }
             }
         })
 
@@ -108,8 +107,7 @@ router.post("/login", async (req: Request, res: Response) => {
                 newUser = true
                 await db.user.update({
                     where: {
-                        ...(email) && { email },
-                        ...(username) && { username }
+                        ...(email) && { email }
                     },
                     data: {
                         data: { ...userData, newUser: false }
