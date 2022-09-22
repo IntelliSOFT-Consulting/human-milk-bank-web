@@ -1,31 +1,27 @@
-import { DhmType } from "@prisma/client"
 import { FhirApi, generateReport } from "./fhir"
 import db from './prisma'
 
 
 const _allMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-let currentMonth = (new Date()).toLocaleString('default', { month: 'short' })
-
-
-
-
+const initMonths = () => {
+    let currentMonth = (new Date()).toLocaleString('default', { month: 'short' });
+    let _months = _allMonths.slice(_allMonths.indexOf(currentMonth) + 1).concat();
+    _months = _months.concat(_allMonths.slice(0, (_allMonths.indexOf(currentMonth) + 1)));
+    return _months;
+}
 
 let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
-let _today = days[(new Date().getDay())]
-let _days = days.slice(days.indexOf(_today) + 1).concat()
-_days = _days.concat(days.slice(0, (days.indexOf(_today) + 1)))
-
-console.log(_days)
+const initDays = () => {
+    let _today = days[(new Date().getDay())]
+    let _days = days.slice(days.indexOf(_today) + 1).concat()
+    _days = _days.concat(days.slice(0, (days.indexOf(_today) + 1)))
+    return _days
+}
 // let totalDHMOrders = async (days: number = 7)  => {
 //     let orders = 
 //     return
 // }
-
-let _months = _allMonths.slice(_allMonths.indexOf(currentMonth) + 1).concat()
-_months = _months.concat(_allMonths.slice(0, (_allMonths.indexOf(currentMonth) + 1)))
-
-const allMonths = _months;
 
 
 export let getTotalDHMOrders = async (dhmType: string = "Preterm") => {
@@ -206,7 +202,8 @@ export let firstFeeding = async () => {
 
 export let dhmAvailable = async () => {
     let week: { [index: string]: any } = {};
-    for (let day of _days) {
+    let days = initDays();
+    for (let day of days) {
         console.log(day)
         week[day] = { preterm: { pasteurized: 0, unPasteurized: 0, total: 0 }, term: { pasteurized: 0, unPasteurized: 0, total: 0 } }
     }
@@ -284,16 +281,17 @@ export let expressingTime = async () => {
     let months: { [index: string]: any } = {};
     let patients: { [index: string]: number } = {};
 
-    for (let month of allMonths) {
-        months[month] = patients
+    let year = initMonths();
+    for (let month of year) {
+        months[month] = patients;
     }
-    let observations = await generateReport("expressingTimes")
+    let observations = await generateReport("expressingTimes");
 
-    let now = new Date()
+    let now = new Date();
 
-    let lastYear = now.setFullYear(now.getFullYear() - 1)
+    let lastYear = now.setFullYear(now.getFullYear() - 1);
     for (let i of observations) {
-        let date = (new Date(i.resource.valueDateTime)).getTime()
+        let date = (new Date(i.resource.valueDateTime)).getTime();
         let month = new Date(i.resource.valueDateTime).toLocaleString('default', { month: 'short' })
         // console.log(months)
         months[month] = { ...months[month], [i.resource.subject.reference]: months[month][i.resource.subject.reference] || 0 }
@@ -332,7 +330,8 @@ export let expressingTime = async () => {
 export let mortalityRateByMonth = async () => {
     let months: { [index: string]: any } = {};
     let results: Array<any> = [];
-    for (let month of allMonths) {
+    const year = initMonths();
+    for (let month of year) {
         months[month] = { born: 0, died: 0 }
     }
     let observations = await generateReport("deceasedInfants")
