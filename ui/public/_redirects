@@ -1,3 +1,3 @@
-/api/*  https://devnndak.intellisoftkenya.com/api/:splat    200
-/fhir/* https://devnndak.intellisoftkenya.com/api/fhir/:splat   200
+/api/*  https://nndak.intellisoftkenya.com/api/:splat    200
+/fhir/* https://nndak.intellisoftkenya.com/api/fhir/:splat   200
 /*  /   200
